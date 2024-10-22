@@ -1,0 +1,53 @@
+networks:
+  backend:
+  frontend:
+
+services:
+  vigodb:
+    container_name: VigoDB
+    image: mysql:8.0.35
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+    ports:
+      - 8002:3306
+    restart: always
+    networks:
+      - backend
+
+  vigo:
+    container_name: vigo-api
+    image: ${DOCKER_REGISTRY-}vigo-api
+    build:
+      context: .
+      dockerfile: vigo/Dockerfile
+    networks:
+      - backend
+    ports:
+      - 2002:80
+    restart: always
+    environment:
+      - DB_HOST=VigoDB
+      - DB_PORT=3306
+      - DB_NAME=vigodb
+      - DB_USER=root
+      - DB_PASSWORD=123456
+      - ASPNETCORE_URLS=http://+:80
+
+  vigo.admin:
+    container_name: vigo-admin-api
+    image: ${DOCKER_REGISTRY-}vigo-admin-api
+    build:
+      context: .
+      dockerfile: vigo.Admin/Dockerfile
+    networks:
+      - backend
+    ports:
+      - 2003:80
+    restart: always
+    environment:
+      - DB_HOST=VigoDB
+      - DB_PORT=3306
+      - DB_NAME=vigo
+      - DB_USER=root
+      - DB_PASSWORD=123456
+      - ASPNETCORE_URLS=http://+:80
