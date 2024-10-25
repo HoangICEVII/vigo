@@ -72,13 +72,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 #region service
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
-builder.Services.AddScoped<IBusinessPartnerService, BusinessPartnerService>();
-builder.Services.AddScoped<IDiscountService, DiscountService>();
-builder.Services.AddScoped<IDistrictService, DistrictService>();
+builder.Services.AddScoped<IDiscountCouponService, DiscountCouponService>();
 builder.Services.AddScoped<IImageService, ImageService>();
-builder.Services.AddScoped<IImageTypeService, ImageTypeService>();
 builder.Services.AddScoped<IInvoiceService, InvoiceService>();
-builder.Services.AddScoped<IProvinceService, ProvinceService>();
 builder.Services.AddScoped<IRatingService, RatingService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IRoomService, RoomService>();

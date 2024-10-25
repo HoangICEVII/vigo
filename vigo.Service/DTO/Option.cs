@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace vigo.Domain.AccountFolder
+namespace vigo.Service.DTO
 {
-    public class RolePermission
+    public class Option
     {
-        public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
-        public string RoleLabel {  get; set; } = string.Empty;
+        public int TotalPage { get; set; }
+        public int Page { get; set; }
     }
 }

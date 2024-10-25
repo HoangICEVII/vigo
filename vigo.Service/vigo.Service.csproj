@@ -8,10 +8,6 @@
 
   <ItemGroup>
     <Folder Include="Application\" />
-    <Folder Include="DTO\Admin\Account\" />
-    <Folder Include="DTO\Admin\Booking\" />
-    <Folder Include="DTO\Admin\Discount\" />
-    <Folder Include="DTO\Admin\District\" />
     <Folder Include="DTO\Application\" />
   </ItemGroup>
 

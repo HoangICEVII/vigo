@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using vigo.Domain.Helper;
 using vigo.Domain.Interface.IGeneric;
 using vigo.Infrastructure.DBContext;
 
@@ -18,21 +20,54 @@ namespace vigo.Infrastructure.Generic
             _context = context;
         }
 
-        public async Task<IEnumerable<T>> GetAll()
+        public async Task<IEnumerable<T>> GetAll(IEnumerable<Expression<Func<T, bool>>>? where)
         {
-            return await _context.Set<T>().ToListAsync();
+            var query = _context.Set<T>().AsQueryable();
+            if (where != null)
+            {
+                foreach (var expression in where)
+                {
+                    query = query.Where(expression);
+                }
+            }
+            return await query.ToListAsync();
         }
 
-        public async Task<IEnumerable<T>> GetPaging(IEnumerable<Expression<Func<T, bool>>>? where, int pageIndex, int pageSize)
+        public async Task<PagedResult<T>> GetPaging(IEnumerable<Expression<Func<T, bool>>>? where,
+                                                    Func<T, string>? sortString,
+                                                    Func<T, decimal>? sortNumber,
+                                                    Func<T, DateTime>? sortDate,
+                                                    int pageIndex,
+                                                    int pageSize,
+                                                    bool sortDown = false)
         {
             var query = _context.Set<T>().AsQueryable();
             if (where != null) {
                 foreach (var expression in where)
                 {
-                    query.Where(expression);
+                    query = query.Where(expression);
                 }
             }
-            return await query.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            if (sortString != null)
+            {
+                query = sortDown ? query.OrderByDescending(sortString).AsQueryable() : query.OrderBy(sortString).AsQueryable();
+            }
+            if (sortNumber != null)
+            {
+                query = sortDown ? query.OrderByDescending(sortNumber).AsQueryable() : query.OrderBy(sortNumber).AsQueryable();
+            }
+            if (sortDate != null)
+            {
+                query = sortDown ? query.OrderByDescending(sortDate).AsQueryable() : query.OrderBy(sortDate).AsQueryable();
+            }
+
+            var totalRecords = await query.CountAsync();
+            var totalPages = totalRecords % pageSize == 0 ? totalRecords/pageSize : totalRecords/pageSize +1;
+            var result = await query.Skip((pageIndex - 1) * pageSize)
+                                    .Take(pageSize)
+                                    .ToListAsync();
+
+            return new PagedResult<T>(result, totalPages, pageIndex, pageSize);
         }
 
         public void Create(T entity)
@@ -79,14 +114,11 @@ namespace vigo.Infrastructure.Generic
             return data;
         }
 
-        public async Task<int> Count(IEnumerable<Expression<Func<T, bool>>> where)
+        public async Task<T?> GetDetailBy(Expression<Func<T, bool>> where)
         {
             var query = _context.Set<T>().AsQueryable();
-            foreach (var expression in where)
-            {
-                query.Where(expression);
-            }
-            return await query.CountAsync();
+            query = query.Where(where);
+            return await query.FirstOrDefaultAsync();
         }
     }
 }

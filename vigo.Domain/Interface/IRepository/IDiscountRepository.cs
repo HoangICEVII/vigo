@@ -9,7 +9,7 @@ using vigo.Domain.Interface.IGeneric;
 
 namespace vigo.Domain.Interface.IRepository
 {
-    public interface IDiscountRepository : IVigoGeneric<Discount>
+    public interface IDiscountRepository : IVigoGeneric<DiscountCoupon>
     {
     }
 }

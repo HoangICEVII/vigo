@@ -7,21 +7,21 @@ using vigo.Service.Admin.IService;
 
 namespace vigo.Service.Admin.Service
 {
-    public class ImageTypeService : IImageTypeService
-    {
-        public Task Create()
-        {
-            throw new NotImplementedException();
-        }
+    //public class ImageTypeService : IImageTypeService
+    //{
+    //    public Task Create()
+    //    {
+    //        throw new NotImplementedException();
+    //    }
 
-        public Task Delete()
-        {
-            throw new NotImplementedException();
-        }
+    //    public Task Delete()
+    //    {
+    //        throw new NotImplementedException();
+    //    }
 
-        public Task GetPaging()
-        {
-            throw new NotImplementedException();
-        }
-    }
+    //    public Task GetPaging()
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+    //}
 }

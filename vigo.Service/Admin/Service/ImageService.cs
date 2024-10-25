@@ -9,17 +9,7 @@ namespace vigo.Service.Admin.Service
 {
     public class ImageService : IImageService
     {
-        public Task Create()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task Delete()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task GetAllByTypeId()
+        public Task Upload()
         {
             throw new NotImplementedException();
         }

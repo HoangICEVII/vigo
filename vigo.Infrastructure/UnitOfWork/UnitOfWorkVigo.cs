@@ -67,7 +67,7 @@ namespace vigo.Infrastructure.UnitOfWork
             _bookings = new Lazy<IBookingRepository>(() => new BookingRepository(_context));
             _businessPartners = new Lazy<IBusinessPartnerRepository>(() => new BusinessPartnerRepository(_context));
 
-            _discounts = new Lazy<IDiscountRepository>(() => new DiscountRepository(_context));
+            _discounts = new Lazy<IDiscountRepository>(() => new DiscountCouponRepository(_context));
             _districts = new Lazy<IDistrictRepository>(() => new DistrictRepository(_context));
             _images = new Lazy<IImageRepository>(() => new ImageRepository(_context));
 

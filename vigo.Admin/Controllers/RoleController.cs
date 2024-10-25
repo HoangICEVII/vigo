@@ -7,6 +7,7 @@ using vigo.Service.Admin.IService;
 using vigo.Service.Admin.Service;
 using vigo.Service.DTO;
 using vigo.Service.DTO.Admin.Role;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace vigo.Admin.Controllers
 {
@@ -27,25 +28,45 @@ namespace vigo.Admin.Controllers
             try
             {
                 var data = await _roleService.GetPermission();
-                return Ok(data);
+                return CreateResponse(data, "get success", 200, null);
             }
             catch (Exception e)
             {
-                return new ObjectResult(new { message = e.Message }) { StatusCode = 500 };
+                return CreateResponse(null, "get fail", 500, null);
             }
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(int indexPage)
+        public async Task<IActionResult> GetPaging(int page, int perPage)
         {
             try
             {
-                var data = await _roleService.GetPaging(indexPage);
-                return Ok(data);
+                var data = await _roleService.GetPaging(page, perPage);
+                Option options = new Option()
+                {
+                    Name = "",
+                    Page = data.PageIndex,
+                    TotalPage = data.TotalPages
+                };
+                return CreateResponse(data.Items, "get success", 200, options);
             }
             catch (Exception e)
             {
-                return new ObjectResult(new { message = e.Message }) { StatusCode = 500 };
+                return CreateResponse(null, "get fail", 500, null);
+            }
+        }
+
+        [HttpGet("get-all")]
+        public async Task<IActionResult> GetAll()
+        {
+            try
+            {
+                var data = await _roleService.GetAll();
+                return CreateResponse(data, "get success", 200, null);
+            }
+            catch (Exception e)
+            {
+                return CreateResponse(null, "get fail", 500, null);
             }
         }
 
@@ -55,11 +76,11 @@ namespace vigo.Admin.Controllers
             try
             {
                 await _roleService.Create(dto);
-                return Ok();
+                return CreateResponse(null, "create success", 200, null);
             }
             catch (Exception e)
             {
-                return new ObjectResult(new { message = e.Message }) { StatusCode = 500 };
+                return CreateResponse(null, "create fail", 500, null);
             }
         }
 
@@ -69,11 +90,11 @@ namespace vigo.Admin.Controllers
             try
             {
                 await _roleService.Update(dto);
-                return Ok();
+                return CreateResponse(null, "update success", 200, null);
             }
             catch (Exception e)
             {
-                return new ObjectResult(new { message = e.Message }) { StatusCode = 500 };
+                return CreateResponse(null, "update fail", 500, null);
             }
         }
 
@@ -83,11 +104,11 @@ namespace vigo.Admin.Controllers
             try
             {
                 await _roleService.Delete(id);
-                return Ok();
+                return CreateResponse(null, "delete success", 200, null);
             }
             catch (Exception e)
             {
-                return new ObjectResult(new { message = e.Message }) { StatusCode = 500 };
+                return CreateResponse(null, "delete fail", 500, null);
             }
         }
     }

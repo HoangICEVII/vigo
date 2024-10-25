@@ -16,7 +16,7 @@ namespace vigo.Infrastructure.DBContext
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Booking> Bookings { get; set; }
-        public DbSet<Discount> Discounts { get; set; }
+        public DbSet<DiscountCoupon> Discounts { get; set; }
         public DbSet<District> Districts { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<ImageType> ImageTypes { get; set; }
@@ -44,7 +44,7 @@ namespace vigo.Infrastructure.DBContext
             modelBuilder.ApplyConfiguration(new BookingConfiguration());
 
             modelBuilder.ApplyConfiguration(new BusinessPartnerConfiguration());
-            modelBuilder.ApplyConfiguration(new DiscountConfiguration());
+            modelBuilder.ApplyConfiguration(new DiscountCouponConfiguration());
 
             modelBuilder.ApplyConfiguration(new DistrictConfiguration());
             modelBuilder.ApplyConfiguration(new ImageConfiguration());

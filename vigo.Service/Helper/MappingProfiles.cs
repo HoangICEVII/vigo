@@ -11,6 +11,8 @@ using static System.Net.Mime.MediaTypeNames;
 using vigo.Domain.AccountFolder;
 using vigo.Domain.Entity;
 using vigo.Service.DTO.Admin.Role;
+using vigo.Service.DTO.Admin.Account;
+using vigo.Domain.User;
 
 namespace vigo.Service.Helper
 {
@@ -19,6 +21,9 @@ namespace vigo.Service.Helper
         public MappingProfiles()
         {
             CreateMap<Role, RoleDTO>();
+            CreateMap<RolePermission, RolePermissionDTO>();
+            CreateMap<BusinessPartner, BusinessPartnerDTO>();
+            CreateMap<SystemEmployee, EmployeeDTO>();
         }
     }
 }

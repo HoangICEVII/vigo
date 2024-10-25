@@ -9,6 +9,7 @@ using System.Text;
 using vigo.Admin.Controllers.Base;
 using vigo.Domain.AccountFolder;
 using vigo.Service.Admin.IService;
+using vigo.Service.Admin.Service;
 using vigo.Service.DTO;
 
 namespace vigo.Admin.Controllers
@@ -39,6 +40,42 @@ namespace vigo.Admin.Controllers
                 return new ObjectResult(new { message = e.Message }) { StatusCode = 500 };
             }
         }
+
+        [HttpGet("business-partners")]
+        public async Task<IActionResult> GetBusinessPartnerPaging(int page, int perPage, bool? nameSort)
+        {
+            try
+            {
+                var data = await _accountService.GetBusinessPartnerPaging(page, perPage, nameSort);
+                Option options = new Option()
+                {
+                    Name = "",
+                    Page = data.PageIndex,
+                    TotalPage = data.TotalPages
+                };
+                return CreateResponse(data.Items, "get success", 200, options);
+            }
+            catch (Exception e)
+            {
+                return CreateResponse(null, "get fail", 500, null);
+            }
+        }
+
+        [HttpGet("business-partners/{id}")]
+        public async Task<IActionResult> GetBusinessPartnerDetail(int id)
+        {
+            try
+            {
+                var data = await _accountService.GetBusinessPartnerDetail(id);
+                return CreateResponse(data, "get success", 200, null);
+            }
+            catch (Exception e)
+            {
+                return CreateResponse(null, "get fail", 500, null);
+            }
+        }
+
+
 
         private string CreateToken(UserAuthen userAuthen)
         {

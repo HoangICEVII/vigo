@@ -9,6 +9,6 @@ namespace vigo.Service.DTO
     public class MetaData
     {
         public int Count { get; set; }
-        public ICollection<object> Rows { get; set; }
+        public ICollection<object>? Rows { get; set; }
     }
 }

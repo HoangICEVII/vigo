@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using vigo.Domain.Helper;
 using vigo.Service.DTO;
 
 namespace vigo.Admin.Controllers.Base
 {
     public class BaseController : ControllerBase
     {
-        protected IActionResult CreateResponse(object data, string message, int status, Option options)
+        protected IActionResult CreateResponse(object? data, string message, int status, Option? options)
         {
             var response = new ResponseData
             {
@@ -19,7 +18,6 @@ namespace vigo.Admin.Controllers.Base
                 },
                 Options = options
             };
-
             return Ok(response);
         }
     }

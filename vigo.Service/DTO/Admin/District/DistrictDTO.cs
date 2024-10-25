@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace vigo.Service.Admin.IService
+namespace vigo.Service.DTO.Admin.District
 {
-    public interface IImageService
+    public class DistrictDTO
     {
-        Task Upload();
     }
 }
