@@ -191,7 +191,7 @@ namespace vigo.Service.Admin.Service
             return new PagedResult<BusinessPartnerDTO>(_mapper.Map<List<BusinessPartnerDTO>>(data.Items), data.TotalPages, data.PageIndex, data.PageSize);
         }
 
-        public async Task<PagedResult<EmployeeDTO>> GetEmployeePaging(int page, int perPage, bool nameSort, bool salarySort, bool dobSort)
+        public async Task<PagedResult<EmployeeDTO>> GetEmployeePaging(int page, int perPage, bool? nameSort, bool? salarySort, bool? dobSort)
         {
             List<Expression<Func<SystemEmployee, bool>>> conditions = new List<Expression<Func<SystemEmployee, bool>>>()
             {
@@ -203,9 +203,9 @@ namespace vigo.Service.Admin.Service
                 sortDown = true;
             }
             var data = await _unitOfWorkVigo.SystemEmployees.GetPaging(conditions,
-                                                                       nameSort? e => e.Name : null,
-                                                                       salarySort? e => e.Salary : null,
-                                                                       dobSort? e => e.DOB : null,
+                                                                       nameSort != null? e => e.Name : null,
+                                                                       salarySort != null? e => e.Salary : null,
+                                                                       dobSort != null ? e => e.DOB : null,
                                                                        page,
                                                                        perPage,
                                                                        sortDown);
