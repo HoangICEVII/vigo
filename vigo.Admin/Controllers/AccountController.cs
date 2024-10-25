@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Text;
 using vigo.Admin.Controllers.Base;
 using vigo.Domain.AccountFolder;
+using vigo.Domain.Helper;
 using vigo.Service.Admin.IService;
 using vigo.Service.Admin.Service;
 using vigo.Service.DTO;
@@ -36,12 +37,12 @@ namespace vigo.Admin.Controllers
             {
                 var userAuthen = await _accountService.AdminLogin(dto);
                 string token = CreateToken(userAuthen);
-                return CreateResponse(token, "get success", 200, null);
+                return CreateResponse(new TokenRes() { AccessToken = token}, "login success", 200, null);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                return new ObjectResult(new { message = e.Message }) { StatusCode = 500 };
+                return CreateResponse(null, "login fail", 500, null);
             }
         }
 

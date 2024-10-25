@@ -11,7 +11,7 @@ namespace vigo.Service.DTO
     {
         public string Message { get; set; } = string.Empty;
         public int Status { get; set; }
-        public MetaData MetaData { get; set; } = null!;
+        public object? MetaData { get; set; } = null!;
         public Option? Options { get; set; }
     }
 }
