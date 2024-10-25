@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using vigo.Domain.Helper;
 using vigo.Domain.Interface.IGeneric;
 using vigo.Infrastructure.DBContext;
+using System.Linq.Dynamic.Core;
 
 namespace vigo.Infrastructure.Generic
 {
@@ -33,15 +34,15 @@ namespace vigo.Infrastructure.Generic
             return await query.ToListAsync();
         }
 
-        public async Task<PagedResult<T>> GetPaging(IEnumerable<Expression<Func<T, bool>>>? where,
-                                                    Func<T, string>? sortString,
-                                                    Func<T, decimal>? sortNumber,
-                                                    Func<T, DateTime>? sortDate,
-                                                    int pageIndex,
-                                                    int pageSize,
-                                                    bool sortDown = false)
+        public async Task<PagedResultCustom<T>> GetPaging(IEnumerable<Expression<Func<T, bool>>>? where,
+                                                          Expression<Func<T, string>>? sortString,
+                                                          Expression<Func<T, decimal>>? sortNumber,
+                                                          Expression<Func<T, DateTime>>? sortDate,
+                                                          int pageIndex,
+                                                          int pageSize,
+                                                          bool sortDown = false)
         {
-            var query = _context.Set<T>().AsQueryable();
+            IQueryable<T> query = _context.Set<T>().AsQueryable();
             if (where != null) {
                 foreach (var expression in where)
                 {
@@ -50,15 +51,15 @@ namespace vigo.Infrastructure.Generic
             }
             if (sortString != null)
             {
-                query = sortDown ? query.OrderByDescending(sortString).AsQueryable() : query.OrderBy(sortString).AsQueryable();
+                query = sortDown ? query.OrderByDescending(sortString) : query.OrderBy(sortString);
             }
             if (sortNumber != null)
             {
-                query = sortDown ? query.OrderByDescending(sortNumber).AsQueryable() : query.OrderBy(sortNumber).AsQueryable();
+                query = sortDown ? query.OrderByDescending(sortNumber) : query.OrderBy(sortNumber);
             }
             if (sortDate != null)
             {
-                query = sortDown ? query.OrderByDescending(sortDate).AsQueryable() : query.OrderBy(sortDate).AsQueryable();
+                query = sortDown ? query.OrderByDescending(sortDate) : query.OrderBy(sortDate);
             }
 
             var totalRecords = await query.CountAsync();
@@ -67,7 +68,7 @@ namespace vigo.Infrastructure.Generic
                                     .Take(pageSize)
                                     .ToListAsync();
 
-            return new PagedResult<T>(result, totalPages, pageIndex, pageSize);
+            return new PagedResultCustom<T>(result, totalPages, pageIndex, pageSize);
         }
 
         public void Create(T entity)

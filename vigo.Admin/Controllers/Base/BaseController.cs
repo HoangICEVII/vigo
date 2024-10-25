@@ -14,10 +14,6 @@ namespace vigo.Admin.Controllers.Base
                 MetaData = data,
                 Options = options
             };
-            //if (data != null && data is object && response.MetaData.Rows == null)
-            //{
-            //    ICollection<object> temp = [data];
-            //}
             return Ok(response);
         }
     }

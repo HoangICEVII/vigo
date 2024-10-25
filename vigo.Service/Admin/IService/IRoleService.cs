@@ -10,7 +10,7 @@ namespace vigo.Service.Admin.IService
 {
     public interface IRoleService
     {
-        Task<PagedResult<RoleDTO>> GetPaging(int page, int perPage);
+        Task<PagedResultCustom<RoleDTO>> GetPaging(int page, int perPage);
         Task<List<RoleDTO>> GetAll();
         Task<List<RolePermissionDTO>> GetPermission();
         Task Create(RoleCreateDTO dto);

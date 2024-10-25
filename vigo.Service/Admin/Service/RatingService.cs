@@ -59,7 +59,7 @@ namespace vigo.Service.Admin.Service
             await _unitOfWorkVigo.Complete();
         }
 
-        public async Task<PagedResult<RatingDTO>> GetPaging(int page, int perPage, RatingType type, ClaimsPrincipal user)
+        public async Task<PagedResultCustom<RatingDTO>> GetPaging(int page, int perPage, RatingType type, ClaimsPrincipal user)
         {
             List<Expression<Func<Rating, bool>>> conditions = new List<Expression<Func<Rating, bool>>>()
             {
@@ -75,7 +75,7 @@ namespace vigo.Service.Admin.Service
                                                                null,
                                                                page,
                                                                perPage);
-            return new PagedResult<RatingDTO>(_mapper.Map<List<RatingDTO>>(data.Items), data.TotalPages, data.PageIndex, data.PageSize);
+            return new PagedResultCustom<RatingDTO>(_mapper.Map<List<RatingDTO>>(data.Items), data.TotalPages, data.PageIndex, data.PageSize);
         }
 
         public async Task UnApprove(List<int> ids, ClaimsPrincipal user)

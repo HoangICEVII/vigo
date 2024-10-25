@@ -14,9 +14,9 @@ namespace vigo.Service.Admin.IService
     public interface IAccountService
     {
         Task<UserAuthen> AdminLogin(LoginViaFormDTO dto);
-        Task<PagedResult<BusinessPartnerDTO>> GetBusinessPartnerPaging(int page, int perPage, bool? nameSort, string? searchName);
+        Task<PagedResultCustom<BusinessPartnerDTO>> GetBusinessPartnerPaging(int page, int perPage, bool? nameSort, string? searchName);
         Task<BusinessPartnerDetailDTO> GetBusinessPartnerDetail(int id);
-        Task<PagedResult<EmployeeDTO>> GetEmployeePaging(int page, int perPage, bool? nameSort, bool? salarySort, bool? dobSort, string? searchName);
+        Task<PagedResultCustom<EmployeeDTO>> GetEmployeePaging(int page, int perPage, bool? nameSort, bool? salarySort, bool? dobSort, string? searchName);
         Task<EmployeeDetailDTO> GetEmployeeDetail(int id);
         Task CreateBusinessPartner(CreateBusinessAccountDTO dto, ClaimsPrincipal user);
         Task CreateEmployee(CreateEmployeeAccount dto, ClaimsPrincipal user);

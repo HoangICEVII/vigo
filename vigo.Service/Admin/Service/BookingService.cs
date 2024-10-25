@@ -40,7 +40,7 @@ namespace vigo.Service.Admin.Service
             return bookingDTO;
         }
 
-        public async Task<PagedResult<BookingDTO>> GetPaging(int page, int perPage, bool? isReceived, bool? priceSort, ClaimsPrincipal user)
+        public async Task<PagedResultCustom<BookingDTO>> GetPaging(int page, int perPage, bool? isReceived, bool? priceSort, ClaimsPrincipal user)
         {
             List<Expression<Func<Booking, bool>>> conditions = new List<Expression<Func<Booking, bool>>>()
             {
@@ -61,7 +61,7 @@ namespace vigo.Service.Admin.Service
                                                                 page,
                                                                 perPage,
                                                                 sortDown);
-            return new PagedResult<BookingDTO>(_mapper.Map<List<BookingDTO>>(data.Items), data.TotalPages, data.PageIndex, data.PageSize);
+            return new PagedResultCustom<BookingDTO>(_mapper.Map<List<BookingDTO>>(data.Items), data.TotalPages, data.PageIndex, data.PageSize);
         }
 
         public async Task ReceiveBooking(List<int> ids, ClaimsPrincipal user)

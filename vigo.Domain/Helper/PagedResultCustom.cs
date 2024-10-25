@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace vigo.Domain.Helper
 {
-    public class PagedResult<T>
+    public class PagedResultCustom<T>
     {
         public IEnumerable<T> Items { get; }
         public int TotalPages { get; }
         public int PageIndex { get; }
         public int PageSize { get; }
 
-        public PagedResult(IEnumerable<T> items, int totalPages, int pageIndex, int pageSize)
+        public PagedResultCustom(IEnumerable<T> items, int totalPages, int pageIndex, int pageSize)
         {
             Items = items;
             TotalPages = totalPages;

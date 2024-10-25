@@ -55,14 +55,14 @@ namespace vigo.Service.Admin.Service
             return _mapper.Map<List<RoleDTO>>(await _unitOfWorkVigo.Roles.GetAll(conditions));
         }
 
-        public async Task<PagedResult<RoleDTO>> GetPaging(int page, int perPage)
+        public async Task<PagedResultCustom<RoleDTO>> GetPaging(int page, int perPage)
         {
             List<Expression<Func<Role, bool>>> conditions = new List<Expression<Func<Role, bool>>>()
             {
                 e => e.DeletedDate == null
             };
             var data = await _unitOfWorkVigo.Roles.GetPaging(conditions, null, null, null, page, perPage);
-            return new PagedResult<RoleDTO>(_mapper.Map<List<RoleDTO>>(data.Items), data.TotalPages, data.PageIndex, data.PageSize);
+            return new PagedResultCustom<RoleDTO>(_mapper.Map<List<RoleDTO>>(data.Items), data.TotalPages, data.PageIndex, data.PageSize);
         }
         public async Task<List<RolePermissionDTO>> GetPermission()
         {
