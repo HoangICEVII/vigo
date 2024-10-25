@@ -27,6 +27,10 @@ namespace vigo.Service.Admin.Service
         }
         public async Task Create(RoleCreateDTO dto)
         {
+            var checkUnique = await _unitOfWorkVigo.Roles.GetDetailBy(e => e.Name.Equals(dto.Name));
+            if (checkUnique != null) {
+                throw new CustomException("quyền đã tồn tại");
+            }
             var role = new Role()
             {
                 Name = dto.Name,

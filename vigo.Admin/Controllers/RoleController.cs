@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using vigo.Admin.Controllers.Base;
+using vigo.Domain.Helper;
 using vigo.Service.Admin.IService;
 using vigo.Service.Admin.Service;
 using vigo.Service.DTO;
@@ -96,6 +97,10 @@ namespace vigo.Admin.Controllers
             {
                 await _roleService.Create(dto);
                 return CreateResponse(null, "create success", 200, null);
+            }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
             }
             catch (Exception e)
             {
