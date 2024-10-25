@@ -170,7 +170,7 @@ namespace vigo.Service.Admin.Service
             return data;
         }
 
-        public async Task<PagedResultCustom<BusinessPartnerDTO>> GetBusinessPartnerPaging(int page, int perPage, bool? nameSort, string? searchName)
+        public async Task<PagedResultCustom<BusinessPartnerDTO>> GetBusinessPartnerPaging(int page, int perPage, string sortType, string sortField, string? searchName)
         {
             List<Expression<Func<BusinessPartner, bool>>> conditions = new List<Expression<Func<BusinessPartner, bool>>>()
             {
@@ -181,12 +181,12 @@ namespace vigo.Service.Admin.Service
                 conditions.Add(e => e.Name.ToLower().Contains(searchName.ToLower()));
             }
             bool sortDown = false;
-            if (nameSort == true)
+            if (sortType.Equals("DESC"))
             {
                 sortDown = true;
             }
             var data = await _unitOfWorkVigo.BusinessPartners.GetPaging(conditions,
-                                                                        nameSort != null ? e => e.Name : null,
+                                                                        sortField.Equals("name") ? e => e.Name : null,
                                                                         null,
                                                                         null,
                                                                         page,
@@ -195,7 +195,7 @@ namespace vigo.Service.Admin.Service
             return new PagedResultCustom<BusinessPartnerDTO>(_mapper.Map<List<BusinessPartnerDTO>>(data.Items), data.TotalRecords, data.PageIndex, data.PageSize);
         }
 
-        public async Task<PagedResultCustom<EmployeeDTO>> GetEmployeePaging(int page, int perPage, bool? nameSort, bool? salarySort, bool? dobSort, string? searchName)
+        public async Task<PagedResultCustom<EmployeeDTO>> GetEmployeePaging(int page, int perPage, string sortType, string sortField, string? searchName)
         {
             List<Expression<Func<SystemEmployee, bool>>> conditions = new List<Expression<Func<SystemEmployee, bool>>>()
             {
@@ -206,14 +206,14 @@ namespace vigo.Service.Admin.Service
                 conditions.Add(e => e.Name.ToLower().Contains(searchName.ToLower()));
             }
             bool sortDown = false;
-            if (nameSort == true || salarySort == true || dobSort == true)
+            if (sortType.Equals("DESC"))
             {
                 sortDown = true;
             }
             var data = await _unitOfWorkVigo.SystemEmployees.GetPaging(conditions,
-                                                                       nameSort != null? e => e.Name : null,
-                                                                       salarySort != null? e => e.Salary : null,
-                                                                       dobSort != null ? e => e.DOB : null,
+                                                                       sortField.Equals("name") ? e => e.Name : null,
+                                                                       sortField.Equals("salary") ? e => e.Salary : null,
+                                                                       sortField.Equals("dob") ? e => e.DOB : null,
                                                                        page,
                                                                        perPage,
                                                                        sortDown);

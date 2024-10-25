@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace vigo.Domain.Entity
+namespace vigo.Service.DTO.Admin.Room
 {
-    public class RoomType
+    public class RoomTypeDTO
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;

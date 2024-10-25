@@ -47,11 +47,11 @@ namespace vigo.Admin.Controllers
         }
 
         [HttpGet("business-partners")]
-        public async Task<IActionResult> GetBusinessPartnerPaging(int page, int perPage, bool? nameSort, string? searchName)
+        public async Task<IActionResult> GetBusinessPartnerPaging(int page, int perPage, string sortType, string sortField, string? searchName)
         {
             try
             {
-                var data = await _accountService.GetBusinessPartnerPaging(page, perPage, nameSort, searchName);
+                var data = await _accountService.GetBusinessPartnerPaging(page, perPage, sortType, sortField, searchName);
                 Option options = new Option()
                 {
                     Name = "",
@@ -84,11 +84,11 @@ namespace vigo.Admin.Controllers
         }
 
         [HttpGet("system-employees")]
-        public async Task<IActionResult> GetEmployeePaging(int page, int perPage, bool? nameSort, bool? salarySort, bool? dobSort, string? searchName)
+        public async Task<IActionResult> GetEmployeePaging(int page, int perPage, string sortType, string sortField, string? searchName)
         {
             try
             {
-                var data = await _accountService.GetEmployeePaging(page, perPage, nameSort, salarySort, dobSort, searchName);
+                var data = await _accountService.GetEmployeePaging(page, perPage, sortType, sortField, searchName);
                 return CreateResponse(data, "get success", 200, null);
             }
             catch (Exception e)

@@ -40,7 +40,7 @@ namespace vigo.Service.Admin.Service
             return bookingDTO;
         }
 
-        public async Task<PagedResultCustom<BookingDTO>> GetPaging(int page, int perPage, bool? isReceived, bool? priceSort, ClaimsPrincipal user)
+        public async Task<PagedResultCustom<BookingDTO>> GetPaging(int page, int perPage, bool? isReceived, string sortType, string sortField, ClaimsPrincipal user)
         {
             List<Expression<Func<Booking, bool>>> conditions = new List<Expression<Func<Booking, bool>>>()
             {
@@ -50,14 +50,14 @@ namespace vigo.Service.Admin.Service
                 conditions.Add(e => e.IsReceived == isReceived);
             }
             bool sortDown = false;
-            if (priceSort == true)
+            if (sortType == "DESC")
             {
                 sortDown = true;
             }
             var data = await _unitOfWorkVigo.Bookings.GetPaging(conditions,
                                                                 null,
-                                                                priceSort != null ? e => e.TotalPrice : null,
-                                                                null,
+                                                                sortField.Equals("totalPrice") ? e => e.TotalPrice : null,
+                                                                sortField.Equals("createdDate") ? e => e.CreatedDate : null,
                                                                 page,
                                                                 perPage,
                                                                 sortDown);

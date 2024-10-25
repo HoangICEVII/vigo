@@ -15,7 +15,7 @@ namespace vigo.Domain.Entity
         public DateTime CheckOutDate { get; set; }
         public int RoomId { get; set; }
         public decimal Price { get; set; }
-        public string DiscountCode { get; set; }
+        public string DiscountCode { get; set; } = string.Empty;
         public decimal DiscountPrice { get; set; }
         public decimal TotalPrice { get; set; }
         public bool IsReceived { get; set; }

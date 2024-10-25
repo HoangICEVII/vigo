@@ -17,9 +17,6 @@ namespace vigo.Infrastructure.Configuration
             builder.ToTable("roomType");
             builder.HasKey(e => e.Id);
             builder.Property(e => e.Id).ValueGeneratedOnAdd();
-            builder.Property(c => c.CreatedDate).HasColumnType("TIMESTAMP");
-            builder.Property(c => c.UpdatedDate).HasColumnType("TIMESTAMP");
-            builder.Property(c => c.DeletedDate).HasColumnType("TIMESTAMP");
         }
     }
 }

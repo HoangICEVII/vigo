@@ -64,7 +64,7 @@ namespace vigo.Service.Admin.Service
             return _mapper.Map<RoleDetailDTO>(await _unitOfWorkVigo.Roles.GetById(id));
         }
 
-        public async Task<PagedResultCustom<RoleDTO>> GetPaging(int page, int perPage, bool? createDateSort, string? searchName)
+        public async Task<PagedResultCustom<RoleDTO>> GetPaging(int page, int perPage, string sortType, string sortField, string? searchName)
         {
             List<Expression<Func<Role, bool>>> conditions = new List<Expression<Func<Role, bool>>>()
             {
@@ -75,14 +75,14 @@ namespace vigo.Service.Admin.Service
                 conditions.Add(e => e.Name.ToLower().Contains(searchName.ToLower()));
             }
             bool sortDown = false;
-            if (createDateSort == true)
+            if (sortType.Equals("DESC"))
             {
                 sortDown = true;
             }
             var data = await _unitOfWorkVigo.Roles.GetPaging(conditions,
                                                              null,
                                                              null,
-                                                             createDateSort != null ? e => e.CreatedDate : null,
+                                                             sortField.Equals("createdDate") ? e => e.CreatedDate : null,
                                                              page,
                                                              perPage,
                                                              sortDown);
@@ -95,6 +95,11 @@ namespace vigo.Service.Admin.Service
 
         public async Task Update(RoleUpdateDTO dto)
         {
+            var checkUnique = await _unitOfWorkVigo.Roles.GetDetailBy(e => e.Name.Equals(dto.Name));
+            if (checkUnique != null)
+            {
+                throw new CustomException("tên bị trùng lặp");
+            }
             var data = await _unitOfWorkVigo.Roles.GetById(dto.Id);
             data.Name = dto.Name;
             data.Permission = dto.Permission != null ? string.Join(",", dto.Permission) : "";

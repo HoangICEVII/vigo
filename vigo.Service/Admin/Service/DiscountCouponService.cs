@@ -66,7 +66,7 @@ namespace vigo.Service.Admin.Service
             return _mapper.Map<DiscountCouponDetailDTO>(data);
         }
 
-        public async Task<PagedResultCustom<DiscountCouponDTO>> GetPaging(int page, int perPage, int showRoomId, bool? startDateSort, bool? endDateSort, ClaimsPrincipal user)
+        public async Task<PagedResultCustom<DiscountCouponDTO>> GetPaging(int page, int perPage, int showRoomId, string sortType, string sortField, ClaimsPrincipal user)
         {
             List<Expression<Func<DiscountCoupon, bool>>> conditions = new List<Expression<Func<DiscountCoupon, bool>>>()
             {
@@ -74,16 +74,16 @@ namespace vigo.Service.Admin.Service
                 e => e.ShowRoomId == showRoomId
             };
             bool sortDown = false;
-            if (startDateSort == true || endDateSort == true)
+            if (sortType.Equals("DESC"))
             {
                 sortDown = true;
             }
             Expression<Func<DiscountCoupon, DateTime>>? func = null;
-            if (startDateSort != null)
+            if (sortField.Equals("startDate"))
             {
                 func = e => e.StartDate;
             }
-            if (endDateSort != null)
+            if (sortField.Equals("endDate"))
             {
                 func = e => e.EndDate;
             }

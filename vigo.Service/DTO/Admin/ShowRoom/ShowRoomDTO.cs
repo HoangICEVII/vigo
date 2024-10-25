@@ -4,17 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace vigo.Domain.Entity
+namespace vigo.Service.DTO.Admin.ShowRoom
 {
-    public class ShowRoom
+    public class ShowRoomDTO
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
-        public int ProvinceId {  get; set; }
-        public int DistrictId { get; set; }
-        public int BusinessPartnerId { get; set; }
+        public string Province { get; set; } = string.Empty;
+        public string District { get; set; } = string.Empty;
+        public string BusinessPartner { get; set; } = string.Empty;
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
-        public DateTime? DeletedDate { get; set; }
+        public DateTime DeletedDate { get; set; }
     }
 }

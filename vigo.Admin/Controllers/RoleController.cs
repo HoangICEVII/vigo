@@ -39,11 +39,11 @@ namespace vigo.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPaging(int page, int perPage, bool? createDateSort, string? searchName)
+        public async Task<IActionResult> GetPaging(int page, int perPage, string sortType, string sortField, string? searchName)
         {
             try
             {
-                var data = await _roleService.GetPaging(page, perPage, createDateSort, searchName);
+                var data = await _roleService.GetPaging(page, perPage, sortType, sortField, searchName);
                 Option options = new Option()
                 {
                     Name = "",

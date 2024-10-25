@@ -9,8 +9,9 @@ namespace vigo.Service.DTO.Admin.Room
     public class RoomDetailDTO
     {
         public int Id { get; set; }
-        public string Description { get; set; }
-        public string Thumbnail { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string Thumbnail { get; set; } = string.Empty;
         public int ShowRoomId { get; set; }
         public int Days { get; set; }
         public decimal Price { get; set; }

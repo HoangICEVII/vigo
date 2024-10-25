@@ -12,7 +12,7 @@ namespace vigo.Service.Admin.IService
 {
     public interface IBookingService
     {
-        Task<PagedResultCustom<BookingDTO>> GetPaging(int page, int perPage, bool? isReceived, bool? priceSort, ClaimsPrincipal user);
+        Task<PagedResultCustom<BookingDTO>> GetPaging(int page, int perPage, bool? isReceived, string sortType, string sortField, ClaimsPrincipal user);
         Task<BookingDetailDTO> GetDetail(int id, ClaimsPrincipal user);
         Task ReceiveBooking(List<int> ids, ClaimsPrincipal user);
     }

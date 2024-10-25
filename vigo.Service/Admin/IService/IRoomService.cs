@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using vigo.Domain.Helper;
+using vigo.Service.DTO.Admin.Room;
 
 namespace vigo.Service.Admin.IService
 {
     public interface IRoomService
     {
-        Task GetPaging();
-        Task GetById();
-        Task Create();
-        Task Update();
-        Task Delete();
+        Task<PagedResultCustom<RoomDTO>> GetPaging(int page, int perPage, int? roomTypeId, string sortType, string sortField, string? searchName);
+        Task<List<RoomTypeDTO>> GetAllType();
+        Task<RoomDetailDTO> GetDetail(int id);
+        Task Create(CreateRoomDTO dto);
+        Task Update(UpdateRoomDTO dto);
+        Task Delete(int id);
     }
 }
