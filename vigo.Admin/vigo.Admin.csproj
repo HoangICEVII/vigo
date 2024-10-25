@@ -28,4 +28,8 @@
     <ProjectReference Include="..\vigo.Service\vigo.Service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Resource\Image\" />
+  </ItemGroup>
+
 </Project>

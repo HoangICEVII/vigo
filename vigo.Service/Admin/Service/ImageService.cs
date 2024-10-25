@@ -24,7 +24,7 @@ namespace vigo.Service.Admin.Service
         {
             string imageExtension = Path.GetExtension(ContentDispositionHeaderValue.Parse(image.ContentDisposition).FileName!.Trim('"'));
             string imageFileName = GenerateString.GenerateRandomString(5) + DateTime.Now.ToString("yyyyMMddHHmmssfff") + imageExtension;
-            string imageFilepath = Path.Combine(_env.ContentRootPath, "volume/Resource", imageFileName);
+            string imageFilepath = Path.Combine(_env.ContentRootPath, "volume/Resource/Image", imageFileName);
             using (var stream = new FileStream(imageFilepath, FileMode.Create))
             {
                 await image.CopyToAsync(stream);

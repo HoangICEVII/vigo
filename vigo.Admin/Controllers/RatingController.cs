@@ -38,6 +38,7 @@ namespace vigo.Admin.Controllers
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return CreateResponse(null, "get fail", 500, null);
             }
         }
@@ -52,6 +53,7 @@ namespace vigo.Admin.Controllers
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return CreateResponse(null, "approve fail", 500, null);
             }
         }
@@ -66,6 +68,7 @@ namespace vigo.Admin.Controllers
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return CreateResponse(null, "fail", 500, null);
             }
         }
@@ -80,6 +83,7 @@ namespace vigo.Admin.Controllers
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return CreateResponse(null, "receive fail", 500, null);
             }
         }

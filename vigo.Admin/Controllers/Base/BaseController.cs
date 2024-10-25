@@ -13,11 +13,17 @@ namespace vigo.Admin.Controllers.Base
                 Status = status,
                 MetaData = new MetaData
                 {
-                    Count = data is ICollection<object> collection ? collection.Count : 1,
+                    Count = data is ICollection<object> ? ((ICollection<object>)data).Count() : 0,
                     Rows = data is ICollection<object> ? (ICollection<object>)data : null
                 },
                 Options = options
             };
+            if (data != null && data is object && response.MetaData.Rows == null)
+            {
+                ICollection<object> temp = [data];
+                response.MetaData.Rows = temp;
+                response.MetaData.Count = temp.Count();
+            }
             return Ok(response);
         }
     }

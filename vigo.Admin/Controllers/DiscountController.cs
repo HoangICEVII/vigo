@@ -39,6 +39,7 @@ namespace vigo.Admin.Controllers
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return CreateResponse(null, "get fail", 500, null);
             }
         }
@@ -53,6 +54,7 @@ namespace vigo.Admin.Controllers
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return CreateResponse(null, "get fail", 500, null);
             }
         }
@@ -67,6 +69,7 @@ namespace vigo.Admin.Controllers
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return CreateResponse(null, "create fail", 500, null);
             }
         }
@@ -81,6 +84,7 @@ namespace vigo.Admin.Controllers
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return CreateResponse(null, "update fail", 500, null);
             }
         }
@@ -95,6 +99,7 @@ namespace vigo.Admin.Controllers
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return CreateResponse(null, "delete fail", 500, null);
             }
         }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -35,10 +36,11 @@ namespace vigo.Admin.Controllers
             {
                 var userAuthen = await _accountService.AdminLogin(dto);
                 string token = CreateToken(userAuthen);
-                return Ok(token);
+                return CreateResponse(token, "get success", 200, null);
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return new ObjectResult(new { message = e.Message }) { StatusCode = 500 };
             }
         }
@@ -59,6 +61,7 @@ namespace vigo.Admin.Controllers
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return CreateResponse(null, "get fail", 500, null);
             }
         }
@@ -73,6 +76,7 @@ namespace vigo.Admin.Controllers
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return CreateResponse(null, "get fail", 500, null);
             }
         }
@@ -87,6 +91,7 @@ namespace vigo.Admin.Controllers
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return CreateResponse(null, "get fail", 500, null);
             }
         }
@@ -101,6 +106,7 @@ namespace vigo.Admin.Controllers
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return CreateResponse(null, "get fail", 500, null);
             }
         }
@@ -116,6 +122,7 @@ namespace vigo.Admin.Controllers
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return CreateResponse(null, "create fail", 500, null);
             }
         }
@@ -131,6 +138,7 @@ namespace vigo.Admin.Controllers
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return CreateResponse(null, "create fail", 500, null);
             }
         }
@@ -146,6 +154,7 @@ namespace vigo.Admin.Controllers
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return CreateResponse(null, "delete fail", 500, null);
             }
         }
@@ -161,6 +170,7 @@ namespace vigo.Admin.Controllers
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return CreateResponse(null, "delete fail", 500, null);
             }
         }

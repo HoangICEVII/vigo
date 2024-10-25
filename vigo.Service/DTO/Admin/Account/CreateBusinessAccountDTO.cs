@@ -8,7 +8,6 @@ namespace vigo.Service.DTO.Admin.Account
 {
     public class CreateBusinessAccountDTO
     {
-        public int Id { get; set; }
         public string FullName { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }

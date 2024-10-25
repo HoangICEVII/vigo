@@ -30,6 +30,7 @@ namespace vigo.Admin.Controllers
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return CreateResponse(null, "upload fail", 500, null);
             }
         }

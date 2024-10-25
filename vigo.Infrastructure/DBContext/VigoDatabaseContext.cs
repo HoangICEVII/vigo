@@ -69,17 +69,15 @@ namespace vigo.Infrastructure.DBContext
             modelBuilder.ApplyConfiguration(new TouristConfiguration());
 
             modelBuilder.Entity<RolePermission>().HasData(
-                new RolePermission { Id = 1, Name = "quản lí tài khoản"},
-                new RolePermission { Id = 2, Name = "quản lí đặt phòng"},
-                new RolePermission { Id = 3, Name = "quản lí quyền"},
-                new RolePermission { Id = 4, Name = "quản lí giảm giá" },
-                new RolePermission { Id = 5, Name = "kiểu ảnh" },
-                new RolePermission { Id = 6, Name = "quản lí giao dịch" },
-                new RolePermission { Id = 7, Name = "phản hồi, đánh giá" },
-                new RolePermission { Id = 8, Name = "quản lí phòng" },
-                new RolePermission { Id = 9, Name = "quản lí dịch vụ" },
-                new RolePermission { Id = 10, Name = "quản lí chi nhánh" },
-                new RolePermission { Id = 11, Name = "quản lí thông tin cá nhân" }
+                new RolePermission { Id = 1, Name = "quản lí tài khoản", RoleLabel = "account_manage"},
+                new RolePermission { Id = 2, Name = "quản lí đặt phòng", RoleLabel = "booking_manage" },
+                new RolePermission { Id = 3, Name = "quản lí quyền", RoleLabel = "role_manage" },
+                new RolePermission { Id = 4, Name = "quản lí giảm giá", RoleLabel = "discount_manage" },
+                new RolePermission { Id = 5, Name = "quản lí giao dịch", RoleLabel = "transaction_manage" },
+                new RolePermission { Id = 6, Name = "phản hồi, đánh giá", RoleLabel = "rating_manage" },
+                new RolePermission { Id = 7, Name = "quản lí phòng", RoleLabel = "room_manage" },
+                new RolePermission { Id = 8, Name = "quản lí dịch vụ", RoleLabel = "service_manage" },
+                new RolePermission { Id = 9, Name = "quản lí chi nhánh", RoleLabel = "showroom_manage" }
             );
 
         }
