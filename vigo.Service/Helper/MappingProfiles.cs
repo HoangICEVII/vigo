@@ -24,7 +24,10 @@ namespace vigo.Service.Helper
     {
         public MappingProfiles()
         {
-            CreateMap<Role, RoleDTO>();
+            CreateMap<Role, RoleDTO>()
+            .ForMember(dest => dest.Permission, opt => opt.MapFrom(src => SplitPermissions(src.Permission)));
+            CreateMap<Role, RoleDetailDTO>()
+            .ForMember(dest => dest.Permission, opt => opt.MapFrom(src => SplitPermissions(src.Permission)));
             CreateMap<RolePermission, RolePermissionDTO>();
             CreateMap<BusinessPartner, BusinessPartnerDTO>();
             CreateMap<SystemEmployee, EmployeeDTO>();
@@ -35,6 +38,10 @@ namespace vigo.Service.Helper
             CreateMap<DiscountCoupon, DiscountCouponDetailDTO>();
             CreateMap<DiscountCoupon, DiscountCouponDTO>();
             CreateMap<Rating, RatingDTO>();
+        }
+        public static List<string> SplitPermissions(string permissions)
+        {
+            return permissions?.Split(',').ToList() ?? new List<string>();
         }
     }
 }

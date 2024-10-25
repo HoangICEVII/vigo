@@ -63,12 +63,11 @@ namespace vigo.Infrastructure.Generic
             }
 
             var totalRecords = await query.CountAsync();
-            var totalPages = totalRecords % pageSize == 0 ? totalRecords/pageSize : totalRecords/pageSize +1;
             var result = await query.Skip((pageIndex - 1) * pageSize)
                                     .Take(pageSize)
                                     .ToListAsync();
 
-            return new PagedResultCustom<T>(result, totalPages, pageIndex, pageSize);
+            return new PagedResultCustom<T>(result, totalRecords, pageIndex, pageSize);
         }
 
         public void Create(T entity)

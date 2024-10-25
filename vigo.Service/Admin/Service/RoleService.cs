@@ -55,14 +55,34 @@ namespace vigo.Service.Admin.Service
             return _mapper.Map<List<RoleDTO>>(await _unitOfWorkVigo.Roles.GetAll(conditions));
         }
 
-        public async Task<PagedResultCustom<RoleDTO>> GetPaging(int page, int perPage)
+        public async Task<RoleDetailDTO> GetDetail(int id)
+        {
+            return _mapper.Map<RoleDetailDTO>(await _unitOfWorkVigo.Roles.GetById(id));
+        }
+
+        public async Task<PagedResultCustom<RoleDTO>> GetPaging(int page, int perPage, bool? createDateSort, string? searchName)
         {
             List<Expression<Func<Role, bool>>> conditions = new List<Expression<Func<Role, bool>>>()
             {
                 e => e.DeletedDate == null
             };
-            var data = await _unitOfWorkVigo.Roles.GetPaging(conditions, null, null, null, page, perPage);
-            return new PagedResultCustom<RoleDTO>(_mapper.Map<List<RoleDTO>>(data.Items), data.TotalPages, data.PageIndex, data.PageSize);
+            if (searchName != null)
+            {
+                conditions.Add(e => e.Name.ToLower().Contains(searchName.ToLower()));
+            }
+            bool sortDown = false;
+            if (createDateSort == true)
+            {
+                sortDown = true;
+            }
+            var data = await _unitOfWorkVigo.Roles.GetPaging(conditions,
+                                                             null,
+                                                             null,
+                                                             createDateSort != null ? e => e.CreatedDate : null,
+                                                             page,
+                                                             perPage,
+                                                             sortDown);
+            return new PagedResultCustom<RoleDTO>(_mapper.Map<List<RoleDTO>>(data.Items), data.TotalRecords, data.PageIndex, data.PageSize);
         }
         public async Task<List<RolePermissionDTO>> GetPermission()
         {

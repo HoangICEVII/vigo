@@ -61,7 +61,7 @@ namespace vigo.Service.Admin.Service
                                                                 page,
                                                                 perPage,
                                                                 sortDown);
-            return new PagedResultCustom<BookingDTO>(_mapper.Map<List<BookingDTO>>(data.Items), data.TotalPages, data.PageIndex, data.PageSize);
+            return new PagedResultCustom<BookingDTO>(_mapper.Map<List<BookingDTO>>(data.Items), data.TotalRecords, data.PageIndex, data.PageSize);
         }
 
         public async Task ReceiveBooking(List<int> ids, ClaimsPrincipal user)

@@ -30,8 +30,9 @@ namespace vigo.Admin.Controllers
                 Option options = new Option()
                 {
                     Name = "",
+                    PageSize = data.PageSize,
                     Page = data.PageIndex,
-                    TotalPage = data.TotalPages
+                    TotalRecords = data.TotalRecords
                 };
                 return CreateResponse(data.Items, "get success", 200, options);
             }

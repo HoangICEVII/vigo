@@ -38,16 +38,17 @@ namespace vigo.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPaging(int page, int perPage)
+        public async Task<IActionResult> GetPaging(int page, int perPage, bool? createDateSort, string? searchName)
         {
             try
             {
-                var data = await _roleService.GetPaging(page, perPage);
+                var data = await _roleService.GetPaging(page, perPage, createDateSort, searchName);
                 Option options = new Option()
                 {
                     Name = "",
                     Page = data.PageIndex,
-                    TotalPage = data.TotalPages
+                    PageSize = data.PageSize,
+                    TotalRecords = data.TotalRecords
                 };
                 return CreateResponse(data.Items, "get success", 200, options);
             }
@@ -64,6 +65,21 @@ namespace vigo.Admin.Controllers
             try
             {
                 var data = await _roleService.GetAll();
+                return CreateResponse(data, "get success", 200, null);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return CreateResponse(null, "get fail", 500, null);
+            }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetAll(int id)
+        {
+            try
+            {
+                var data = await _roleService.GetDetail(id);
                 return CreateResponse(data, "get success", 200, null);
             }
             catch (Exception e)

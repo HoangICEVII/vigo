@@ -94,7 +94,7 @@ namespace vigo.Service.Admin.Service
                                                                        page,
                                                                        perPage,
                                                                        sortDown);
-            return new PagedResultCustom<DiscountCouponDTO>(_mapper.Map<List<DiscountCouponDTO>>(data.Items), data.TotalPages, data.PageIndex, data.PageSize);
+            return new PagedResultCustom<DiscountCouponDTO>(_mapper.Map<List<DiscountCouponDTO>>(data.Items), data.TotalRecords, data.PageIndex, data.PageSize);
         }
 
         public async Task Update(DiscountCouponUpdateDTO dto, ClaimsPrincipal user)

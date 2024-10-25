@@ -9,7 +9,8 @@ namespace vigo.Service.DTO
     public class Option
     {
         public string Name { get; set; } = string.Empty;
-        public int TotalPage { get; set; }
+        public int TotalRecords { get; set; }
+        public int PageSize { get; set; }
         public int Page { get; set; }
     }
 }

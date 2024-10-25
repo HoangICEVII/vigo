@@ -192,7 +192,7 @@ namespace vigo.Service.Admin.Service
                                                                         page,
                                                                         perPage,
                                                                         sortDown);
-            return new PagedResultCustom<BusinessPartnerDTO>(_mapper.Map<List<BusinessPartnerDTO>>(data.Items), data.TotalPages, data.PageIndex, data.PageSize);
+            return new PagedResultCustom<BusinessPartnerDTO>(_mapper.Map<List<BusinessPartnerDTO>>(data.Items), data.TotalRecords, data.PageIndex, data.PageSize);
         }
 
         public async Task<PagedResultCustom<EmployeeDTO>> GetEmployeePaging(int page, int perPage, bool? nameSort, bool? salarySort, bool? dobSort, string? searchName)
@@ -217,7 +217,7 @@ namespace vigo.Service.Admin.Service
                                                                        page,
                                                                        perPage,
                                                                        sortDown);
-            return new PagedResultCustom<EmployeeDTO>(_mapper.Map<List<EmployeeDTO>>(data.Items), data.TotalPages, data.PageIndex, data.PageSize);
+            return new PagedResultCustom<EmployeeDTO>(_mapper.Map<List<EmployeeDTO>>(data.Items), data.TotalRecords, data.PageIndex, data.PageSize);
         }
     }
 }

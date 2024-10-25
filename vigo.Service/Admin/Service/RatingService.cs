@@ -75,7 +75,7 @@ namespace vigo.Service.Admin.Service
                                                                null,
                                                                page,
                                                                perPage);
-            return new PagedResultCustom<RatingDTO>(_mapper.Map<List<RatingDTO>>(data.Items), data.TotalPages, data.PageIndex, data.PageSize);
+            return new PagedResultCustom<RatingDTO>(_mapper.Map<List<RatingDTO>>(data.Items), data.TotalRecords, data.PageIndex, data.PageSize);
         }
 
         public async Task UnApprove(List<int> ids, ClaimsPrincipal user)
