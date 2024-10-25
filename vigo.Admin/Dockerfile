@@ -30,4 +30,5 @@ RUN dotnet publish "./vigo.Admin.csproj" -c $BUILD_CONFIGURATION -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+COPY ["vigo.Admin/Resource", "/app/volume/Resource"]
 ENTRYPOINT ["dotnet", "vigo.Admin.dll"]

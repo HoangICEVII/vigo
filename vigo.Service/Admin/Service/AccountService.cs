@@ -170,12 +170,16 @@ namespace vigo.Service.Admin.Service
             return data;
         }
 
-        public async Task<PagedResult<BusinessPartnerDTO>> GetBusinessPartnerPaging(int page, int perPage, bool? nameSort)
+        public async Task<PagedResult<BusinessPartnerDTO>> GetBusinessPartnerPaging(int page, int perPage, bool? nameSort, string? searchName)
         {
             List<Expression<Func<BusinessPartner, bool>>> conditions = new List<Expression<Func<BusinessPartner, bool>>>()
             {
                 e => e.DeletedDate == null
             };
+            if (searchName != null)
+            {
+                conditions.Add(e => e.Name.ToLower().Contains(searchName.ToLower()));
+            }
             bool sortDown = false;
             if (nameSort == true)
             {
@@ -191,12 +195,16 @@ namespace vigo.Service.Admin.Service
             return new PagedResult<BusinessPartnerDTO>(_mapper.Map<List<BusinessPartnerDTO>>(data.Items), data.TotalPages, data.PageIndex, data.PageSize);
         }
 
-        public async Task<PagedResult<EmployeeDTO>> GetEmployeePaging(int page, int perPage, bool? nameSort, bool? salarySort, bool? dobSort)
+        public async Task<PagedResult<EmployeeDTO>> GetEmployeePaging(int page, int perPage, bool? nameSort, bool? salarySort, bool? dobSort, string? searchName)
         {
             List<Expression<Func<SystemEmployee, bool>>> conditions = new List<Expression<Func<SystemEmployee, bool>>>()
             {
                 e => e.DeletedDate == null
             };
+            if (searchName != null)
+            {
+                conditions.Add(e => e.Name.ToLower().Contains(searchName.ToLower()));
+            }
             bool sortDown = false;
             if (nameSort == true || salarySort == true || dobSort == true)
             {

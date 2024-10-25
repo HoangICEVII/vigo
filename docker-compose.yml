@@ -17,6 +17,8 @@ services:
   vigo:
     container_name: vigo-api
     image: ${DOCKER_REGISTRY-}vigo-api
+    volumes:
+      - vigo_volume:/app/volume/Resource
     build:
       context: .
       dockerfile: vigo/Dockerfile
@@ -36,6 +38,8 @@ services:
   vigo.admin:
     container_name: vigo-admin-api
     image: ${DOCKER_REGISTRY-}vigo-admin-api
+    volumes:
+      - vigo_volume:/app/volume/Resource
     build:
       context: .
       dockerfile: vigo.Admin/Dockerfile
@@ -51,3 +55,8 @@ services:
       - DB_USER=root
       - DB_PASSWORD=123456
       - ASPNETCORE_URLS=http://+:80
+
+volumes:
+  vigo_volume:
+    driver: local
+    name: vigo_pro4_volume

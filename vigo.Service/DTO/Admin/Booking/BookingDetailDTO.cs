@@ -3,21 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using vigo.Service.DTO.Admin.Account;
+using vigo.Service.DTO.Admin.Room;
 
-namespace vigo.Domain.Entity
+namespace vigo.Service.DTO.Admin.Booking
 {
-    public class Booking
+    public class BookingDetailDTO
     {
         public int Id { get; set; }
-        public int TouristId { get; set; }
+        public TouristDetailDTO Tourist { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime CheckInDate { get; set; }
         public DateTime CheckOutDate { get; set; }
-        public int RoomId { get; set; }
+        public RoomDetailDTO Room { get; set; }
         public decimal Price { get; set; }
         public string DiscountCode { get; set; }
         public decimal DiscountPrice { get; set; }
         public decimal TotalPrice { get; set; }
-        public bool IsReceived { get; set; }
     }
 }

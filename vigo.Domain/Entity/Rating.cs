@@ -12,11 +12,11 @@ namespace vigo.Domain.Entity
         public int TouristId { get; set; }
         public int RoomId { get; set; }
         public int Rate { get; set; }
-        public string Comment { get; set; }
-        public string UpdateComment { get; set; }
+        public string Comment { get; set; } = string.Empty;
+        public string UpdateComment { get; set; } = string.Empty;
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
-        public DateTime DeletedDate { get; set; }
+        public DateTime? DeletedDate { get; set; }
         public bool Status { get; set; }
     }
 }

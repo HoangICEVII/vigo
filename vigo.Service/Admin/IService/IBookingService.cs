@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using vigo.Domain.Helper;
 using vigo.Service.DTO.Admin.Account;
 using vigo.Service.DTO.Admin.Booking;
 
@@ -10,7 +12,8 @@ namespace vigo.Service.Admin.IService
 {
     public interface IBookingService
     {
-        Task<List<BookingDTO>> GetPaging();
-        Task ReceiveBooking();
+        Task<PagedResult<BookingDTO>> GetPaging(int page, int perPage, bool? isReceived, bool? priceSort, ClaimsPrincipal user);
+        Task<BookingDetailDTO> GetDetail(int id, ClaimsPrincipal user);
+        Task ReceiveBooking(List<int> ids, ClaimsPrincipal user);
     }
 }

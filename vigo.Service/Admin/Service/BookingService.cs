@@ -1,23 +1,79 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using vigo.Domain.Entity;
+using vigo.Domain.Helper;
+using vigo.Domain.Interface.IUnitOfWork;
+using vigo.Domain.User;
 using vigo.Service.Admin.IService;
+using vigo.Service.DTO.Admin.Account;
 using vigo.Service.DTO.Admin.Booking;
+using vigo.Service.DTO.Admin.Room;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace vigo.Service.Admin.Service
 {
     public class BookingService : IBookingService
     {
-        public Task<List<BookingDTO>> GetPaging()
+        private readonly IMapper _mapper;
+        private readonly IUnitOfWorkVigo _unitOfWorkVigo;
+
+        public BookingService(IUnitOfWorkVigo unitOfWorkVigo, IMapper mapper)
         {
-            throw new NotImplementedException();
+            _unitOfWorkVigo = unitOfWorkVigo;
+            _mapper = mapper;
         }
 
-        public Task ReceiveBooking()
+        public async Task<BookingDetailDTO> GetDetail(int id, ClaimsPrincipal user)
         {
-            throw new NotImplementedException();
+            var booking = await _unitOfWorkVigo.Bookings.GetById(id);
+            var tourist = await _unitOfWorkVigo.Tourists.GetById(booking.TouristId);
+            var room = await _unitOfWorkVigo.Rooms.GetById(booking.RoomId);
+            var bookingDTO = _mapper.Map<BookingDetailDTO>(booking);
+            bookingDTO.Tourist = _mapper.Map<TouristDetailDTO>(tourist);
+            bookingDTO.Room = _mapper.Map<RoomDetailDTO>(room);
+            return bookingDTO;
+        }
+
+        public async Task<PagedResult<BookingDTO>> GetPaging(int page, int perPage, bool? isReceived, bool? priceSort, ClaimsPrincipal user)
+        {
+            List<Expression<Func<Booking, bool>>> conditions = new List<Expression<Func<Booking, bool>>>()
+            {
+            };
+            if (isReceived != null)
+            {
+                conditions.Add(e => e.IsReceived == isReceived);
+            }
+            bool sortDown = false;
+            if (priceSort == true)
+            {
+                sortDown = true;
+            }
+            var data = await _unitOfWorkVigo.Bookings.GetPaging(conditions,
+                                                                null,
+                                                                priceSort != null ? e => e.TotalPrice : null,
+                                                                null,
+                                                                page,
+                                                                perPage,
+                                                                sortDown);
+            return new PagedResult<BookingDTO>(_mapper.Map<List<BookingDTO>>(data.Items), data.TotalPages, data.PageIndex, data.PageSize);
+        }
+
+        public async Task ReceiveBooking(List<int> ids, ClaimsPrincipal user)
+        {
+            List<Booking> data = new List<Booking>();
+            foreach (int id in ids) {
+                data.Add(await _unitOfWorkVigo.Bookings.GetById(id));
+            }
+            foreach (Booking item in data) {
+                item.IsReceived = true;
+            }
+            await _unitOfWorkVigo.Complete();
         }
     }
 }

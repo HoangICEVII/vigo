@@ -41,7 +41,7 @@ namespace vigo.Infrastructure.UnitOfWork
         public IAccountRepository Accounts => _accounts.Value;
         public IBookingRepository Bookings => _bookings.Value;
         public IBusinessPartnerRepository BusinessPartners => _businessPartners.Value;
-        public IDiscountRepository Discounts => _discounts.Value;
+        public IDiscountRepository DiscountCoupons => _discounts.Value;
         public IDistrictRepository Districts => _districts.Value;
         public IImageRepository Images => _images.Value;
         public IImageTypeRepository ImageTypes => _imageTypes.Value;

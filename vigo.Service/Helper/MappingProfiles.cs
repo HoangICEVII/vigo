@@ -13,6 +13,10 @@ using vigo.Domain.Entity;
 using vigo.Service.DTO.Admin.Role;
 using vigo.Service.DTO.Admin.Account;
 using vigo.Domain.User;
+using vigo.Service.DTO.Admin.Booking;
+using vigo.Service.DTO.Admin.Room;
+using vigo.Service.DTO.Admin.Discount;
+using vigo.Service.DTO.Admin.Rating;
 
 namespace vigo.Service.Helper
 {
@@ -24,6 +28,13 @@ namespace vigo.Service.Helper
             CreateMap<RolePermission, RolePermissionDTO>();
             CreateMap<BusinessPartner, BusinessPartnerDTO>();
             CreateMap<SystemEmployee, EmployeeDTO>();
+            CreateMap<Booking, BookingDetailDTO>();
+            CreateMap<Tourist, TouristDetailDTO>();
+            CreateMap<Room, RoomDetailDTO>();
+            CreateMap<Booking, BookingDTO>();
+            CreateMap<DiscountCoupon, DiscountCouponDetailDTO>();
+            CreateMap<DiscountCoupon, DiscountCouponDTO>();
+            CreateMap<Rating, RatingDTO>();
         }
     }
 }

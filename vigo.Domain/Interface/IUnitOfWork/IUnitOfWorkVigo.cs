@@ -12,7 +12,7 @@ namespace vigo.Domain.Interface.IUnitOfWork
         IAccountRepository Accounts { get; }
         IBookingRepository Bookings { get; }
 
-        IDiscountRepository Discounts { get; }
+        IDiscountRepository DiscountCoupons { get; }
         IDistrictRepository Districts { get; }
 
         IImageRepository Images { get; }

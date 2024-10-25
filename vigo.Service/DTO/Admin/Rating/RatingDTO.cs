@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace vigo.Service.DTO.Admin.Booking
+namespace vigo.Service.DTO.Admin.Rating
 {
-    public class BookingDTO
+    public class RatingDTO
     {
         public int Id { get; set; }
+        public int Rate { get; set; }
+        public string Comment { get; set; } = string.Empty;
         public DateTime CreatedDate { get; set; }
-        public decimal TotalPrice { get; set; }
     }
 }
