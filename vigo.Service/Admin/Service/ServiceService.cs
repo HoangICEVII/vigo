@@ -43,6 +43,7 @@ namespace vigo.Service.Admin.Service
                 DeletedDate = null,
                 Name = dto.Name,
                 Description = dto.Description,
+                Icon = dto.Icon,
             };
             _unitOfWorkVigo.Services.Create(data);
             await _unitOfWorkVigo.Complete();
@@ -106,6 +107,7 @@ namespace vigo.Service.Admin.Service
             data.UpdatedDate = DateTime.Now;
             data.Name = dto.Name;
             data.Description = dto.Description;
+            data.Icon = dto.Icon;
             await _unitOfWorkVigo.Complete();
         }
     }
