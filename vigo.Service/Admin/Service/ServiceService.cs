@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using vigo.Domain.AccountFolder;
 using vigo.Domain.Entity;
 using vigo.Domain.Helper;
 using vigo.Domain.Interface.IUnitOfWork;
@@ -29,6 +30,11 @@ namespace vigo.Service.Admin.Service
 
         public async Task Create(ServiceCreateDTO dto)
         {
+            var checkUnique = await _unitOfWorkVigo.Services.GetDetailBy(e => e.Name == dto.Name);
+            if (checkUnique != null)
+            {
+                throw new CustomException("dịch vụ đã tồn tại");
+            }
             DateTime DateNow = DateTime.Now;
             ServiceR data = new ServiceR()
             {
@@ -90,6 +96,12 @@ namespace vigo.Service.Admin.Service
 
         public async Task Update(ServiceUpdateDTO dto)
         {
+            var service = await _unitOfWorkVigo.Services.GetDetailBy(e => e.Id == dto.Id);
+            var checkUnique = await _unitOfWorkVigo.Services.GetDetailBy(e => e.Name == dto.Name);
+            if (dto.Name != service!.Name && checkUnique != null)
+            {
+                throw new CustomException("dịch vụ đã tồn tại");
+            }
             var data = await _unitOfWorkVigo.Services.GetById(dto.Id);
             data.UpdatedDate = DateTime.Now;
             data.Name = dto.Name;

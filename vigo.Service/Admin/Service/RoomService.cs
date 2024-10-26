@@ -147,6 +147,30 @@ namespace vigo.Service.Admin.Service
             data.Description = dto.Description;
             data.Name = dto.Name;
             data.RoomTypeId = dto.RoomTypeId;
+
+            List<Expression<Func<RoomServiceR, bool>>> con = new List<Expression<Func<RoomServiceR, bool>>>()
+            {
+                e => e.RoomId == dto.Id,
+            };
+
+            var roomService = await _unitOfWorkVigo.RoomServices.GetAll(con);
+            foreach (var r in roomService) {
+                if (!dto.Services.Contains(r.ServiceId))
+                {
+                    _unitOfWorkVigo.RoomServices.Delete(r);
+                }
+                else
+                {
+                    dto.Services.Remove(r.ServiceId);
+                }
+            }
+            foreach (var item in dto.Services) {
+                _unitOfWorkVigo.RoomServices.Create(new RoomServiceR()
+                {
+                    RoomId = dto.Id,
+                    ServiceId = item
+                });
+            }
             await _unitOfWorkVigo.Complete();
         }
     }

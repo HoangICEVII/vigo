@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using vigo.Admin.Controllers.Base;
 using vigo.Domain.Helper;
 using vigo.Service.Admin.IService;
@@ -24,12 +25,31 @@ namespace vigo.Admin.Controllers
             _roomTypeService = roomTypeService;
         }
 
-        [HttpGet("room-types")]
+        [HttpGet("room-types/get-all")]
         public async Task<IActionResult> GetAllType()
         {
             try
             {
                 var data = await _roomTypeService.GetAll(User);
+                return CreateResponse(data, "get success", 200, null);
+            }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return CreateResponse(null, "get fail", 500, null);
+            }
+        }
+
+        [HttpGet("room-types")]
+        public async Task<IActionResult> GetPagingType(int page, int perPage, string? sortType, string? sortField, string? searchName)
+        {
+            try
+            {
+                var data = await _roomTypeService.GetPaging(page, perPage, sortType, sortField, searchName, User);
                 return CreateResponse(data, "get success", 200, null);
             }
             catch (CustomException e)
