@@ -32,7 +32,7 @@ namespace vigo.Service.Helper
             .ForMember(dest => dest.Permission, opt => opt.MapFrom(src => SplitPermissions(src.Permission)));
             CreateMap<RolePermission, RolePermissionDTO>();
             CreateMap<BusinessPartner, BusinessPartnerDTO>();
-            CreateMap<SystemEmployee, EmployeeDTO>();
+            CreateMap<SystemEmployee, EmployeeDTO>().ForMember(dest => dest.Name, opt => opt.MapFrom(e => e.FullName)); ;
             CreateMap<Booking, BookingDetailDTO>();
             CreateMap<Tourist, TouristDetailDTO>();
             CreateMap<Room, RoomDetailDTO>();

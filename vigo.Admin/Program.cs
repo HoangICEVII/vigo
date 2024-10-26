@@ -129,9 +129,9 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-//var startup = new Startup(app.Services);
-//startup.Configure(app);
+var startup = new Startup(app.Services);
+startup.Configure(app);
 
-//startup.Init();
+startup.Init();
 
 app.Run();

@@ -120,6 +120,8 @@ namespace vigo.Infrastructure.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Description = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    Icon = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     CreatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
                     DeletedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: true)

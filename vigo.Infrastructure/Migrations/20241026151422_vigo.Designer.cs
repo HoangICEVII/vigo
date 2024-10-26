@@ -12,7 +12,7 @@ using vigo.Infrastructure.DBContext;
 namespace vigo.Infrastructure.Migrations
 {
     [DbContext(typeof(VigoDatabaseContext))]
-    [Migration("20241026130337_vigo")]
+    [Migration("20241026151422_vigo")]
     partial class vigo
     {
         /// <inheritdoc />
@@ -606,6 +606,10 @@ namespace vigo.Infrastructure.Migrations
                         .HasColumnType("TIMESTAMP");
 
                     b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Icon")
                         .IsRequired()
                         .HasColumnType("longtext");
 

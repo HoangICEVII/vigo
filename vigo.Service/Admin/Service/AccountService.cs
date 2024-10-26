@@ -176,7 +176,7 @@ namespace vigo.Service.Admin.Service
                 DeletedDate = info.DeletedDate,
                 UpdatedDate = info.UpdatedDate,
                 Email = account.Email,
-                Name = info.Name,
+                Name = info.FullName,
                 PhoneNumber = info.PhoneNumber,
                 RoleId = account.RoleId,
                 BankNumber = info.BankNumber,
