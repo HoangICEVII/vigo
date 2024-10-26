@@ -18,7 +18,7 @@ services:
     container_name: vigo-api
     image: ${DOCKER_REGISTRY-}vigo-api
     volumes:
-      - vigo_volume:/app/volume/Resource
+      - vigo_volume:/app/volume/image
     build:
       context: .
       dockerfile: vigo/Dockerfile
@@ -39,7 +39,7 @@ services:
     container_name: vigo-admin-api
     image: ${DOCKER_REGISTRY-}vigo-admin-api
     volumes:
-      - vigo_volume:/app/volume/Resource
+      - vigo_volume:/app/volume/image
     build:
       context: .
       dockerfile: vigo.Admin/Dockerfile

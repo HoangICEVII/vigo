@@ -124,7 +124,7 @@ app.UseCors("CorsPolicy");
 
 app.UseStaticFiles(new StaticFileOptions
 {
-    FileProvider = new PhysicalFileProvider("/app/volume/Resource/Image"),
+    FileProvider = new PhysicalFileProvider("/app/volume/image"),
     RequestPath = "/resource"
 });
 

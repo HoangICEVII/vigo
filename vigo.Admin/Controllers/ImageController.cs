@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using vigo.Admin.Controllers.Base;
 using vigo.Domain.Helper;
 using vigo.Service.Admin.IService;
+using vigo.Service.DTO.Admin;
 using vigo.Service.DTO.Admin.Discount;
 
 namespace vigo.Admin.Controllers
@@ -26,8 +27,9 @@ namespace vigo.Admin.Controllers
         {
             try
             {
-                await _imageService.Upload(image, User);
-                return CreateResponse(null, "upload success", 200, null);
+                ImageDTO data = new ImageDTO();
+                data.Url = await _imageService.Upload(image, User);
+                return CreateResponse(data, "upload success", 200, null);
             }
             catch (CustomException e)
             {

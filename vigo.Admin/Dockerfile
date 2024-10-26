@@ -7,6 +7,8 @@ WORKDIR /app
 EXPOSE 80
 ENV ASPNETCORE_URLS=http://+:80
 
+RUN mkdir -p /app/volume/image && \
+    chmod -R 775 /app/volume/image
 
 # This stage is used to build the service project
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
@@ -30,5 +32,5 @@ RUN dotnet publish "./vigo.Admin.csproj" -c $BUILD_CONFIGURATION -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-COPY ["vigo.Admin/Resource", "/app/volume/Resource"]
+COPY ["vigo.Admin/image", "/app/volume/image"]
 ENTRYPOINT ["dotnet", "vigo.Admin.dll"]
