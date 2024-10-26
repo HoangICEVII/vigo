@@ -114,7 +114,10 @@ namespace vigo.Service.Admin.Service
                 PhoneNumber = dto.PhoneNumber,
                 DOB = dto.DOB,
                 BankNumber = dto.BankNumber,
-                Salary = dto.Salary
+                Salary = dto.Salary,
+                Bank = dto.Bank,
+                Address = dto.Address,
+                Avatar = dto.Avatar
             };
             _unitOfWorkVigo.SystemEmployees.Create(info);
             await _unitOfWorkVigo.Complete();
@@ -181,7 +184,11 @@ namespace vigo.Service.Admin.Service
                 RoleId = account.RoleId,
                 BankNumber = info.BankNumber,
                 DOB = info.DOB,
-                Salary = info.Salary
+                Salary = info.Salary,
+                Avatar = info.Avatar,
+                Address = info.Address,
+                Bank = info.Bank,
+                RoleName = (await _unitOfWorkVigo.Roles.GetById(account.RoleId)).Name
             };
             return data;
         }
@@ -240,7 +247,15 @@ namespace vigo.Service.Admin.Service
                                                                        page,
                                                                        perPage,
                                                                        sortDown);
-            return new PagedResultCustom<EmployeeDTO>(_mapper.Map<List<EmployeeDTO>>(data.Items), data.TotalRecords, data.PageIndex, data.PageSize);
+            var result = new PagedResultCustom<EmployeeDTO>(_mapper.Map<List<EmployeeDTO>>(data.Items), data.TotalRecords, data.PageIndex, data.PageSize);
+            foreach (var item in result.Items)
+            {
+                var account = await _unitOfWorkVigo.Accounts.GetDetailBy(e => e.Id == item.AccountId);
+                item.RoleId = account!.RoleId;
+                item.RoleName = (await _unitOfWorkVigo.Roles.GetById(account.RoleId)).Name;
+                item.Email = account.Email;
+            }
+            return result;
         }
 
         public async Task UpdateEmployee(UpdateEmployeeDTO dto, ClaimsPrincipal user)
