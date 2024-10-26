@@ -37,6 +37,10 @@ namespace vigo.Admin.Controllers
                 };
                 return CreateResponse(data.Items, "get success", 200, options);
             }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
+            }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
@@ -51,6 +55,10 @@ namespace vigo.Admin.Controllers
             {
                 await _ratingService.Approve(ids, User);
                 return CreateResponse(null, "approve success", 200, null);
+            }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
             }
             catch (Exception e)
             {
@@ -67,6 +75,10 @@ namespace vigo.Admin.Controllers
                 await _ratingService.UnApprove(ids, User);
                 return CreateResponse(null, "success", 200, null);
             }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
+            }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
@@ -81,6 +93,10 @@ namespace vigo.Admin.Controllers
             {
                 await _ratingService.Delete(ids, User);
                 return CreateResponse(null, "recieve success", 200, null);
+            }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
             }
             catch (Exception e)
             {

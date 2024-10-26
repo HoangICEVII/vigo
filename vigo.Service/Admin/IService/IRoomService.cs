@@ -11,7 +11,6 @@ namespace vigo.Service.Admin.IService
     public interface IRoomService
     {
         Task<PagedResultCustom<RoomDTO>> GetPaging(int page, int perPage, int? roomTypeId, string? sortType, string? sortField, string? searchName);
-        Task<List<RoomTypeDTO>> GetAllType();
         Task<RoomDetailDTO> GetDetail(int id);
         Task Create(CreateRoomDTO dto);
         Task Update(UpdateRoomDTO dto);

@@ -9,7 +9,7 @@ using vigo.Domain.Interface.IGeneric;
 
 namespace vigo.Domain.Interface.IRepository
 {
-    public interface IServiceRepository : IVigoGeneric<Service>
+    public interface IServiceRepository : IVigoGeneric<ServiceR>
     {
     }
 }

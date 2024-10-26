@@ -36,6 +36,11 @@ namespace vigo.Service.Admin.Service
 
         public async Task CreateBusinessPartner(CreateBusinessAccountDTO dto, ClaimsPrincipal user)
         {
+            var checkUnique = await _unitOfWorkVigo.Accounts.GetDetailBy(e => e.Email == dto.Email);
+            if (checkUnique != null)
+            {
+                throw new CustomException("email đã tồn tại");
+            }
             var salt = PasswordHasher.CreateSalt();
             var hashedPassword = PasswordHasher.HashPassword(dto.Password, salt);
             Guid accountId = Guid.NewGuid();
@@ -74,6 +79,11 @@ namespace vigo.Service.Admin.Service
 
         public async Task CreateEmployee(CreateEmployeeAccount dto, ClaimsPrincipal user)
         {
+            var checkUnique = await _unitOfWorkVigo.Accounts.GetDetailBy(e => e.Email == dto.Email);
+            if (checkUnique != null)
+            {
+                throw new CustomException("email đã tồn tại");
+            }
             var salt = PasswordHasher.CreateSalt();
             var hashedPassword = PasswordHasher.HashPassword(dto.Password, salt);
             Guid accountId = Guid.NewGuid();
@@ -184,7 +194,7 @@ namespace vigo.Service.Admin.Service
             };
             if (searchName != null)
             {
-                conditions.Add(e => e.Name.ToLower().Contains(searchName.ToLower()));
+                conditions.Add(e => e.CompanyName.ToLower().Contains(searchName.ToLower()));
             }
             bool sortDown = false;
             if (sortType != null && sortType.Equals("DESC"))
@@ -237,6 +247,11 @@ namespace vigo.Service.Admin.Service
         {
             var info = await _unitOfWorkVigo.SystemEmployees.GetById(dto.Id);
             var account = await _unitOfWorkVigo.Accounts.GetDetailBy(e => e.Id == info.AccountId);
+            var checkUnique = await _unitOfWorkVigo.Accounts.GetDetailBy(e => e.Email == dto.Email);
+            if (dto.Email != account!.Email && checkUnique != null)
+            {
+                throw new CustomException("email đã tồn tại");
+            }
             DateTime dateNow = DateTime.Now;
             info.Salary = dto.Salary;
             info.DOB = dto.DOB;
@@ -245,11 +260,13 @@ namespace vigo.Service.Admin.Service
             info.FullName = dto.FullName;
             info.Name = dto.FullName.Split(' ').Last();
             info.UpdatedDate = dateNow;
+            info.Address = dto.Address;
+            info.Avatar = dto.Avatar;
+            info.Bank = dto.Bank;
 
             account!.UpdatedDate = dateNow;
             account.Email = dto.Email;
             account.RoleId = dto.RoleId;
-            account.Password = PasswordHasher.HashPassword(dto.Password, account.Salt);
 
             await _unitOfWorkVigo.Complete();
         }
@@ -258,16 +275,22 @@ namespace vigo.Service.Admin.Service
         {
             var info = await _unitOfWorkVigo.BusinessPartners.GetById(dto.Id);
             var account = await _unitOfWorkVigo.Accounts.GetDetailBy(e => e.Id == info.AccountId);
+            var checkUnique = await _unitOfWorkVigo.Accounts.GetDetailBy(e => e.Email == dto.Email);
+            if (dto.Email != account!.Email && checkUnique != null)
+            {
+                throw new CustomException("email đã tồn tại");
+            }
             DateTime dateNow = DateTime.Now;
             info.CompanyName = dto.FullName;
             info.Name = dto.Name;
             info.PhoneNumber = dto.PhoneNumber;
             info.UpdatedDate = dateNow;
+            info.Address = dto.Address;
+            info.Logo = dto.Logo;
 
             account!.UpdatedDate = dateNow;
             account.Email = dto.Email;
             account.RoleId = dto.RoleId;
-            account.Password = PasswordHasher.HashPassword(dto.Password, account.Salt);
 
             await _unitOfWorkVigo.Complete();
         }

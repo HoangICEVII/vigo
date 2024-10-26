@@ -29,7 +29,11 @@ namespace vigo.Service.Admin.Service
         public async Task Create(CreateDiscountCouponDTO dto, ClaimsPrincipal user)
         {
             var DateNow = DateTime.Now;
-            var count = (await _unitOfWorkVigo.DiscountCoupons.GetAll(null)).Count();
+            List<Expression<Func<DiscountCoupon, bool>>> conditions = new List<Expression<Func<DiscountCoupon, bool>>>()
+            {
+                e => e.DeletedDate == null
+            };
+            var count = (await _unitOfWorkVigo.DiscountCoupons.GetAll(conditions)).Count();
             DiscountCoupon data = new DiscountCoupon()
             {
                 EndDate = dto.EndDate,

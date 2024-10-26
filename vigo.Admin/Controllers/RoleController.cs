@@ -31,6 +31,10 @@ namespace vigo.Admin.Controllers
                 var data = await _roleService.GetPermission();
                 return CreateResponse(data, "get success", 200, null);
             }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
+            }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
@@ -53,6 +57,10 @@ namespace vigo.Admin.Controllers
                 };
                 return CreateResponse(data.Items, "get success", 200, options);
             }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
+            }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
@@ -68,6 +76,10 @@ namespace vigo.Admin.Controllers
                 var data = await _roleService.GetAll();
                 return CreateResponse(data, "get success", 200, null);
             }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
+            }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
@@ -82,6 +94,10 @@ namespace vigo.Admin.Controllers
             {
                 var data = await _roleService.GetDetail(id);
                 return CreateResponse(data, "get success", 200, null);
+            }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
             }
             catch (Exception e)
             {
@@ -117,6 +133,10 @@ namespace vigo.Admin.Controllers
                 await _roleService.Update(dto);
                 return CreateResponse(null, "update success", 200, null);
             }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
+            }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
@@ -131,6 +151,10 @@ namespace vigo.Admin.Controllers
             {
                 await _roleService.Delete(id);
                 return CreateResponse(null, "delete success", 200, null);
+            }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
             }
             catch (Exception e)
             {

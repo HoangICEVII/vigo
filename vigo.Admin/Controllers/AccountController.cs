@@ -39,6 +39,10 @@ namespace vigo.Admin.Controllers
                 string token = CreateToken(userAuthen);
                 return CreateResponse(new TokenRes() { AccessToken = token}, "login success", 200, null);
             }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
+            }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
@@ -61,6 +65,10 @@ namespace vigo.Admin.Controllers
                 };
                 return CreateResponse(data.Items, "get success", 200, options);
             }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
+            }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
@@ -75,6 +83,10 @@ namespace vigo.Admin.Controllers
             {
                 var data = await _accountService.GetBusinessPartnerDetail(id);
                 return CreateResponse(data, "get success", 200, null);
+            }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
             }
             catch (Exception e)
             {
@@ -98,6 +110,10 @@ namespace vigo.Admin.Controllers
                 };
                 return CreateResponse(data.Items, "get success", 200, options);
             }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
+            }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
@@ -112,6 +128,10 @@ namespace vigo.Admin.Controllers
             {
                 var data = await _accountService.GetEmployeeDetail(id);
                 return CreateResponse(data, "get success", 200, null);
+            }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
             }
             catch (Exception e)
             {
@@ -129,6 +149,10 @@ namespace vigo.Admin.Controllers
                 await _accountService.CreateBusinessPartner(dto, User);
                 return CreateResponse(null, "create success", 200, null);
             }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
+            }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
@@ -145,6 +169,10 @@ namespace vigo.Admin.Controllers
                 await _accountService.CreateEmployee(dto, User);
                 return CreateResponse(null, "create success", 200, null);
             }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
+            }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
@@ -159,12 +187,16 @@ namespace vigo.Admin.Controllers
             try
             {
                 await _accountService.UpdateEmployee(dto, User);
-                return CreateResponse(null, "create success", 200, null);
+                return CreateResponse(null, "update success", 200, null);
+            }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                return CreateResponse(null, "create fail", 500, null);
+                return CreateResponse(null, "update fail", 500, null);
             }
         }
 
@@ -175,12 +207,16 @@ namespace vigo.Admin.Controllers
             try
             {
                 await _accountService.UpdateBusiness(dto, User);
-                return CreateResponse(null, "create success", 200, null);
+                return CreateResponse(null, "update success", 200, null);
+            }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                return CreateResponse(null, "create fail", 500, null);
+                return CreateResponse(null, "update fail", 500, null);
             }
         }
 
@@ -192,6 +228,10 @@ namespace vigo.Admin.Controllers
             {
                 await _accountService.DeleteEmployee(id, User);
                 return CreateResponse(null, "delete success", 200, null);
+            }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
             }
             catch (Exception e)
             {
@@ -208,6 +248,10 @@ namespace vigo.Admin.Controllers
             {
                 await _accountService.DeleteBusinessPartner(id, User);
                 return CreateResponse(null, "delete success", 200, null);
+            }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
             }
             catch (Exception e)
             {

@@ -17,9 +17,11 @@ namespace vigo.Admin.Controllers
     public class RoomController : BaseController
     {
         private readonly IRoomService _roomService;
-        public RoomController(IRoomService roomService)
+        private readonly IRoomTypeService _roomTypeService;
+        public RoomController(IRoomService roomService, IRoomTypeService roomTypeService)
         {
             _roomService = roomService;
+            _roomTypeService = roomTypeService;
         }
 
         [HttpGet("room-types")]
@@ -27,13 +29,93 @@ namespace vigo.Admin.Controllers
         {
             try
             {
-                var data = await _roomService.GetAllType();
+                var data = await _roomTypeService.GetAll(User);
                 return CreateResponse(data, "get success", 200, null);
+            }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
                 return CreateResponse(null, "get fail", 500, null);
+            }
+        }
+
+        [HttpGet("room-types/{id}")]
+        public async Task<IActionResult> GetDetailRT(int id)
+        {
+            try
+            {
+                var data = await _roomTypeService.GetDetail(id);
+                return CreateResponse(data, "get success", 200, null);
+            }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return CreateResponse(null, "get fail", 500, null);
+            }
+        }
+
+        [HttpPost("room-types")]
+        public async Task<IActionResult> Create(RoomTypeCreateDTO dto)
+        {
+            try
+            {
+                await _roomTypeService.Create(dto);
+                return CreateResponse(null, "create success", 200, null);
+            }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return CreateResponse(null, "create fail", 500, null);
+            }
+        }
+
+        [HttpPut("room-types")]
+        public async Task<IActionResult> Update(RoomTypeUpdateDTO dto)
+        {
+            try
+            {
+                await _roomTypeService.Update(dto);
+                return CreateResponse(null, "update success", 200, null);
+            }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return CreateResponse(null, "update fail", 500, null);
+            }
+        }
+
+        [HttpDelete("room-types/{id}")]
+        public async Task<IActionResult> DeleteRT(int id)
+        {
+            try
+            {
+                await _roomTypeService.Delete(id);
+                return CreateResponse(null, "update success", 200, null);
+            }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return CreateResponse(null, "update fail", 500, null);
             }
         }
 
@@ -52,6 +134,10 @@ namespace vigo.Admin.Controllers
                 };
                 return CreateResponse(data.Items, "get success", 200, options);
             }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
+            }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
@@ -66,6 +152,10 @@ namespace vigo.Admin.Controllers
             {
                 var data = await _roomService.GetDetail(id);
                 return CreateResponse(data, "get success", 200, null);
+            }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
             }
             catch (Exception e)
             {
@@ -101,6 +191,10 @@ namespace vigo.Admin.Controllers
                 await _roomService.Update(dto);
                 return CreateResponse(null, "update success", 200, null);
             }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
+            }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
@@ -115,6 +209,10 @@ namespace vigo.Admin.Controllers
             {
                 await _roomService.Delete(id);
                 return CreateResponse(null, "delete success", 200, null);
+            }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
             }
             catch (Exception e)
             {

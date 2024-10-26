@@ -6,13 +6,9 @@ using System.Threading.Tasks;
 
 namespace vigo.Service.DTO.Admin.Room
 {
-    public class RoomTypeDTO
+    public class RoomTypeCreateDTO
     {
-        public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public DateTime CreatedDate { get; set; }
-        public DateTime UpdatedDate { get; set; }
-        public DateTime DeletedDate { get; set; }
     }
 }

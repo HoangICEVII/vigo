@@ -9,9 +9,9 @@ using vigo.Domain.Entity;
 
 namespace vigo.Infrastructure.Configuration
 {
-    internal class ServiceConfiguration : IEntityTypeConfiguration<Service>
+    internal class ServiceConfiguration : IEntityTypeConfiguration<ServiceR>
     {
-        public void Configure(EntityTypeBuilder<Service> builder)
+        public void Configure(EntityTypeBuilder<ServiceR> builder)
         {
             builder.ToTable("service");
             builder.HasKey(e => e.Id);

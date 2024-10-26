@@ -4,14 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace vigo.Domain.Entity
+namespace vigo.Service.DTO.Admin.Room
 {
-    public class Province
+    public class RoomTypeUpdateDTO
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
-        public DateTime CreatedDate { get; set; }
-        public DateTime UpdatedDate { get; set; }
-        public DateTime DeletedDate { get; set; }
+        public string Description { get; set; } = string.Empty;
     }
 }

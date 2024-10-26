@@ -25,11 +25,6 @@ namespace vigo.Service.Admin.Service
             _mapper = mapper;
         }
 
-        public async Task<List<RoomTypeDTO>> GetAllType()
-        {
-            return _mapper.Map<List<RoomTypeDTO>>(await _unitOfWorkVigo.RoomTypes.GetAll(null));
-        }
-
         public async Task Create(CreateRoomDTO dto)
         {
             DateTime dateNow = DateTime.Now;
