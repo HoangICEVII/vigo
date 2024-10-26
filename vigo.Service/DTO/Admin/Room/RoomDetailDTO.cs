@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using vigo.Service.DTO.Admin.Service;
 
 namespace vigo.Service.DTO.Admin.Room
 {
@@ -17,6 +18,7 @@ namespace vigo.Service.DTO.Admin.Room
         public decimal Price { get; set; }
         public int Avaiable { get; set; }
         public int RoomTypeId { get; set; }
+        public List<ServiceDTO> Services { get; set; } = new List<ServiceDTO>();
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
         public DateTime DeletedDate { get; set; }

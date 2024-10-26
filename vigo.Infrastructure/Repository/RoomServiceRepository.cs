@@ -10,7 +10,7 @@ using vigo.Infrastructure.Generic;
 
 namespace vigo.Infrastructure.Repository
 {
-    public class RoomServiceRepository : VigoGeneric<RoomService>, IRoomServiceRepository
+    public class RoomServiceRepository : VigoGeneric<RoomServiceR>, IRoomServiceRepository
     {
         public RoomServiceRepository(VigoDatabaseContext context) : base(context)
         {

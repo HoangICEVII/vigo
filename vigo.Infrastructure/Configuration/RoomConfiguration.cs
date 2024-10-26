@@ -21,7 +21,7 @@ namespace vigo.Infrastructure.Configuration
             builder.Property(c => c.CreatedDate).HasColumnType("TIMESTAMP");
             builder.Property(c => c.UpdatedDate).HasColumnType("TIMESTAMP");
             builder.Property(c => c.DeletedDate).HasColumnType("TIMESTAMP");
-            builder.HasMany<RoomService>().WithOne().HasForeignKey(e => e.RoomId).OnDelete(DeleteBehavior.NoAction);
+            builder.HasMany<RoomServiceR>().WithOne().HasForeignKey(e => e.RoomId).OnDelete(DeleteBehavior.NoAction);
             builder.HasOne<ShowRoom>().WithMany().HasForeignKey(e => e.ShowRoomId).OnDelete(DeleteBehavior.NoAction);
             builder.HasOne<RoomType>().WithMany().HasForeignKey(e => e.RoomTypeId).OnDelete(DeleteBehavior.NoAction);
         }

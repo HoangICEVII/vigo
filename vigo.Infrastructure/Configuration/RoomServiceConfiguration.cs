@@ -9,9 +9,9 @@ using vigo.Domain.Entity;
 
 namespace vigo.Infrastructure.Configuration
 {
-    internal class RoomServiceConfiguration : IEntityTypeConfiguration<RoomService>
+    internal class RoomServiceConfiguration : IEntityTypeConfiguration<RoomServiceR>
     {
-        public void Configure(EntityTypeBuilder<RoomService> builder)
+        public void Configure(EntityTypeBuilder<RoomServiceR> builder)
         {
             builder.ToTable("roomService");
             builder.HasNoKey();

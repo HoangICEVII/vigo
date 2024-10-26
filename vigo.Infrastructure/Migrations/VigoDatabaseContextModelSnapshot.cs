@@ -543,7 +543,7 @@ namespace vigo.Infrastructure.Migrations
                     b.ToTable("room", (string)null);
                 });
 
-            modelBuilder.Entity("vigo.Domain.Entity.RoomService", b =>
+            modelBuilder.Entity("vigo.Domain.Entity.RoomServiceR", b =>
                 {
                     b.Property<int>("RoomId")
                         .HasColumnType("int");
@@ -908,7 +908,7 @@ namespace vigo.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("vigo.Domain.Entity.RoomService", b =>
+            modelBuilder.Entity("vigo.Domain.Entity.RoomServiceR", b =>
                 {
                     b.HasOne("vigo.Domain.Entity.Room", null)
                         .WithMany()

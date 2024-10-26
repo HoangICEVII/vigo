@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace vigo.Domain.Entity
 {
-    public class RoomService
+    public class RoomServiceR
     {
         public int RoomId { get; set; }
         public int ServiceId { get; set; }

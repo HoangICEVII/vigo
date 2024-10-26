@@ -16,5 +16,6 @@ namespace vigo.Service.DTO.Admin.Room
         public decimal Price { get; set; }
         public int Avaiable { get; set; }
         public int RoomTypeId { get; set; }
+        public List<int> Services { get; set; } = new List<int>();
     }
 }

@@ -12,7 +12,7 @@ using vigo.Infrastructure.DBContext;
 namespace vigo.Infrastructure.Migrations
 {
     [DbContext(typeof(VigoDatabaseContext))]
-    [Migration("20241026124416_vigo")]
+    [Migration("20241026130337_vigo")]
     partial class vigo
     {
         /// <inheritdoc />
@@ -546,7 +546,7 @@ namespace vigo.Infrastructure.Migrations
                     b.ToTable("room", (string)null);
                 });
 
-            modelBuilder.Entity("vigo.Domain.Entity.RoomService", b =>
+            modelBuilder.Entity("vigo.Domain.Entity.RoomServiceR", b =>
                 {
                     b.Property<int>("RoomId")
                         .HasColumnType("int");
@@ -911,7 +911,7 @@ namespace vigo.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("vigo.Domain.Entity.RoomService", b =>
+            modelBuilder.Entity("vigo.Domain.Entity.RoomServiceR", b =>
                 {
                     b.HasOne("vigo.Domain.Entity.Room", null)
                         .WithMany()

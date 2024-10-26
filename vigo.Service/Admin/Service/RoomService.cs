@@ -10,6 +10,7 @@ using vigo.Domain.Helper;
 using vigo.Domain.Interface.IUnitOfWork;
 using vigo.Service.Admin.IService;
 using vigo.Service.DTO.Admin.Room;
+using vigo.Service.DTO.Admin.Service;
 using vigo.Service.DTO.Admin.ShowRoom;
 
 namespace vigo.Service.Admin.Service
@@ -44,6 +45,24 @@ namespace vigo.Service.Admin.Service
             };
             _unitOfWorkVigo.Rooms.Create(room);
             await _unitOfWorkVigo.Complete();
+
+            try{
+                List<RoomServiceR> roomServices = new List<RoomServiceR>();
+                foreach (var item in dto.Services)
+                {
+                    roomServices.Add(new RoomServiceR()
+                    {
+                        RoomId = room.Id,
+                        ServiceId = item
+                    });
+                }
+                _unitOfWorkVigo.RoomServices.CreateRange(roomServices);
+                await _unitOfWorkVigo.Complete();
+            }
+            catch(CustomException)
+            {
+                throw new CustomException("không đăng ký được dịch vụ cho phòng");
+            }
         }
 
         public async Task Delete(int id)
@@ -55,7 +74,17 @@ namespace vigo.Service.Admin.Service
 
         public async Task<RoomDetailDTO> GetDetail(int id)
         {
-            return _mapper.Map<RoomDetailDTO>(await _unitOfWorkVigo.Rooms.GetById(id));
+            var result = _mapper.Map<RoomDetailDTO>(await _unitOfWorkVigo.Rooms.GetById(id));
+            List<Expression<Func<RoomServiceR, bool>>> con = new List<Expression<Func<RoomServiceR, bool>>>()
+            {
+                e => e.RoomId == result.Id,
+            };
+            var roomServices = await _unitOfWorkVigo.RoomServices.GetAll(con);
+            foreach (var service in roomServices)
+            {
+                result.Services.Add(_mapper.Map<ServiceDTO>(await _unitOfWorkVigo.Services.GetById(service.ServiceId)));
+            }
+            return result;
         }
 
         public async Task<PagedResultCustom<RoomDTO>> GetPaging(int page, int perPage, int? roomTypeId, string? sortType, string? sortField, string? searchName)
@@ -93,7 +122,18 @@ namespace vigo.Service.Admin.Service
                                                              page,
                                                              perPage,
                                                              sortDown);
-            return new PagedResultCustom<RoomDTO>(_mapper.Map<List<RoomDTO>>(data.Items), data.TotalRecords, data.PageIndex, data.PageSize);
+            var result = new PagedResultCustom<RoomDTO>(_mapper.Map<List<RoomDTO>>(data.Items), data.TotalRecords, data.PageIndex, data.PageSize);
+            foreach (var item in result.Items) {
+                List<Expression<Func<RoomServiceR, bool>>> con = new List<Expression<Func<RoomServiceR, bool>>>()
+                {
+                    e => e.RoomId == item.Id,
+                };
+                var roomServices = await _unitOfWorkVigo.RoomServices.GetAll(con);
+                foreach (var service in roomServices) {
+                    item.Services.Add(_mapper.Map<ServiceDTO>(await _unitOfWorkVigo.Services.GetById(service.ServiceId)));
+                }
+            }
+            return result;
         }
 
         public async Task Update(UpdateRoomDTO dto)
