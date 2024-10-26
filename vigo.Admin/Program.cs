@@ -81,6 +81,7 @@ builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IRoomService, RoomService>();
 builder.Services.AddScoped<IServiceService, ServiceService>();
 builder.Services.AddScoped<IShowRoomService, ShowRoomService>();
+builder.Services.AddScoped<IRoomTypeService, RoomTypeService>();
 //builder.Services.AddScoped<ISystemEmployeeService, SystemEmployeeService>();
 //builder.Services.AddScoped<ITouristService, TouristService>();
 #endregion
@@ -129,9 +130,9 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-var startup = new Startup(app.Services);
-startup.Configure(app);
+//var startup = new Startup(app.Services);
+//startup.Configure(app);
 
-startup.Init();
+//startup.Init();
 
 app.Run();
