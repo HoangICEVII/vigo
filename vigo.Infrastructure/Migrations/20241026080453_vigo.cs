@@ -97,10 +97,7 @@ namespace vigo.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
-                    DeletedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -282,7 +279,7 @@ namespace vigo.Infrastructure.Migrations
                     BusinessPartnerId = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
-                    DeletedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false)
+                    DeletedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -353,6 +350,8 @@ namespace vigo.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Description = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Thumbnail = table.Column<string>(type: "longtext", nullable: false)
@@ -364,7 +363,7 @@ namespace vigo.Infrastructure.Migrations
                     RoomTypeId = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
-                    DeletedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false)
+                    DeletedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: true)
                 },
                 constraints: table =>
                 {

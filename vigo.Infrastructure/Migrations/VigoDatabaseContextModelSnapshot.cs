@@ -507,10 +507,14 @@ namespace vigo.Infrastructure.Migrations
                     b.Property<int>("Days")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("DeletedDate")
+                    b.Property<DateTime?>("DeletedDate")
                         .HasColumnType("TIMESTAMP");
 
                     b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -562,18 +566,9 @@ namespace vigo.Infrastructure.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("TIMESTAMP");
-
-                    b.Property<DateTime>("DeletedDate")
-                        .HasColumnType("TIMESTAMP");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("TIMESTAMP");
 
                     b.HasKey("Id");
 
@@ -620,7 +615,7 @@ namespace vigo.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("TIMESTAMP");
 
-                    b.Property<DateTime>("DeletedDate")
+                    b.Property<DateTime?>("DeletedDate")
                         .HasColumnType("TIMESTAMP");
 
                     b.Property<int>("DistrictId")

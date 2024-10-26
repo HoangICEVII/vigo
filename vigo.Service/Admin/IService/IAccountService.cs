@@ -8,6 +8,7 @@ using vigo.Domain.AccountFolder;
 using vigo.Domain.Helper;
 using vigo.Service.DTO;
 using vigo.Service.DTO.Admin.Account;
+using vigo.Service.DTO.Admin.Room;
 
 namespace vigo.Service.Admin.IService
 {
@@ -20,7 +21,8 @@ namespace vigo.Service.Admin.IService
         Task<EmployeeDetailDTO> GetEmployeeDetail(int id);
         Task CreateBusinessPartner(CreateBusinessAccountDTO dto, ClaimsPrincipal user);
         Task CreateEmployee(CreateEmployeeAccount dto, ClaimsPrincipal user);
-        //Task Update(int id, UpdateBookDTO dto, ClaimsPrincipal user);
+        Task UpdateEmployee(int id, UpdateEmployeeDTO dto, ClaimsPrincipal user);
+        Task UpdateBusiness(int id, UpdateBusinessPartnerDTO dto, ClaimsPrincipal user);
         Task DeleteEmployee(Guid id, ClaimsPrincipal user);
         Task DeleteBusinessPartner(Guid id, ClaimsPrincipal user);
     }

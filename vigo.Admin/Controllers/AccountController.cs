@@ -89,7 +89,14 @@ namespace vigo.Admin.Controllers
             try
             {
                 var data = await _accountService.GetEmployeePaging(page, perPage, sortType, sortField, searchName);
-                return CreateResponse(data, "get success", 200, null);
+                Option options = new Option()
+                {
+                    Name = "",
+                    PageSize = data.PageSize,
+                    Page = data.PageIndex,
+                    TotalRecords = data.TotalRecords
+                };
+                return CreateResponse(data.Items, "get success", 200, options);
             }
             catch (Exception e)
             {

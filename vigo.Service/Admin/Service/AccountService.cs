@@ -219,5 +219,15 @@ namespace vigo.Service.Admin.Service
                                                                        sortDown);
             return new PagedResultCustom<EmployeeDTO>(_mapper.Map<List<EmployeeDTO>>(data.Items), data.TotalRecords, data.PageIndex, data.PageSize);
         }
+
+        public Task UpdateEmployee(int id, UpdateEmployeeDTO dto, ClaimsPrincipal user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateBusiness(int id, UpdateBusinessPartnerDTO dto, ClaimsPrincipal user)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
