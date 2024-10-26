@@ -50,7 +50,14 @@ namespace vigo.Admin.Controllers
             try
             {
                 var data = await _roomTypeService.GetPaging(page, perPage, sortType, sortField, searchName, User);
-                return CreateResponse(data, "get success", 200, null);
+                Option options = new Option()
+                {
+                    Name = "",
+                    Page = data.PageIndex,
+                    PageSize = data.PageSize,
+                    TotalRecords = data.TotalRecords
+                };
+                return CreateResponse(data.Items, "get success", 200, options);
             }
             catch (CustomException e)
             {

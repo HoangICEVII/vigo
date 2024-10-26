@@ -125,14 +125,12 @@ app.UseSwaggerUI(option => option.SwaggerEndpoint("/swagger/v1/swagger.json", "V
 
 app.UseRouting();
 app.UseCors("CorsPolicy");
-
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
 //var startup = new Startup(app.Services);
 //startup.Configure(app);
-
 //startup.Init();
 
 app.Run();
