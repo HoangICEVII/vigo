@@ -15,14 +15,14 @@ namespace vigo.Service.Admin.IService
     public interface IAccountService
     {
         Task<UserAuthen> AdminLogin(LoginViaFormDTO dto);
-        Task<PagedResultCustom<BusinessPartnerDTO>> GetBusinessPartnerPaging(int page, int perPage, string sortType, string sortField, string? searchName);
+        Task<PagedResultCustom<BusinessPartnerDTO>> GetBusinessPartnerPaging(int page, int perPage, string? sortType, string? sortField, string? searchName);
         Task<BusinessPartnerDetailDTO> GetBusinessPartnerDetail(int id);
-        Task<PagedResultCustom<EmployeeDTO>> GetEmployeePaging(int page, int perPage, string sortType, string sortField, string? searchName);
+        Task<PagedResultCustom<EmployeeDTO>> GetEmployeePaging(int page, int perPage, string? sortType, string? sortField, string? searchName);
         Task<EmployeeDetailDTO> GetEmployeeDetail(int id);
         Task CreateBusinessPartner(CreateBusinessAccountDTO dto, ClaimsPrincipal user);
         Task CreateEmployee(CreateEmployeeAccount dto, ClaimsPrincipal user);
-        Task UpdateEmployee(int id, UpdateEmployeeDTO dto, ClaimsPrincipal user);
-        Task UpdateBusiness(int id, UpdateBusinessPartnerDTO dto, ClaimsPrincipal user);
+        Task UpdateEmployee(UpdateEmployeeDTO dto, ClaimsPrincipal user);
+        Task UpdateBusiness(UpdateBusinessPartnerDTO dto, ClaimsPrincipal user);
         Task DeleteEmployee(Guid id, ClaimsPrincipal user);
         Task DeleteBusinessPartner(Guid id, ClaimsPrincipal user);
     }

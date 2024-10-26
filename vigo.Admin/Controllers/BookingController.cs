@@ -22,7 +22,7 @@ namespace vigo.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPaging(int page, int perPage, bool? isReceived, string sortType, string sortField)
+        public async Task<IActionResult> GetPaging(int page, int perPage, bool? isReceived, string? sortType, string? sortField)
         {
             try
             {

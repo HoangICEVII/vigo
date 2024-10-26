@@ -63,7 +63,7 @@ namespace vigo.Service.Admin.Service
             return _mapper.Map<RoomDetailDTO>(await _unitOfWorkVigo.Rooms.GetById(id));
         }
 
-        public async Task<PagedResultCustom<RoomDTO>> GetPaging(int page, int perPage, int? roomTypeId, string sortType, string sortField, string? searchName)
+        public async Task<PagedResultCustom<RoomDTO>> GetPaging(int page, int perPage, int? roomTypeId, string? sortType, string? sortField, string? searchName)
         {
             List<Expression<Func<Room, bool>>> conditions = new List<Expression<Func<Room, bool>>>()
             {
@@ -78,16 +78,16 @@ namespace vigo.Service.Admin.Service
                 conditions.Add(e => e.RoomTypeId == roomTypeId);
             }
             bool sortDown = false;
-            if (sortType.Equals("DESC"))
+            if (sortType != null && sortType.Equals("DESC"))
             {
                 sortDown = true;
             }
             Expression<Func<Room, decimal>>? func = null;
-            if (sortField.Equals("days"))
+            if (sortField != null && sortField.Equals("days"))
             {
                 func = e => e.Days;
             }
-            if (sortField.Equals("price"))
+            if (sortField != null && sortField.Equals("price"))
             {
                 func = e => e.Price;
             }

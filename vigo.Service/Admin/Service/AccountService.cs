@@ -58,10 +58,12 @@ namespace vigo.Service.Admin.Service
             BusinessPartner info = new BusinessPartner()
             {
                 AccountId = accountId,
+                Address = dto.Address,
+                Logo = dto.Logo,
                 CreatedDate = DateNow,
                 DeletedDate = null,
                 UpdatedDate= DateNow,
-                Name = temp.Last(),
+                Name = dto.Name,
                 CompanyName = dto.FullName,
                 PhoneNumber = dto.PhoneNumber,
                 BusinessKey = PasswordHasher.HashPassword(dto.FullName, DateNow.ToString())
@@ -143,7 +145,11 @@ namespace vigo.Service.Admin.Service
                 Email = account.Email,
                 Name = info.Name,
                 PhoneNumber = info.PhoneNumber,
-                RoleId = account.RoleId
+                Logo = info.Logo,
+                Address = info.Address,
+                CompanyName = info.CompanyName,
+                RoleId = account.RoleId,
+                RoleName = (await _unitOfWorkVigo.Roles.GetById(account.RoleId)).Name
             };
             return data;
         }
@@ -170,7 +176,7 @@ namespace vigo.Service.Admin.Service
             return data;
         }
 
-        public async Task<PagedResultCustom<BusinessPartnerDTO>> GetBusinessPartnerPaging(int page, int perPage, string sortType, string sortField, string? searchName)
+        public async Task<PagedResultCustom<BusinessPartnerDTO>> GetBusinessPartnerPaging(int page, int perPage, string? sortType, string? sortField, string? searchName)
         {
             List<Expression<Func<BusinessPartner, bool>>> conditions = new List<Expression<Func<BusinessPartner, bool>>>()
             {
@@ -181,21 +187,28 @@ namespace vigo.Service.Admin.Service
                 conditions.Add(e => e.Name.ToLower().Contains(searchName.ToLower()));
             }
             bool sortDown = false;
-            if (sortType.Equals("DESC"))
+            if (sortType != null && sortType.Equals("DESC"))
             {
                 sortDown = true;
             }
             var data = await _unitOfWorkVigo.BusinessPartners.GetPaging(conditions,
-                                                                        sortField.Equals("name") ? e => e.Name : null,
+                                                                        sortField != null && sortField.Equals("name") ? e => e.Name : null,
                                                                         null,
-                                                                        null,
+                                                                        sortField != null && sortField.Equals("createdDate") ? e => e.CreatedDate : null,
                                                                         page,
                                                                         perPage,
                                                                         sortDown);
-            return new PagedResultCustom<BusinessPartnerDTO>(_mapper.Map<List<BusinessPartnerDTO>>(data.Items), data.TotalRecords, data.PageIndex, data.PageSize);
+            var result = new PagedResultCustom<BusinessPartnerDTO>(_mapper.Map<List<BusinessPartnerDTO>>(data.Items), data.TotalRecords, data.PageIndex, data.PageSize);
+            foreach (var item in result.Items) {
+                var account = await _unitOfWorkVigo.Accounts.GetDetailBy(e => e.Id == item.AccountId);
+                item.RoleId = account!.RoleId;
+                item.RoleName = (await _unitOfWorkVigo.Roles.GetById(account.RoleId)).Name;
+                item.Email = account.Email;
+            }
+            return result;
         }
 
-        public async Task<PagedResultCustom<EmployeeDTO>> GetEmployeePaging(int page, int perPage, string sortType, string sortField, string? searchName)
+        public async Task<PagedResultCustom<EmployeeDTO>> GetEmployeePaging(int page, int perPage, string? sortType, string? sortField, string? searchName)
         {
             List<Expression<Func<SystemEmployee, bool>>> conditions = new List<Expression<Func<SystemEmployee, bool>>>()
             {
@@ -206,28 +219,57 @@ namespace vigo.Service.Admin.Service
                 conditions.Add(e => e.Name.ToLower().Contains(searchName.ToLower()));
             }
             bool sortDown = false;
-            if (sortType.Equals("DESC"))
+            if (sortType != null && sortType.Equals("DESC"))
             {
                 sortDown = true;
             }
             var data = await _unitOfWorkVigo.SystemEmployees.GetPaging(conditions,
-                                                                       sortField.Equals("name") ? e => e.Name : null,
-                                                                       sortField.Equals("salary") ? e => e.Salary : null,
-                                                                       sortField.Equals("dob") ? e => e.DOB : null,
+                                                                       sortField != null && sortField.Equals("name") ? e => e.Name : null,
+                                                                       sortField != null && sortField.Equals("salary") ? e => e.Salary : null,
+                                                                       sortField != null && sortField.Equals("dOB") ? e => e.DOB : null,
                                                                        page,
                                                                        perPage,
                                                                        sortDown);
             return new PagedResultCustom<EmployeeDTO>(_mapper.Map<List<EmployeeDTO>>(data.Items), data.TotalRecords, data.PageIndex, data.PageSize);
         }
 
-        public Task UpdateEmployee(int id, UpdateEmployeeDTO dto, ClaimsPrincipal user)
+        public async Task UpdateEmployee(UpdateEmployeeDTO dto, ClaimsPrincipal user)
         {
-            throw new NotImplementedException();
+            var info = await _unitOfWorkVigo.SystemEmployees.GetById(dto.Id);
+            var account = await _unitOfWorkVigo.Accounts.GetDetailBy(e => e.Id == info.AccountId);
+            DateTime dateNow = DateTime.Now;
+            info.Salary = dto.Salary;
+            info.DOB = dto.DOB;
+            info.BankNumber = dto.BankNumber;
+            info.PhoneNumber = dto.PhoneNumber;
+            info.FullName = dto.FullName;
+            info.Name = dto.FullName.Split(' ').Last();
+            info.UpdatedDate = dateNow;
+
+            account!.UpdatedDate = dateNow;
+            account.Email = dto.Email;
+            account.RoleId = dto.RoleId;
+            account.Password = PasswordHasher.HashPassword(dto.Password, account.Salt);
+
+            await _unitOfWorkVigo.Complete();
         }
 
-        public Task UpdateBusiness(int id, UpdateBusinessPartnerDTO dto, ClaimsPrincipal user)
+        public async Task UpdateBusiness(UpdateBusinessPartnerDTO dto, ClaimsPrincipal user)
         {
-            throw new NotImplementedException();
+            var info = await _unitOfWorkVigo.BusinessPartners.GetById(dto.Id);
+            var account = await _unitOfWorkVigo.Accounts.GetDetailBy(e => e.Id == info.AccountId);
+            DateTime dateNow = DateTime.Now;
+            info.CompanyName = dto.FullName;
+            info.Name = dto.Name;
+            info.PhoneNumber = dto.PhoneNumber;
+            info.UpdatedDate = dateNow;
+
+            account!.UpdatedDate = dateNow;
+            account.Email = dto.Email;
+            account.RoleId = dto.RoleId;
+            account.Password = PasswordHasher.HashPassword(dto.Password, account.Salt);
+
+            await _unitOfWorkVigo.Complete();
         }
     }
 }

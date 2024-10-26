@@ -47,7 +47,7 @@ namespace vigo.Admin.Controllers
         }
 
         [HttpGet("business-partners")]
-        public async Task<IActionResult> GetBusinessPartnerPaging(int page, int perPage, string sortType, string sortField, string? searchName)
+        public async Task<IActionResult> GetBusinessPartnerPaging(int page, int perPage, string? sortType, string? sortField, string? searchName)
         {
             try
             {
@@ -84,7 +84,7 @@ namespace vigo.Admin.Controllers
         }
 
         [HttpGet("system-employees")]
-        public async Task<IActionResult> GetEmployeePaging(int page, int perPage, string sortType, string sortField, string? searchName)
+        public async Task<IActionResult> GetEmployeePaging(int page, int perPage, string? sortType, string? sortField, string? searchName)
         {
             try
             {
@@ -120,7 +120,7 @@ namespace vigo.Admin.Controllers
             }
         }
 
-        [HttpPost("business-partner")]
+        [HttpPost("business-partners")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> CreateBusinessPartner(CreateBusinessAccountDTO dto)
         {
@@ -143,6 +143,38 @@ namespace vigo.Admin.Controllers
             try
             {
                 await _accountService.CreateEmployee(dto, User);
+                return CreateResponse(null, "create success", 200, null);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return CreateResponse(null, "create fail", 500, null);
+            }
+        }
+
+        [HttpPut("employees")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> UpdateEmployee(UpdateEmployeeDTO dto)
+        {
+            try
+            {
+                await _accountService.UpdateEmployee(dto, User);
+                return CreateResponse(null, "create success", 200, null);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return CreateResponse(null, "create fail", 500, null);
+            }
+        }
+
+        [HttpPut("business-partners")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> UpdateBusiness(UpdateBusinessPartnerDTO dto)
+        {
+            try
+            {
+                await _accountService.UpdateBusiness(dto, User);
                 return CreateResponse(null, "create success", 200, null);
             }
             catch (Exception e)

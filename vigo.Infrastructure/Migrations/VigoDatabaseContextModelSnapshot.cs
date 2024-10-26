@@ -653,6 +653,10 @@ namespace vigo.Infrastructure.Migrations
                     b.Property<Guid>("AccountId")
                         .HasColumnType("char(36)");
 
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("BusinessKey")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -666,6 +670,10 @@ namespace vigo.Infrastructure.Migrations
 
                     b.Property<DateTime?>("DeletedDate")
                         .HasColumnType("TIMESTAMP");
+
+                    b.Property<string>("Logo")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Name")
                         .IsRequired()

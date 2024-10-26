@@ -64,7 +64,7 @@ namespace vigo.Service.Admin.Service
             return _mapper.Map<RoleDetailDTO>(await _unitOfWorkVigo.Roles.GetById(id));
         }
 
-        public async Task<PagedResultCustom<RoleDTO>> GetPaging(int page, int perPage, string sortType, string sortField, string? searchName)
+        public async Task<PagedResultCustom<RoleDTO>> GetPaging(int page, int perPage, string? sortType, string? sortField, string? searchName)
         {
             List<Expression<Func<Role, bool>>> conditions = new List<Expression<Func<Role, bool>>>()
             {
@@ -75,14 +75,14 @@ namespace vigo.Service.Admin.Service
                 conditions.Add(e => e.Name.ToLower().Contains(searchName.ToLower()));
             }
             bool sortDown = false;
-            if (sortType.Equals("DESC"))
+            if (sortType != null && sortType.Equals("DESC"))
             {
                 sortDown = true;
             }
             var data = await _unitOfWorkVigo.Roles.GetPaging(conditions,
                                                              null,
                                                              null,
-                                                             sortField.Equals("createdDate") ? e => e.CreatedDate : null,
+                                                             sortField != null && sortField.Equals("createdDate") ? e => e.CreatedDate : null,
                                                              page,
                                                              perPage,
                                                              sortDown);

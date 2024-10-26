@@ -39,7 +39,7 @@ namespace vigo.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPaging(int page, int perPage, string sortType, string sortField, string? searchName)
+        public async Task<IActionResult> GetPaging(int page, int perPage, string? sortType, string? sortField, string? searchName)
         {
             try
             {
