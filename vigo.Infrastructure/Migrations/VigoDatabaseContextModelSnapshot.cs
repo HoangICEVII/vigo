@@ -453,6 +453,9 @@ namespace vigo.Infrastructure.Migrations
                     b.Property<int>("Days")
                         .HasColumnType("int");
 
+                    b.Property<int>("DefaultDiscount")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("DeletedDate")
                         .HasColumnType("TIMESTAMP");
 

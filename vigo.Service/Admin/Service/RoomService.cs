@@ -42,6 +42,11 @@ namespace vigo.Service.Admin.Service
                 RoomTypeId = dto.RoomTypeId,
                 Thumbnail = dto.Thumbnail,
                 UpdatedDate = dateNow,
+                Address = dto.Address,
+                District = dto.District,
+                Province = dto.Province,
+                Street = dto.Street,
+                DefaultDiscount = dto.DefaultDiscount
             };
             _unitOfWorkVigo.Rooms.Create(room);
             await _unitOfWorkVigo.Complete();
@@ -194,6 +199,11 @@ namespace vigo.Service.Admin.Service
             data.Description = dto.Description;
             data.Name = dto.Name;
             data.RoomTypeId = dto.RoomTypeId;
+            data.Address = dto.Address;
+            data.Street = dto.Street;
+            data.Province = dto.Province;
+            data.District = dto.District;
+            data.DefaultDiscount = dto.DefaultDiscount;
 
             List<Expression<Func<RoomServiceR, bool>>> con = new List<Expression<Func<RoomServiceR, bool>>>()
             {

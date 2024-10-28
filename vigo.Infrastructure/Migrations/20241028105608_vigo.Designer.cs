@@ -12,7 +12,7 @@ using vigo.Infrastructure.DBContext;
 namespace vigo.Infrastructure.Migrations
 {
     [DbContext(typeof(VigoDatabaseContext))]
-    [Migration("20241028104007_vigo")]
+    [Migration("20241028105608_vigo")]
     partial class vigo
     {
         /// <inheritdoc />
@@ -454,6 +454,9 @@ namespace vigo.Infrastructure.Migrations
                         .HasColumnType("TIMESTAMP");
 
                     b.Property<int>("Days")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DefaultDiscount")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("DeletedDate")

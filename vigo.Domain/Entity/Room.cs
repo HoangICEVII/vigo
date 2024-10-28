@@ -17,6 +17,7 @@ namespace vigo.Domain.Entity
         public int Avaiable {  get; set; }
         public int RoomTypeId { get; set; }
         public int BusinessPartnerId { get; set; }
+        public int DefaultDiscount { get; set; }
         public string Province {  get; set; } = string.Empty;
         public string District {  get; set; } = string.Empty;
         public string Street { get; set; } = string.Empty;

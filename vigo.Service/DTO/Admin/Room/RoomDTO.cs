@@ -18,9 +18,11 @@ namespace vigo.Service.DTO.Admin.Room
         public decimal Price { get; set; }
         public int Avaiable { get; set; }
         public int BusinessPartnerId { get; set; }
+        public int DefaultDiscount { get; set; }
         public int Province { get; set; }
         public int District { get; set; }
         public int Street { get; set; }
+        public string Address { get; set; } = string.Empty;
         public BusinessPartnerShortDTO BusinessPartner { get; set; } = new BusinessPartnerShortDTO();
         public List<ServiceDTO> Services { get; set; } = new List<ServiceDTO>();
     }

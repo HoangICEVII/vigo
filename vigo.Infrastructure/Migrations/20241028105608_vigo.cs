@@ -338,6 +338,7 @@ namespace vigo.Infrastructure.Migrations
                     Avaiable = table.Column<int>(type: "int", nullable: false),
                     RoomTypeId = table.Column<int>(type: "int", nullable: false),
                     BusinessPartnerId = table.Column<int>(type: "int", nullable: false),
+                    DefaultDiscount = table.Column<int>(type: "int", nullable: false),
                     Province = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     District = table.Column<string>(type: "longtext", nullable: false)
