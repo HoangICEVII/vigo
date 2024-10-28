@@ -26,7 +26,6 @@ namespace vigo.Infrastructure.DBContext
         public DbSet<RoomServiceR> RoomServices { get; set; }
         public DbSet<RoomType> RoomTypes { get; set; }
         public DbSet<ServiceR> Services { get; set; }
-        public DbSet<ShowRoom> ShowRooms { get; set; }
         public DbSet<BusinessPartner> BusinessPartners { get; set; }
         public DbSet<SystemEmployee> SystemEmployees { get; set; }
         public DbSet<Tourist> Tourists { get; set; }

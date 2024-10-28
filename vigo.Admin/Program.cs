@@ -80,7 +80,6 @@ builder.Services.AddScoped<IRatingService, RatingService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IRoomService, RoomService>();
 builder.Services.AddScoped<IServiceService, ServiceService>();
-builder.Services.AddScoped<IShowRoomService, ShowRoomService>();
 builder.Services.AddScoped<IRoomTypeService, RoomTypeService>();
 //builder.Services.AddScoped<ISystemEmployeeService, SystemEmployeeService>();
 //builder.Services.AddScoped<ITouristService, TouristService>();

@@ -43,8 +43,6 @@ namespace vigo.Service.Helper
             CreateMap<RoomType, RoomTypeDTO>();
             CreateMap<Room, RoomDetailDTO > ();
             CreateMap<Room, RoomDTO> ();
-            CreateMap<ShowRoom, ShowRoomDetailDTO>();
-            CreateMap<ShowRoom, ShowRoomDTO>();
             CreateMap<RoomType, RoomTypeDTO>();
             CreateMap<ServiceR, ServiceDTO>();
             CreateMap<BusinessPartner, BusinessPartnerShortDTO>(); 

@@ -30,7 +30,6 @@ namespace vigo.Infrastructure.UnitOfWork
         private Lazy<IRoomServiceRepository> _roomServices;
         private Lazy<IRoomTypeRepository> _roomTypes;
         private Lazy<IServiceRepository> _services;
-        private Lazy<IShowRoomRepository> _showRooms;
         private Lazy<ISystemEmployeeRepository> _systemEmployees;
         private Lazy<ITouristRepository> _tourists;
         private Lazy<IRoomRepository> _rooms;
@@ -52,7 +51,6 @@ namespace vigo.Infrastructure.UnitOfWork
         public IRoomServiceRepository RoomServices => _roomServices.Value;
         public IRoomTypeRepository RoomTypes => _roomTypes.Value;
         public IServiceRepository Services => _services.Value;
-        public IShowRoomRepository ShowRooms => _showRooms.Value;
         public ISystemEmployeeRepository SystemEmployees => _systemEmployees.Value;
         public ITouristRepository Tourists => _tourists.Value;
         public IRoomRepository Rooms => _rooms.Value;
@@ -81,7 +79,6 @@ namespace vigo.Infrastructure.UnitOfWork
 
             _roomTypes = new Lazy<IRoomTypeRepository>(() => new RoomTypeRepository(_context));
             _services = new Lazy<IServiceRepository>(() => new ServiceRepository(_context));
-            _showRooms = new Lazy<IShowRoomRepository>(() => new ShowRoomRepository(_context));
 
             _systemEmployees = new Lazy<ISystemEmployeeRepository>(() => new SystemEmployeeRepository(_context));
             _tourists = new Lazy<ITouristRepository>(() => new TouristRepository(_context));

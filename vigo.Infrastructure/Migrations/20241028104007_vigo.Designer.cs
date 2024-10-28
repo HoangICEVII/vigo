@@ -12,7 +12,7 @@ using vigo.Infrastructure.DBContext;
 namespace vigo.Infrastructure.Migrations
 {
     [DbContext(typeof(VigoDatabaseContext))]
-    [Migration("20241028102701_vigo")]
+    [Migration("20241028104007_vigo")]
     partial class vigo
     {
         /// <inheritdoc />
@@ -291,8 +291,6 @@ namespace vigo.Infrastructure.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ShowRoomId");
 
                     b.ToTable("discount", (string)null);
                 });
@@ -582,43 +580,6 @@ namespace vigo.Infrastructure.Migrations
                     b.ToTable("service", (string)null);
                 });
 
-            modelBuilder.Entity("vigo.Domain.Entity.ShowRoom", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BusinessPartnerId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("DistrictId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("ProvinceId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BusinessPartnerId");
-
-                    b.ToTable("ShowRooms");
-                });
-
             modelBuilder.Entity("vigo.Domain.Entity.Street", b =>
                 {
                     b.Property<string>("Id")
@@ -816,15 +777,6 @@ namespace vigo.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("vigo.Domain.Entity.DiscountCoupon", b =>
-                {
-                    b.HasOne("vigo.Domain.Entity.ShowRoom", null)
-                        .WithMany()
-                        .HasForeignKey("ShowRoomId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("vigo.Domain.Entity.District", b =>
                 {
                     b.HasOne("vigo.Domain.Entity.Province", null)
@@ -893,15 +845,6 @@ namespace vigo.Infrastructure.Migrations
                     b.HasOne("vigo.Domain.Entity.ServiceR", null)
                         .WithMany()
                         .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("vigo.Domain.Entity.ShowRoom", b =>
-                {
-                    b.HasOne("vigo.Domain.User.BusinessPartner", null)
-                        .WithMany()
-                        .HasForeignKey("BusinessPartnerId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });

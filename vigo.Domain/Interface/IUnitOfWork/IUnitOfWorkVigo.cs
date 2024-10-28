@@ -30,7 +30,6 @@ namespace vigo.Domain.Interface.IUnitOfWork
         IRoomTypeRepository RoomTypes { get; }
         IServiceRepository Services { get; }
 
-        IShowRoomRepository ShowRooms { get; }
         IBusinessPartnerRepository BusinessPartners { get; }
 
         ITouristRepository Tourists { get; }
