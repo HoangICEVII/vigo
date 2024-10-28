@@ -8,6 +8,7 @@ namespace vigo.Domain.Entity
 {
     public class RoomServiceR
     {
+        public int Id { get; set; }
         public int RoomId { get; set; }
         public int ServiceId { get; set; }
     }

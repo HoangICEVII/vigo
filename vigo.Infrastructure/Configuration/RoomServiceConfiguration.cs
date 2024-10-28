@@ -14,7 +14,8 @@ namespace vigo.Infrastructure.Configuration
         public void Configure(EntityTypeBuilder<RoomServiceR> builder)
         {
             builder.ToTable("roomService");
-            builder.HasNoKey();
+            builder.HasKey(e => e.Id);
+            builder.Property(e => e.Id).ValueGeneratedOnAdd();
         }
     }
 }

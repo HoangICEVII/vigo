@@ -503,11 +503,19 @@ namespace vigo.Infrastructure.Migrations
 
             modelBuilder.Entity("vigo.Domain.Entity.RoomServiceR", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<int>("RoomId")
                         .HasColumnType("int");
 
                     b.Property<int>("ServiceId")
                         .HasColumnType("int");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("RoomId");
 

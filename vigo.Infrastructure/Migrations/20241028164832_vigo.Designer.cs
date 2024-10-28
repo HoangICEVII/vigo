@@ -12,7 +12,7 @@ using vigo.Infrastructure.DBContext;
 namespace vigo.Infrastructure.Migrations
 {
     [DbContext(typeof(VigoDatabaseContext))]
-    [Migration("20241028105608_vigo")]
+    [Migration("20241028164832_vigo")]
     partial class vigo
     {
         /// <inheritdoc />
@@ -506,11 +506,19 @@ namespace vigo.Infrastructure.Migrations
 
             modelBuilder.Entity("vigo.Domain.Entity.RoomServiceR", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<int>("RoomId")
                         .HasColumnType("int");
 
                     b.Property<int>("ServiceId")
                         .HasColumnType("int");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("RoomId");
 

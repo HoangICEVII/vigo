@@ -462,11 +462,14 @@ namespace vigo.Infrastructure.Migrations
                 name: "roomService",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     RoomId = table.Column<int>(type: "int", nullable: false),
                     ServiceId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
+                    table.PrimaryKey("PK_roomService", x => x.Id);
                     table.ForeignKey(
                         name: "FK_roomService_room_RoomId",
                         column: x => x.RoomId,
