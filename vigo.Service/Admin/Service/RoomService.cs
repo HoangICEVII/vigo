@@ -75,12 +75,15 @@ namespace vigo.Service.Admin.Service
                 List<Image> images = new List<Image>();
                 foreach (var item in dto.Images)
                 {
-                    images.Add(new Image()
+                    foreach (var image in item.Urls)
                     {
-                        RoomId = room.Id,
-                        Type = item.Type,
-                        Url = item.Url
-                    });
+                        images.Add(new Image()
+                        {
+                            RoomId = room.Id,
+                            Type = item.Type,
+                            Url = image
+                        });
+                    }
                 }
                 _unitOfWorkVigo.Images.CreateRange(images);
                 await _unitOfWorkVigo.Complete();
@@ -236,12 +239,15 @@ namespace vigo.Service.Admin.Service
                 List<Image> images = new List<Image>();
                 foreach (var item in dto.Images)
                 {
-                    images.Add(new Image()
+                    foreach (var image in item.Urls)
                     {
-                        RoomId = data.Id,
-                        Type = item.Type,
-                        Url = item.Url
-                    });
+                        images.Add(new Image()
+                        {
+                            RoomId = data.Id,
+                            Type = item.Type,
+                            Url = image
+                        });
+                    }
                 }
                 _unitOfWorkVigo.Images.CreateRange(images);
                 await _unitOfWorkVigo.Complete();

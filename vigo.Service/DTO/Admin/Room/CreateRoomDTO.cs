@@ -28,6 +28,6 @@ namespace vigo.Service.DTO.Admin.Room
     public class RoomImage
     {
         public string Type { get; set; } = string.Empty;
-        public string Url { get; set; } = string.Empty;
+        public List<string> Urls { get; set; } = new List<string>();
     }
 }
