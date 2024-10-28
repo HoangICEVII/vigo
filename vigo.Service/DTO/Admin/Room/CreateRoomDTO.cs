@@ -21,6 +21,7 @@ namespace vigo.Service.DTO.Admin.Room
         public string Street { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;
         public int RoomTypeId { get; set; }
+        public int BusinessPartnerId { get; set; }
         public List<int> Services { get; set; } = new List<int>();
     }
 

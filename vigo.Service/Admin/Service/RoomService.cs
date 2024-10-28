@@ -46,7 +46,8 @@ namespace vigo.Service.Admin.Service
                 District = dto.District,
                 Province = dto.Province,
                 Street = dto.Street,
-                DefaultDiscount = dto.DefaultDiscount
+                DefaultDiscount = dto.DefaultDiscount,
+                BusinessPartnerId = dto.BusinessPartnerId
             };
             _unitOfWorkVigo.Rooms.Create(room);
             await _unitOfWorkVigo.Complete();
