@@ -1,8 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Data;
 using vigo.Domain.AccountFolder;
+using vigo.Domain.Entity;
 using vigo.Infrastructure.DBContext;
+using vigo.Service.DTO;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace vigo.Admin
 {
@@ -38,7 +42,7 @@ namespace vigo.Admin
             }
         }
 
-        public void Init()
+        public async Task Init()
         {
             using (var scope = _serviceProvider.CreateScope())
             {
@@ -79,6 +83,42 @@ namespace vigo.Admin
                             UserType = "SystemEmployee"
                         };
                         _vigoContext.Accounts.Add(account);
+                        _vigoContext.SaveChanges();
+                    }
+
+                    using (HttpClient client = new HttpClient())
+                    {
+                        string urlP = "https://esgoo.net/api-tinhthanh/1/0.htm";
+                        HttpResponseMessage responseP = await client.GetAsync(urlP);
+                        string responseBodyP = await responseP.Content.ReadAsStringAsync();
+                        DataTemp<Province> dataP = JsonConvert.DeserializeObject<DataTemp<Province>>(responseBodyP);
+                        _vigoContext.Provinces.AddRange(dataP.Data);
+
+                        foreach (Province province in dataP.Data)
+                        {
+                            string urlD = $"https://esgoo.net/api-tinhthanh/2/{province.Id}.htm";
+                            HttpResponseMessage responseD = await client.GetAsync(urlD);
+                            string responseBodyD = await responseD.Content.ReadAsStringAsync();
+                            DataTemp<District> dataD = JsonConvert.DeserializeObject<DataTemp<District>>(responseBodyD);
+                            foreach (var district in dataD.Data)
+                            {
+                                district.ProvinceId = province.Id;
+                            }
+                            _vigoContext.Districts.AddRange(dataD.Data);
+
+                            foreach (District district in dataD.Data)
+                            {
+                                string urlS = $"https://esgoo.net/api-tinhthanh/3/{district.Id}.htm";
+                                HttpResponseMessage responseS = await client.GetAsync(urlS);
+                                string responseBodyS = await responseS.Content.ReadAsStringAsync();
+                                DataTemp<Street> dataS = JsonConvert.DeserializeObject<DataTemp<Street>>(responseBodyS);
+                                foreach(var street in dataS.Data)
+                                {
+                                    street.DistrictId = district.Id;
+                                }
+                                _vigoContext.Streets.AddRange(dataS.Data);
+                            }
+                        }
                         _vigoContext.SaveChanges();
                     }
                 }

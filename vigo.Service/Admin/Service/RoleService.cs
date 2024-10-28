@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using vigo.Domain.AccountFolder;
@@ -95,12 +96,12 @@ namespace vigo.Service.Admin.Service
 
         public async Task Update(RoleUpdateDTO dto)
         {
+            var data = await _unitOfWorkVigo.Roles.GetById(dto.Id);
             var checkUnique = await _unitOfWorkVigo.Roles.GetDetailBy(e => e.Name.Equals(dto.Name));
-            if (checkUnique != null)
+            if (dto.Name != data!.Name && checkUnique != null)
             {
                 throw new CustomException("tên bị trùng lặp");
             }
-            var data = await _unitOfWorkVigo.Roles.GetById(dto.Id);
             data.Name = dto.Name;
             data.Permission = dto.Permission != null ? string.Join(",", dto.Permission) : "";
             data.UpdatedDate = DateTime.Now;

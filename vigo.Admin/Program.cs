@@ -131,6 +131,6 @@ app.MapControllers();
 
 var startup = new Startup(app.Services);
 startup.Configure(app);
-startup.Init();
+await startup.Init();
 
 app.Run();

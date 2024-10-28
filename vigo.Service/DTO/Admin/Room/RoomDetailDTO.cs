@@ -18,7 +18,12 @@ namespace vigo.Service.DTO.Admin.Room
         public decimal Price { get; set; }
         public int Avaiable { get; set; }
         public int RoomTypeId { get; set; }
+        public int BusinessPartnerId { get; set; }
+        public int Province { get; set; }
+        public int District { get; set; }
+        public int Street { get; set; }
         public List<ServiceDTO> Services { get; set; } = new List<ServiceDTO>();
+        public List<RoomImageDTO> Images { get; set; } = new List<RoomImageDTO>();
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
         public DateTime DeletedDate { get; set; }

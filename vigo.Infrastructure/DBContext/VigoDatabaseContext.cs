@@ -19,7 +19,6 @@ namespace vigo.Infrastructure.DBContext
         public DbSet<DiscountCoupon> Discounts { get; set; }
         public DbSet<District> Districts { get; set; }
         public DbSet<Image> Images { get; set; }
-        public DbSet<ImageType> ImageTypes { get; set; }
         public DbSet<Invoice> Invoices { get; set; }
         public DbSet<Province> Provinces { get; set; }
         public DbSet<Rating> Ratings { get; set; }
@@ -31,6 +30,7 @@ namespace vigo.Infrastructure.DBContext
         public DbSet<BusinessPartner> BusinessPartners { get; set; }
         public DbSet<SystemEmployee> SystemEmployees { get; set; }
         public DbSet<Tourist> Tourists { get; set; }
+        public DbSet<Street> Streets { get; set; }
 
         public VigoDatabaseContext(DbContextOptions<VigoDatabaseContext> options) : base(options)
         {
@@ -49,7 +49,6 @@ namespace vigo.Infrastructure.DBContext
             modelBuilder.ApplyConfiguration(new DistrictConfiguration());
             modelBuilder.ApplyConfiguration(new ImageConfiguration());
 
-            modelBuilder.ApplyConfiguration(new ImageTypeConfiguration());
             modelBuilder.ApplyConfiguration(new InvoiceConfiguration());
 
             modelBuilder.ApplyConfiguration(new ProvinceConfiguration());
@@ -63,10 +62,10 @@ namespace vigo.Infrastructure.DBContext
             modelBuilder.ApplyConfiguration(new RoomTypeConfiguration());
 
             modelBuilder.ApplyConfiguration(new ServiceConfiguration());
-            modelBuilder.ApplyConfiguration(new ShowRoomConfiguration());
 
             modelBuilder.ApplyConfiguration(new SystemEmployeeConfiguration());
             modelBuilder.ApplyConfiguration(new TouristConfiguration());
+            modelBuilder.ApplyConfiguration(new StreetConfiguration());
 
             modelBuilder.Entity<RolePermission>().HasData(
                 new RolePermission { Id = 1, Name = "quản lí tài khoản", RoleLabel = "account_manage"},

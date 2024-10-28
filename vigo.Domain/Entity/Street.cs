@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace vigo.Domain.Entity
 {
-    public class Province
+    public class Street
     {
         public string Id { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
+        public string DistrictId { get; set; } = string.Empty;
     }
 }

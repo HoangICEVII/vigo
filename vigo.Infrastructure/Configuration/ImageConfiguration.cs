@@ -17,8 +17,8 @@ namespace vigo.Infrastructure.Configuration
             builder.ToTable("image");
             builder.HasKey(e => e.Id);
             builder.Property(e => e.Id).ValueGeneratedOnAdd();
-            builder.HasOne<ImageType>().WithMany().HasForeignKey(e => e.ImageTypeId).OnDelete(DeleteBehavior.NoAction);
             builder.HasOne<Room>().WithMany().HasForeignKey(e => e.RoomId).OnDelete(DeleteBehavior.NoAction);
+
         }
     }
 }

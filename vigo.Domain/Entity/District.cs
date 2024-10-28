@@ -8,11 +8,8 @@ namespace vigo.Domain.Entity
 {
     public class District
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public int ProvinceId { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public DateTime UpdatedDate { get; set; }
-        public DateTime DeletedDate { get; set; }
+        public string Id { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+        public string ProvinceId { get; set; } = string.Empty;
     }
 }

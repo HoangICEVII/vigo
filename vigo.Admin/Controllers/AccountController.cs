@@ -76,6 +76,32 @@ namespace vigo.Admin.Controllers
             }
         }
 
+        [HttpGet("business-partners/get-all")]
+        public async Task<IActionResult> GetAllBusinessPartner()
+        {
+            try
+            {
+                var data = await _accountService.GetAllBusinessPartner();
+                Option options = new Option()
+                {
+                    Name = "",
+                    PageSize = data.Count(),
+                    Page = 1,
+                    TotalRecords = data.Count()
+                };
+                return CreateResponse(data, "get success", 200, options);
+            }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return CreateResponse(null, "get fail", 500, null);
+            }
+        }
+
         [HttpGet("business-partners/{id}")]
         public async Task<IActionResult> GetBusinessPartnerDetail(int id)
         {

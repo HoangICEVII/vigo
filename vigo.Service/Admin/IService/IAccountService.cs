@@ -16,6 +16,7 @@ namespace vigo.Service.Admin.IService
     {
         Task<UserAuthen> AdminLogin(LoginViaFormDTO dto);
         Task<PagedResultCustom<BusinessPartnerDTO>> GetBusinessPartnerPaging(int page, int perPage, string? sortType, string? sortField, string? searchName);
+        Task<List<BusinessPartnerShortDTO>> GetAllBusinessPartner();
         Task<BusinessPartnerDetailDTO> GetBusinessPartnerDetail(int id);
         Task<PagedResultCustom<EmployeeDTO>> GetEmployeePaging(int page, int perPage, string? sortType, string? sortField, string? searchName);
         Task<EmployeeDetailDTO> GetEmployeeDetail(int id);

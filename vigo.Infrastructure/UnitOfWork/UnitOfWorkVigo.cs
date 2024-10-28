@@ -22,7 +22,6 @@ namespace vigo.Infrastructure.UnitOfWork
         private Lazy<IDiscountRepository> _discounts;
         private Lazy<IDistrictRepository> _districts;
         private Lazy<IImageRepository> _images;
-        private Lazy<IImageTypeRepository> _imageTypes;
         private Lazy<IInvoiceRepository> _invoices;
         private Lazy<IProvinceRepository> _provinces;
         private Lazy<IRatingRepository> _ratings;
@@ -35,6 +34,7 @@ namespace vigo.Infrastructure.UnitOfWork
         private Lazy<ISystemEmployeeRepository> _systemEmployees;
         private Lazy<ITouristRepository> _tourists;
         private Lazy<IRoomRepository> _rooms;
+        private Lazy<IStreetRepository> _streets;
         #endregion
 
         #region b
@@ -44,7 +44,6 @@ namespace vigo.Infrastructure.UnitOfWork
         public IDiscountRepository DiscountCoupons => _discounts.Value;
         public IDistrictRepository Districts => _districts.Value;
         public IImageRepository Images => _images.Value;
-        public IImageTypeRepository ImageTypes => _imageTypes.Value;
         public IInvoiceRepository Invoices => _invoices.Value;
         public IProvinceRepository Provinces => _provinces.Value;
         public IRatingRepository Ratings => _ratings.Value;
@@ -57,6 +56,7 @@ namespace vigo.Infrastructure.UnitOfWork
         public ISystemEmployeeRepository SystemEmployees => _systemEmployees.Value;
         public ITouristRepository Tourists => _tourists.Value;
         public IRoomRepository Rooms => _rooms.Value;
+        public IStreetRepository Streets => _streets.Value;
         #endregion
 
         public UnitOfWorkVigo(VigoDatabaseContext context)
@@ -71,7 +71,6 @@ namespace vigo.Infrastructure.UnitOfWork
             _districts = new Lazy<IDistrictRepository>(() => new DistrictRepository(_context));
             _images = new Lazy<IImageRepository>(() => new ImageRepository(_context));
 
-            _imageTypes = new Lazy<IImageTypeRepository>(() => new ImageTypeRepository(_context));
             _invoices = new Lazy<IInvoiceRepository>(() => new InvoiceRepository(_context));
             _provinces = new Lazy<IProvinceRepository>(() => new ProvinceRepository(_context));
 
@@ -87,6 +86,7 @@ namespace vigo.Infrastructure.UnitOfWork
             _systemEmployees = new Lazy<ISystemEmployeeRepository>(() => new SystemEmployeeRepository(_context));
             _tourists = new Lazy<ITouristRepository>(() => new TouristRepository(_context));
             _rooms = new Lazy<IRoomRepository>(() => new RoomRepository(_context));
+            _streets = new Lazy<IStreetRepository>(() => new StreetRepository(_context));
         }
         public async Task<int> Complete()
         {

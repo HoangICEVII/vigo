@@ -9,6 +9,7 @@ using vigo.Domain.Entity;
 using vigo.Domain.Helper;
 using vigo.Domain.Interface.IUnitOfWork;
 using vigo.Service.Admin.IService;
+using vigo.Service.DTO.Admin.Account;
 using vigo.Service.DTO.Admin.Room;
 using vigo.Service.DTO.Admin.Service;
 using vigo.Service.DTO.Admin.ShowRoom;
@@ -39,7 +40,6 @@ namespace vigo.Service.Admin.Service
                 Description = dto.Description,
                 Price = dto.Price,
                 RoomTypeId = dto.RoomTypeId,
-                ShowRoomId = dto.ShowRoomId,
                 Thumbnail = dto.Thumbnail,
                 UpdatedDate = dateNow,
             };
@@ -63,6 +63,26 @@ namespace vigo.Service.Admin.Service
             {
                 throw new CustomException("không đăng ký được dịch vụ cho phòng");
             }
+
+            try
+            {
+                List<Image> images = new List<Image>();
+                foreach (var item in dto.Images)
+                {
+                    images.Add(new Image()
+                    {
+                        RoomId = room.Id,
+                        Type = item.Type,
+                        Url = item.Url
+                    });
+                }
+                _unitOfWorkVigo.Images.CreateRange(images);
+                await _unitOfWorkVigo.Complete();
+            }
+            catch (CustomException)
+            {
+                throw new CustomException("không lưu được ảnh cho phòng cho phòng");
+            }
         }
 
         public async Task Delete(int id)
@@ -77,29 +97,55 @@ namespace vigo.Service.Admin.Service
             var result = _mapper.Map<RoomDetailDTO>(await _unitOfWorkVigo.Rooms.GetById(id));
             List<Expression<Func<RoomServiceR, bool>>> con = new List<Expression<Func<RoomServiceR, bool>>>()
             {
-                e => e.RoomId == result.Id,
+                e => e.RoomId == result.Id
             };
             var roomServices = await _unitOfWorkVigo.RoomServices.GetAll(con);
             foreach (var service in roomServices)
             {
                 result.Services.Add(_mapper.Map<ServiceDTO>(await _unitOfWorkVigo.Services.GetById(service.ServiceId)));
             }
+            List<Expression<Func<Image, bool>>> con2 = new List<Expression<Func<Image, bool>>>()
+            {
+                e => e.RoomId == result.Id
+            };
+            var images = await _unitOfWorkVigo.Images.GetAll(con2);
+            List<string> type = new List<string>();
+            foreach (var image in images)
+            {
+                if (type.Contains(image.Type)) {
+                    result.Images.Where(e => e.Type == image.Type).FirstOrDefault()!.Urls.Add(image.Url);
+                }
+                else
+                {
+                    type.Add(image.Type);
+                    var temp = new RoomImageDTO()
+                    {
+                        Type = image.Type
+                    };
+                    temp.Urls.Add(image.Url);
+                    result.Images.Add(temp);
+                }
+            }
             return result;
         }
 
-        public async Task<PagedResultCustom<RoomDTO>> GetPaging(int page, int perPage, int? roomTypeId, string? sortType, string? sortField, string? searchName)
+        public async Task<PagedResultCustom<RoomDTO>> GetPaging(int page, int perPage, int? roomTypeId, int? businessPartnerId, string? sortType, string? sortField, string? searchName)
         {
             List<Expression<Func<Room, bool>>> conditions = new List<Expression<Func<Room, bool>>>()
             {
                 e => e.DeletedDate == null,
             };
-            if (searchName != null)
+            if (businessPartnerId != null)
             {
-                conditions.Add(e => e.Name.ToLower().Contains(searchName.ToLower()));
+                conditions.Add(e => e.BusinessPartnerId == businessPartnerId);
             }
             if (roomTypeId != null)
             {
                 conditions.Add(e => e.RoomTypeId == roomTypeId);
+            }
+            if (searchName != null)
+            {
+                conditions.Add(e => e.Name.ToLower().Contains(searchName.ToLower()));
             }
             bool sortDown = false;
             if (sortType != null && sortType.Equals("DESC"))
@@ -132,6 +178,7 @@ namespace vigo.Service.Admin.Service
                 foreach (var service in roomServices) {
                     item.Services.Add(_mapper.Map<ServiceDTO>(await _unitOfWorkVigo.Services.GetById(service.ServiceId)));
                 }
+                item.BusinessPartner = _mapper.Map<BusinessPartnerShortDTO>(await _unitOfWorkVigo.BusinessPartners.GetById(item.BusinessPartnerId));
             }
             return result;
         }
@@ -172,6 +219,26 @@ namespace vigo.Service.Admin.Service
                 });
             }
             await _unitOfWorkVigo.Complete();
+
+            try
+            {
+                List<Image> images = new List<Image>();
+                foreach (var item in dto.Images)
+                {
+                    images.Add(new Image()
+                    {
+                        RoomId = data.Id,
+                        Type = item.Type,
+                        Url = item.Url
+                    });
+                }
+                _unitOfWorkVigo.Images.CreateRange(images);
+                await _unitOfWorkVigo.Complete();
+            }
+            catch (CustomException)
+            {
+                throw new CustomException("không lưu được ảnh cho phòng cho phòng");
+            }
         }
     }
 }

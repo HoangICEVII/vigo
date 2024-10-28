@@ -309,5 +309,14 @@ namespace vigo.Service.Admin.Service
 
             await _unitOfWorkVigo.Complete();
         }
+
+        public async Task<List<BusinessPartnerShortDTO>> GetAllBusinessPartner()
+        {
+            List<Expression<Func<BusinessPartner, bool>>> conditions = new List<Expression<Func<BusinessPartner, bool>>>()
+            {
+                e => e.DeletedDate == null
+            };
+            return _mapper.Map<List<BusinessPartnerShortDTO>>(await _unitOfWorkVigo.BusinessPartners.GetAll(conditions));
+        }
     }
 }

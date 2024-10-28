@@ -18,34 +18,13 @@ namespace vigo.Infrastructure.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "imageType",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
-                    DeletedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_imageType", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "province",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: false)
+                    Id = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
-                    DeletedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false)
+                    Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -136,14 +115,12 @@ namespace vigo.Infrastructure.Migrations
                 name: "district",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ProvinceId = table.Column<int>(type: "int", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
-                    DeletedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false)
+                    ProvinceId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -182,6 +159,28 @@ namespace vigo.Infrastructure.Migrations
                         name: "FK_account_role_RoleId",
                         column: x => x.RoleId,
                         principalTable: "role",
+                        principalColumn: "Id");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "street",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DistrictId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_street", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_street_district_DistrictId",
+                        column: x => x.DistrictId,
+                        principalTable: "district",
                         principalColumn: "Id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -286,84 +285,6 @@ namespace vigo.Infrastructure.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "showRoom",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ProvinceId = table.Column<int>(type: "int", nullable: false),
-                    DistrictId = table.Column<int>(type: "int", nullable: false),
-                    BusinessPartnerId = table.Column<int>(type: "int", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
-                    DeletedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_showRoom", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_showRoom_businessPartner_BusinessPartnerId",
-                        column: x => x.BusinessPartnerId,
-                        principalTable: "businessPartner",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_showRoom_district_DistrictId",
-                        column: x => x.DistrictId,
-                        principalTable: "district",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_showRoom_province_ProvinceId",
-                        column: x => x.ProvinceId,
-                        principalTable: "province",
-                        principalColumn: "Id");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "discount",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Image = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Description = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    DiscountType = table.Column<int>(type: "int", nullable: false),
-                    DiscountCode = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    StartDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
-                    DiscountMax = table.Column<int>(type: "int", nullable: false),
-                    DiscountCount = table.Column<int>(type: "int", nullable: false),
-                    UserUsed = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    RoomApply = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    BusinessKey = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ShowRoomId = table.Column<int>(type: "int", nullable: false),
-                    DiscountApply = table.Column<int>(type: "int", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
-                    DeletedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_discount", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_discount_showRoom_ShowRoomId",
-                        column: x => x.ShowRoomId,
-                        principalTable: "showRoom",
-                        principalColumn: "Id");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "room",
                 columns: table => new
                 {
@@ -375,11 +296,19 @@ namespace vigo.Infrastructure.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Thumbnail = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ShowRoomId = table.Column<int>(type: "int", nullable: false),
                     Days = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
                     Avaiable = table.Column<int>(type: "int", nullable: false),
                     RoomTypeId = table.Column<int>(type: "int", nullable: false),
+                    BusinessPartnerId = table.Column<int>(type: "int", nullable: false),
+                    Province = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    District = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Street = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Address = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     CreatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
                     DeletedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: true)
@@ -388,14 +317,40 @@ namespace vigo.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_room", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_room_businessPartner_BusinessPartnerId",
+                        column: x => x.BusinessPartnerId,
+                        principalTable: "businessPartner",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_room_roomType_RoomTypeId",
                         column: x => x.RoomTypeId,
                         principalTable: "roomType",
                         principalColumn: "Id");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "ShowRooms",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ProvinceId = table.Column<int>(type: "int", nullable: false),
+                    DistrictId = table.Column<int>(type: "int", nullable: false),
+                    BusinessPartnerId = table.Column<int>(type: "int", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    DeletedDate = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ShowRooms", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_room_showRoom_ShowRoomId",
-                        column: x => x.ShowRoomId,
-                        principalTable: "showRoom",
+                        name: "FK_ShowRooms_businessPartner_BusinessPartnerId",
+                        column: x => x.BusinessPartnerId,
+                        principalTable: "businessPartner",
                         principalColumn: "Id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -443,19 +398,12 @@ namespace vigo.Infrastructure.Migrations
                     Url = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     RoomId = table.Column<int>(type: "int", nullable: false),
-                    ImageTypeId = table.Column<int>(type: "int", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    DeletedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    Type = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_image", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_image_imageType_ImageTypeId",
-                        column: x => x.ImageTypeId,
-                        principalTable: "imageType",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_image_room_RoomId",
                         column: x => x.RoomId,
@@ -516,6 +464,48 @@ namespace vigo.Infrastructure.Migrations
                         name: "FK_roomService_service_ServiceId",
                         column: x => x.ServiceId,
                         principalTable: "service",
+                        principalColumn: "Id");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "discount",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Image = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Description = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DiscountType = table.Column<int>(type: "int", nullable: false),
+                    DiscountCode = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    StartDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
+                    DiscountMax = table.Column<int>(type: "int", nullable: false),
+                    DiscountCount = table.Column<int>(type: "int", nullable: false),
+                    UserUsed = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    RoomApply = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    BusinessKey = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ShowRoomId = table.Column<int>(type: "int", nullable: false),
+                    DiscountApply = table.Column<int>(type: "int", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
+                    DeletedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_discount", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_discount_ShowRooms_ShowRoomId",
+                        column: x => x.ShowRoomId,
+                        principalTable: "ShowRooms",
                         principalColumn: "Id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -591,11 +581,6 @@ namespace vigo.Infrastructure.Migrations
                 column: "ProvinceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_image_ImageTypeId",
-                table: "image",
-                column: "ImageTypeId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_image_RoomId",
                 table: "image",
                 column: "RoomId");
@@ -617,14 +602,14 @@ namespace vigo.Infrastructure.Migrations
                 column: "TouristId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_room_BusinessPartnerId",
+                table: "room",
+                column: "BusinessPartnerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_room_RoomTypeId",
                 table: "room",
                 column: "RoomTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_room_ShowRoomId",
-                table: "room",
-                column: "ShowRoomId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_roomService_RoomId",
@@ -637,19 +622,14 @@ namespace vigo.Infrastructure.Migrations
                 column: "ServiceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_showRoom_BusinessPartnerId",
-                table: "showRoom",
+                name: "IX_ShowRooms_BusinessPartnerId",
+                table: "ShowRooms",
                 column: "BusinessPartnerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_showRoom_DistrictId",
-                table: "showRoom",
+                name: "IX_street_DistrictId",
+                table: "street",
                 column: "DistrictId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_showRoom_ProvinceId",
-                table: "showRoom",
-                column: "ProvinceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_systemEmployee_AccountId",
@@ -686,10 +666,13 @@ namespace vigo.Infrastructure.Migrations
                 name: "roomService");
 
             migrationBuilder.DropTable(
+                name: "street");
+
+            migrationBuilder.DropTable(
                 name: "systemEmployee");
 
             migrationBuilder.DropTable(
-                name: "imageType");
+                name: "ShowRooms");
 
             migrationBuilder.DropTable(
                 name: "booking");
@@ -698,28 +681,25 @@ namespace vigo.Infrastructure.Migrations
                 name: "service");
 
             migrationBuilder.DropTable(
+                name: "district");
+
+            migrationBuilder.DropTable(
                 name: "room");
 
             migrationBuilder.DropTable(
                 name: "tourist");
 
             migrationBuilder.DropTable(
-                name: "roomType");
-
-            migrationBuilder.DropTable(
-                name: "showRoom");
+                name: "province");
 
             migrationBuilder.DropTable(
                 name: "businessPartner");
 
             migrationBuilder.DropTable(
-                name: "district");
+                name: "roomType");
 
             migrationBuilder.DropTable(
                 name: "account");
-
-            migrationBuilder.DropTable(
-                name: "province");
 
             migrationBuilder.DropTable(
                 name: "role");

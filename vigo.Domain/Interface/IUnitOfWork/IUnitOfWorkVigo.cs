@@ -16,7 +16,6 @@ namespace vigo.Domain.Interface.IUnitOfWork
         IDistrictRepository Districts { get; }
 
         IImageRepository Images { get; }
-        IImageTypeRepository ImageTypes { get; }
 
         IInvoiceRepository Invoices { get; }
         IProvinceRepository Provinces { get; }

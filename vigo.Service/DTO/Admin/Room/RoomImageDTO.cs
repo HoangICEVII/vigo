@@ -4,13 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace vigo.Domain.Entity
+namespace vigo.Service.DTO.Admin.Room
 {
-    public class Image
+    public class RoomImageDTO
     {
-        public int Id { get; set; }
-        public string Url { get; set; } = string.Empty;
-        public int RoomId { get; set; }
         public string Type { get; set; } = string.Empty;
+        public List<string> Urls { get; set; } = new List<string>();
     }
 }

@@ -9,12 +9,13 @@ using vigo.Domain.Entity;
 
 namespace vigo.Infrastructure.Configuration
 {
-    internal class ProvinceConfiguration : IEntityTypeConfiguration<Province>
+    internal class StreetConfiguration : IEntityTypeConfiguration<Street>
     {
-        public void Configure(EntityTypeBuilder<Province> builder)
+        public void Configure(EntityTypeBuilder<Street> builder)
         {
-            builder.ToTable("province");
+            builder.ToTable("street");
             builder.HasKey(e => e.Id);
+            builder.HasOne<District>().WithMany().HasForeignKey(e => e.DistrictId).OnDelete(DeleteBehavior.NoAction);
         }
     }
 }
