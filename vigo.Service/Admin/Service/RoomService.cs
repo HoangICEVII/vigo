@@ -34,7 +34,6 @@ namespace vigo.Service.Admin.Service
                 Name = dto.Name,
                 Avaiable = dto.Avaiable,
                 CreatedDate = dateNow,
-                Days = dto.Days,
                 DeletedDate = null,
                 Description = dto.Description,
                 Price = dto.Price,
@@ -161,10 +160,6 @@ namespace vigo.Service.Admin.Service
                 sortDown = true;
             }
             Expression<Func<Room, decimal>>? func = null;
-            if (sortField != null && sortField.Equals("days"))
-            {
-                func = e => e.Days;
-            }
             if (sortField != null && sortField.Equals("price"))
             {
                 func = e => e.Price;
@@ -195,7 +190,6 @@ namespace vigo.Service.Admin.Service
         {
             var data = await _unitOfWorkVigo.Rooms.GetById(dto.Id);
             data.Thumbnail = dto.Thumbnail;
-            data.Days = dto.Days;
             data.Price = dto.Price;
             data.UpdatedDate = DateTime.Now;
             data.Avaiable = dto.Avaiable;

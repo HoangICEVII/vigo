@@ -70,6 +70,9 @@ namespace vigo.Service.Admin.Service
                 Name = dto.Name,
                 CompanyName = dto.FullName,
                 PhoneNumber = dto.PhoneNumber,
+                DistrictId = dto.DistrictId,
+                ProvinceId = dto.ProvinceId,
+                StreetId = dto.StreetId,
                 BusinessKey = PasswordHasher.HashPassword(dto.FullName, DateNow.ToString())
             };
             _unitOfWorkVigo.BusinessPartners.Create(info);

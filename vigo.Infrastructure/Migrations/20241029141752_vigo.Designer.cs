@@ -12,7 +12,7 @@ using vigo.Infrastructure.DBContext;
 namespace vigo.Infrastructure.Migrations
 {
     [DbContext(typeof(VigoDatabaseContext))]
-    [Migration("20241029133946_vigo")]
+    [Migration("20241029141752_vigo")]
     partial class vigo
     {
         /// <inheritdoc />
@@ -453,9 +453,6 @@ namespace vigo.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("TIMESTAMP");
 
-                    b.Property<int>("Days")
-                        .HasColumnType("int");
-
                     b.Property<int>("DefaultDiscount")
                         .HasColumnType("int");
 
@@ -640,6 +637,10 @@ namespace vigo.Infrastructure.Migrations
                     b.Property<DateTime?>("DeletedDate")
                         .HasColumnType("TIMESTAMP");
 
+                    b.Property<string>("DistrictId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Logo")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -649,6 +650,14 @@ namespace vigo.Infrastructure.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ProvinceId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("StreetId")
                         .IsRequired()
                         .HasColumnType("longtext");
 

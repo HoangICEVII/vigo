@@ -13,7 +13,6 @@ namespace vigo.Service.DTO.Admin.Room
         public string Thumbnail { get; set; } = string.Empty;
         public int DefaultDiscount { get; set; }
         public List<RoomImage> Images { get; set; } = new List<RoomImage>();
-        public int Days { get; set; }
         public decimal Price { get; set; }
         public int Avaiable { get; set; }
         public string Province { get; set; } = string.Empty;

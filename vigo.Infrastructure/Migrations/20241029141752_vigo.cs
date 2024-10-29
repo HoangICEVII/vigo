@@ -238,6 +238,12 @@ namespace vigo.Infrastructure.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Address = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    ProvinceId = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DistrictId = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    StreetId = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Logo = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     AccountId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
@@ -335,7 +341,6 @@ namespace vigo.Infrastructure.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Thumbnail = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Days = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
                     Avaiable = table.Column<int>(type: "int", nullable: false),
                     RoomTypeId = table.Column<int>(type: "int", nullable: false),

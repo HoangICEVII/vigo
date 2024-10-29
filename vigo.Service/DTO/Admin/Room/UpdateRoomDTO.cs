@@ -18,7 +18,6 @@ namespace vigo.Service.DTO.Admin.Room
         public string Street { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;
         public int DefaultDiscount { get; set; }
-        public int Days { get; set; }
         public decimal Price { get; set; }
         public int Avaiable { get; set; }
         public int RoomTypeId { get; set; }
