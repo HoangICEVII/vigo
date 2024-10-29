@@ -63,6 +63,16 @@ namespace vigo.Admin
                             DeletedDate = null
                         };
                         _vigoContext.Roles.Add(role);
+                        Role role2 = new Role()
+                        {
+                            Id = 2,
+                            Name = "tourist",
+                            Permission = "",
+                            CreatedDate = DateTime.Now,
+                            UpdatedDate = DateTime.Now,
+                            DeletedDate = null
+                        };
+                        _vigoContext.Roles.Add(role);
                         _vigoContext.SaveChanges();
                     }
                     var admin = _vigoContext.Accounts.Where(e => e.Email == "admin456@gmail.com").FirstOrDefault();

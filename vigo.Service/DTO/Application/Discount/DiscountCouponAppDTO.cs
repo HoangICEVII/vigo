@@ -5,13 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using vigo.Domain.Helper;
 
-namespace vigo.Domain.Entity
+namespace vigo.Service.DTO.Application.Discount
 {
-    public class DiscountCoupon
+    public class DiscountCouponAppDTO
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
-        public string Image {  get; set; } = string.Empty;
+        public string Image { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public DiscountType DiscountType { get; set; }
         public decimal DiscountValue { get; set; }
@@ -20,12 +20,7 @@ namespace vigo.Domain.Entity
         public DateTime EndDate { get; set; }
         public int DiscountMax { get; set; }
         public int DiscountCount { get; set; }
-        public string UserUsed { get; set; } = string.Empty;
-        public string RoomApply {  get; set; } = string.Empty;
-        public string BusinessKey {  get; set; } = string.Empty;
-        public DiscountApply DiscountApply { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public DateTime UpdatedDate { get; set; }
-        public DateTime? DeletedDate { get; set; }
+        public bool IsAvaiable { get; set; }
+        // RoomAppDTO
     }
 }

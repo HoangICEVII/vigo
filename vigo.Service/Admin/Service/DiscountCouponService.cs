@@ -70,12 +70,11 @@ namespace vigo.Service.Admin.Service
             return _mapper.Map<DiscountCouponDetailDTO>(data);
         }
 
-        public async Task<PagedResultCustom<DiscountCouponDTO>> GetPaging(int page, int perPage, int showRoomId, string? sortType, string? sortField, ClaimsPrincipal user)
+        public async Task<PagedResultCustom<DiscountCouponDTO>> GetPaging(int page, int perPage, string? sortType, string? sortField, ClaimsPrincipal user)
         {
             List<Expression<Func<DiscountCoupon, bool>>> conditions = new List<Expression<Func<DiscountCoupon, bool>>>()
             {
                 e => e.DeletedDate == null,
-                e => e.ShowRoomId == showRoomId
             };
             bool sortDown = false;
             if (sortType != null && sortType.Equals("DESC"))

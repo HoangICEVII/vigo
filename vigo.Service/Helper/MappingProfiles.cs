@@ -17,8 +17,9 @@ using vigo.Service.DTO.Admin.Booking;
 using vigo.Service.DTO.Admin.Room;
 using vigo.Service.DTO.Admin.Discount;
 using vigo.Service.DTO.Admin.Rating;
-using vigo.Service.DTO.Admin.ShowRoom;
 using vigo.Service.DTO.Admin.Service;
+using vigo.Service.DTO.Application.Booking;
+using vigo.Service.DTO.Application.Discount;
 
 namespace vigo.Service.Helper
 {
@@ -45,7 +46,10 @@ namespace vigo.Service.Helper
             CreateMap<Room, RoomDTO> ();
             CreateMap<RoomType, RoomTypeDTO>();
             CreateMap<ServiceR, ServiceDTO>();
-            CreateMap<BusinessPartner, BusinessPartnerShortDTO>(); 
+            CreateMap<BusinessPartner, BusinessPartnerShortDTO>();
+            CreateMap<Tourist, TouristDTO>();
+            CreateMap<Booking, BookingAppDTO>();
+            CreateMap<DiscountCoupon, DiscountCouponAppDTO>();
         }
         public static List<string> SplitPermissions(string permissions)
         {

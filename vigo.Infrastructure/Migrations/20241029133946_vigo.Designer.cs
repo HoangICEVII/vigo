@@ -12,7 +12,7 @@ using vigo.Infrastructure.DBContext;
 namespace vigo.Infrastructure.Migrations
 {
     [DbContext(typeof(VigoDatabaseContext))]
-    [Migration("20241028164832_vigo")]
+    [Migration("20241029133946_vigo")]
     partial class vigo
     {
         /// <inheritdoc />
@@ -262,6 +262,9 @@ namespace vigo.Infrastructure.Migrations
                     b.Property<int>("DiscountType")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("DiscountValue")
+                        .HasColumnType("decimal(65,30)");
+
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("TIMESTAMP");
 
@@ -276,9 +279,6 @@ namespace vigo.Infrastructure.Migrations
                     b.Property<string>("RoomApply")
                         .IsRequired()
                         .HasColumnType("longtext");
-
-                    b.Property<int>("ShowRoomId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("TIMESTAMP");
@@ -742,8 +742,12 @@ namespace vigo.Infrastructure.Migrations
                     b.Property<DateTime>("DOB")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateTime>("DeletedDate")
+                    b.Property<DateTime?>("DeletedDate")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Gender")
                         .IsRequired()

@@ -8,6 +8,8 @@ namespace vigo.Domain.AccountFolder
 {
     public class UserAuthen
     {
+        public int? InfoId { get; set; }
+        public string UserType { get; set; } = string.Empty;
         public string BusinessKey { get; set; } = string.Empty;
         public int RoleId { get; set; }
         public string Permission {  get; set; } = string.Empty;

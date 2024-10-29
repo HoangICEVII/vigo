@@ -13,7 +13,6 @@ using vigo.Domain.Helper;
 using vigo.Domain.Interface.IUnitOfWork;
 using vigo.Service.Admin.IService;
 using vigo.Service.DTO.Admin.Service;
-using vigo.Service.DTO.Admin.ShowRoom;
 
 namespace vigo.Service.Admin.Service
 {

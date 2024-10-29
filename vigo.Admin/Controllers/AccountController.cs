@@ -37,7 +37,7 @@ namespace vigo.Admin.Controllers
             {
                 var userAuthen = await _accountService.AdminLogin(dto);
                 string token = CreateToken(userAuthen);
-                return CreateResponse(new TokenRes() { AccessToken = token}, "login success", 200, null);
+                return CreateResponse(new TokenRes() { AccessToken = token, UserType = userAuthen.UserType}, "login success", 200, null);
             }
             catch (CustomException e)
             {
@@ -294,6 +294,7 @@ namespace vigo.Admin.Controllers
             {
                 Subject = new ClaimsIdentity(new[]
                 {
+                    new Claim("InfoId", userAuthen.InfoId != null ? userAuthen.InfoId.ToString()! : string.Empty),
                     new Claim("RoleId", userAuthen.RoleId.ToString()),
                     new Claim("BusinessKey", userAuthen.BusinessKey)
                 }),

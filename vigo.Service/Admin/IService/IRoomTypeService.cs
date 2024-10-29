@@ -6,8 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using vigo.Domain.Helper;
 using vigo.Service.DTO.Admin.Room;
-using vigo.Service.DTO.Admin.Service;
-using vigo.Service.DTO.Admin.ShowRoom;
 
 namespace vigo.Service.Admin.IService
 {

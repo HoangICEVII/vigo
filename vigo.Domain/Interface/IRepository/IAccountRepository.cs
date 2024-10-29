@@ -10,6 +10,6 @@ namespace vigo.Domain.Interface.IRepository
 {
     public interface IAccountRepository : IVigoGeneric<Account>
     {
-        Task<UserAuthen> LoginViaForm(string email, string password, bool admin);
+        Task<UserAuthen> LoginViaForm(string email, string password);
     }
 }

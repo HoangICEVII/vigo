@@ -31,7 +31,7 @@ namespace vigo.Service.Admin.Service
 
         public async Task<UserAuthen> AdminLogin(LoginViaFormDTO dto)
         {
-            return await _unitOfWorkVigo.Accounts.LoginViaForm(dto.Email, dto.Password, true);
+            return await _unitOfWorkVigo.Accounts.LoginViaForm(dto.Email, dto.Password);
         }
 
         public async Task CreateBusinessPartner(CreateBusinessAccountDTO dto, ClaimsPrincipal user)
@@ -45,7 +45,6 @@ namespace vigo.Service.Admin.Service
             var hashedPassword = PasswordHasher.HashPassword(dto.Password, salt);
             Guid accountId = Guid.NewGuid();
             var DateNow = DateTime.Now;
-            string[] temp = dto.FullName.Split(' ');
             Account account = new Account()
             {
                 Id = accountId,

@@ -7,11 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Application\" />
-    <Folder Include="DTO\Application\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.10">
@@ -26,6 +21,12 @@
   <ItemGroup>
     <ProjectReference Include="..\vigo.Domain\vigo.Domain.csproj" />
     <ProjectReference Include="..\vigo.Infrastructure\vigo.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="DTO\Application\Service\" />
+    <Folder Include="DTO\Application\Room\" />
+    <Folder Include="DTO\Application\Rating\" />
   </ItemGroup>
 
 </Project>

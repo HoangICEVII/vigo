@@ -30,6 +30,7 @@ namespace vigo.Infrastructure.Migrations
                     Description = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     DiscountType = table.Column<int>(type: "int", nullable: false),
+                    DiscountValue = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
                     DiscountCode = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     StartDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
@@ -42,7 +43,6 @@ namespace vigo.Infrastructure.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     BusinessKey = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ShowRoomId = table.Column<int>(type: "int", nullable: false),
                     DiscountApply = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
@@ -302,13 +302,15 @@ namespace vigo.Infrastructure.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    FullName = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     DOB = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Gender = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     AccountId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     CreatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    DeletedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    DeletedDate = table.Column<DateTime>(type: "datetime(6)", nullable: true)
                 },
                 constraints: table =>
                 {
