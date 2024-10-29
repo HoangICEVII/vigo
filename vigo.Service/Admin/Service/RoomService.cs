@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using vigo.Domain.Entity;
@@ -26,8 +28,16 @@ namespace vigo.Service.Admin.Service
             _mapper = mapper;
         }
 
-        public async Task Create(CreateRoomDTO dto)
+        public async Task Create(CreateRoomDTO dto, ClaimsPrincipal user)
         {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            string businessKey = user.FindFirst("BusinessKey")!.Value;
+            if (businessKey.IsNullOrEmpty() || !role.Permission.Split(",").Contains("room_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
+            var businessPartner = await _unitOfWorkVigo.BusinessPartners.GetDetailBy(e => e.BusinessKey.Equals(businessKey));
             DateTime dateNow = DateTime.Now;
             Room room = new Room()
             {
@@ -40,12 +50,12 @@ namespace vigo.Service.Admin.Service
                 RoomTypeId = dto.RoomTypeId,
                 Thumbnail = dto.Thumbnail,
                 UpdatedDate = dateNow,
-                Address = dto.Address,
-                District = dto.District,
-                Province = dto.Province,
-                Street = dto.Street,
+                Address = businessPartner!.Address,
+                DistrictId = businessPartner.DistrictId,
+                ProvinceId = businessPartner.ProvinceId,
+                StreetId = businessPartner.StreetId,
                 DefaultDiscount = dto.DefaultDiscount,
-                BusinessPartnerId = dto.BusinessPartnerId
+                BusinessPartnerId = businessPartner.Id
             };
             _unitOfWorkVigo.Rooms.Create(room);
             await _unitOfWorkVigo.Complete();
@@ -92,15 +102,27 @@ namespace vigo.Service.Admin.Service
             }
         }
 
-        public async Task Delete(int id)
+        public async Task Delete(int id, ClaimsPrincipal user)
         {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("room_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
             var data = await _unitOfWorkVigo.Rooms.GetById(id);
             data.DeletedDate = DateTime.Now;
             await _unitOfWorkVigo.Complete();
         }
 
-        public async Task<RoomDetailDTO> GetDetail(int id)
+        public async Task<RoomDetailDTO> GetDetail(int id, ClaimsPrincipal user)
         {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("room_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
             var result = _mapper.Map<RoomDetailDTO>(await _unitOfWorkVigo.Rooms.GetById(id));
             List<Expression<Func<RoomServiceR, bool>>> con = new List<Expression<Func<RoomServiceR, bool>>>()
             {
@@ -136,8 +158,14 @@ namespace vigo.Service.Admin.Service
             return result;
         }
 
-        public async Task<PagedResultCustom<RoomDTO>> GetPaging(int page, int perPage, int? roomTypeId, int? businessPartnerId, string? sortType, string? sortField, string? searchName)
+        public async Task<PagedResultCustom<RoomDTO>> GetPaging(int page, int perPage, int? roomTypeId, int? businessPartnerId, string? sortType, string? sortField, string? searchName, ClaimsPrincipal user)
         {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("room_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
             List<Expression<Func<Room, bool>>> conditions = new List<Expression<Func<Room, bool>>>()
             {
                 e => e.DeletedDate == null,
@@ -159,15 +187,10 @@ namespace vigo.Service.Admin.Service
             {
                 sortDown = true;
             }
-            Expression<Func<Room, decimal>>? func = null;
-            if (sortField != null && sortField.Equals("price"))
-            {
-                func = e => e.Price;
-            }
             var data = await _unitOfWorkVigo.Rooms.GetPaging(conditions,
                                                              null,
-                                                             func,
-                                                             null,
+                                                             sortField != null && sortField.Equals("price") ? e => e.Price : null,
+                                                             sortField != null && sortField.Equals("createdDate") ? e => e.CreatedDate : null,
                                                              page,
                                                              perPage,
                                                              sortDown);
@@ -186,9 +209,21 @@ namespace vigo.Service.Admin.Service
             return result;
         }
 
-        public async Task Update(UpdateRoomDTO dto)
+        public async Task Update(UpdateRoomDTO dto, ClaimsPrincipal user)
         {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            string businessKey = user.FindFirst("BusinessKey")!.Value;
+            if (businessKey.IsNullOrEmpty() || !role.Permission.Split(",").Contains("room_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
+            var businessPartner = await _unitOfWorkVigo.BusinessPartners.GetDetailBy(e => e.BusinessKey.Equals(businessKey));
             var data = await _unitOfWorkVigo.Rooms.GetById(dto.Id);
+            if (businessPartner!.Id != data.BusinessPartnerId)
+            {
+                throw new CustomException("đối tác không có quyền với dữ liệu này");
+            }
             data.Thumbnail = dto.Thumbnail;
             data.Price = dto.Price;
             data.UpdatedDate = DateTime.Now;
@@ -196,10 +231,10 @@ namespace vigo.Service.Admin.Service
             data.Description = dto.Description;
             data.Name = dto.Name;
             data.RoomTypeId = dto.RoomTypeId;
-            data.Address = dto.Address;
-            data.Street = dto.Street;
-            data.Province = dto.Province;
-            data.District = dto.District;
+            data.Address = businessPartner.Address;
+            data.StreetId = businessPartner.StreetId;
+            data.ProvinceId = businessPartner.ProvinceId;
+            data.DistrictId = businessPartner.DistrictId;
             data.DefaultDiscount = dto.DefaultDiscount;
 
             List<Expression<Func<RoomServiceR, bool>>> con = new List<Expression<Func<RoomServiceR, bool>>>()

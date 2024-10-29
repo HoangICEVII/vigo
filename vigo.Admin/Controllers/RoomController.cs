@@ -75,7 +75,7 @@ namespace vigo.Admin.Controllers
         {
             try
             {
-                var data = await _roomTypeService.GetDetail(id);
+                var data = await _roomTypeService.GetDetail(id, User);
                 return CreateResponse(data, "get success", 200, null);
             }
             catch (CustomException e)
@@ -94,7 +94,7 @@ namespace vigo.Admin.Controllers
         {
             try
             {
-                await _roomTypeService.Create(dto);
+                await _roomTypeService.Create(dto, User);
                 return CreateResponse(null, "create success", 200, null);
             }
             catch (CustomException e)
@@ -113,7 +113,7 @@ namespace vigo.Admin.Controllers
         {
             try
             {
-                await _roomTypeService.Update(dto);
+                await _roomTypeService.Update(dto, User);
                 return CreateResponse(null, "update success", 200, null);
             }
             catch (CustomException e)
@@ -132,7 +132,7 @@ namespace vigo.Admin.Controllers
         {
             try
             {
-                await _roomTypeService.Delete(id);
+                await _roomTypeService.Delete(id, User);
                 return CreateResponse(null, "update success", 200, null);
             }
             catch (CustomException e)
@@ -151,7 +151,7 @@ namespace vigo.Admin.Controllers
         {
             try
             {
-                var data = await _roomService.GetPaging(page, perPage, roomTypeId, businessPartnerId, sortType, sortField, searchName);
+                var data = await _roomService.GetPaging(page, perPage, roomTypeId, businessPartnerId, sortType, sortField, searchName, User);
                 Option options = new Option()
                 {
                     Name = "",
@@ -177,7 +177,7 @@ namespace vigo.Admin.Controllers
         {
             try
             {
-                var data = await _roomService.GetDetail(id);
+                var data = await _roomService.GetDetail(id, User);
                 return CreateResponse(data, "get success", 200, null);
             }
             catch (CustomException e)
@@ -196,7 +196,7 @@ namespace vigo.Admin.Controllers
         {
             try
             {
-                await _roomService.Create(dto);
+                await _roomService.Create(dto, User);
                 return CreateResponse(null, "create success", 200, null);
             }
             catch (CustomException e)
@@ -215,7 +215,7 @@ namespace vigo.Admin.Controllers
         {
             try
             {
-                await _roomService.Update(dto);
+                await _roomService.Update(dto, User);
                 return CreateResponse(null, "update success", 200, null);
             }
             catch (CustomException e)
@@ -234,7 +234,7 @@ namespace vigo.Admin.Controllers
         {
             try
             {
-                await _roomService.Delete(id);
+                await _roomService.Delete(id, User);
                 return CreateResponse(null, "delete success", 200, null);
             }
             catch (CustomException e)

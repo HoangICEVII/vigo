@@ -22,7 +22,6 @@ namespace vigo.Infrastructure.UnitOfWork
         private Lazy<IDiscountRepository> _discounts;
         private Lazy<IDistrictRepository> _districts;
         private Lazy<IImageRepository> _images;
-        private Lazy<IInvoiceRepository> _invoices;
         private Lazy<IProvinceRepository> _provinces;
         private Lazy<IRatingRepository> _ratings;
         private Lazy<IRoleRepository> _roles;
@@ -43,7 +42,6 @@ namespace vigo.Infrastructure.UnitOfWork
         public IDiscountRepository DiscountCoupons => _discounts.Value;
         public IDistrictRepository Districts => _districts.Value;
         public IImageRepository Images => _images.Value;
-        public IInvoiceRepository Invoices => _invoices.Value;
         public IProvinceRepository Provinces => _provinces.Value;
         public IRatingRepository Ratings => _ratings.Value;
         public IRoleRepository Roles => _roles.Value;
@@ -69,7 +67,6 @@ namespace vigo.Infrastructure.UnitOfWork
             _districts = new Lazy<IDistrictRepository>(() => new DistrictRepository(_context));
             _images = new Lazy<IImageRepository>(() => new ImageRepository(_context));
 
-            _invoices = new Lazy<IInvoiceRepository>(() => new InvoiceRepository(_context));
             _provinces = new Lazy<IProvinceRepository>(() => new ProvinceRepository(_context));
 
             _ratings = new Lazy<IRatingRepository>(() => new RatingRepository(_context));

@@ -13,9 +13,9 @@ namespace vigo.Service.Admin.IService
     {
         Task<PagedResultCustom<RoomTypeDTO>> GetPaging(int page, int perPage, string? sortType, string? sortField, string? searchName, ClaimsPrincipal user);
         Task<List<RoomTypeDTO>> GetAll(ClaimsPrincipal user);
-        Task<RoomTypeDTO> GetDetail(int id);
-        Task Create(RoomTypeCreateDTO dto);
-        Task Update(RoomTypeUpdateDTO dto);
-        Task Delete(int id);
+        Task<RoomTypeDTO> GetDetail(int id, ClaimsPrincipal user);
+        Task Create(RoomTypeCreateDTO dto, ClaimsPrincipal user);
+        Task Update(RoomTypeUpdateDTO dto, ClaimsPrincipal user);
+        Task Delete(int id, ClaimsPrincipal user);
     }
 }

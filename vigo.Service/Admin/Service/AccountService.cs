@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using vigo.Domain.AccountFolder;
 using vigo.Domain.Helper;
@@ -15,6 +16,7 @@ using vigo.Infrastructure.UnitOfWork;
 using vigo.Service.Admin.IService;
 using vigo.Service.DTO;
 using vigo.Service.DTO.Admin.Account;
+using vigo.Service.DTO.Admin.Role;
 
 namespace vigo.Service.Admin.Service
 {
@@ -29,17 +31,31 @@ namespace vigo.Service.Admin.Service
             _mapper = mapper;
         }
 
-        public async Task<UserAuthen> AdminLogin(LoginViaFormDTO dto)
+        public async Task<UserAuthen> Login(LoginViaFormDTO dto)
         {
             return await _unitOfWorkVigo.Accounts.LoginViaForm(dto.Email, dto.Password);
         }
 
         public async Task CreateBusinessPartner(CreateBusinessAccountDTO dto, ClaimsPrincipal user)
         {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("account_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
             var checkUnique = await _unitOfWorkVigo.Accounts.GetDetailBy(e => e.Email == dto.Email);
             if (checkUnique != null)
             {
                 throw new CustomException("email đã tồn tại");
+            }
+            if (!Regex.IsMatch(dto.Email, $@"{ConstRegex.EMAIL_REGEX}"))
+            {
+                throw new CustomException("email không hợp lệ");
+            }
+            if (!Regex.IsMatch(dto.PhoneNumber, $@"{ConstRegex.PHONE_REGEX}"))
+            {
+                throw new CustomException("số điện thoại không hợp lệ");
             }
             var salt = PasswordHasher.CreateSalt();
             var hashedPassword = PasswordHasher.HashPassword(dto.Password, salt);
@@ -81,10 +97,24 @@ namespace vigo.Service.Admin.Service
 
         public async Task CreateEmployee(CreateEmployeeAccount dto, ClaimsPrincipal user)
         {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("account_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
             var checkUnique = await _unitOfWorkVigo.Accounts.GetDetailBy(e => e.Email == dto.Email);
             if (checkUnique != null)
             {
                 throw new CustomException("email đã tồn tại");
+            }
+            if (!Regex.IsMatch(dto.Email, $@"{ConstRegex.EMAIL_REGEX}"))
+            {
+                throw new CustomException("email không hợp lệ");
+            }
+            if (!Regex.IsMatch(dto.PhoneNumber, $@"{ConstRegex.PHONE_REGEX}"))
+            {
+                throw new CustomException("số điện thoại không hợp lệ");
             }
             var salt = PasswordHasher.CreateSalt();
             var hashedPassword = PasswordHasher.HashPassword(dto.Password, salt);
@@ -127,6 +157,12 @@ namespace vigo.Service.Admin.Service
 
         public async Task DeleteBusinessPartner(Guid id, ClaimsPrincipal user)
         {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("account_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
             var account = await _unitOfWorkVigo.Accounts.GetDetailBy(e => e.Id == id);
             var info = await _unitOfWorkVigo.BusinessPartners.GetDetailBy(e => e.AccountId == id);
             var DateNow = DateTime.Now;
@@ -137,6 +173,12 @@ namespace vigo.Service.Admin.Service
 
         public async Task DeleteEmployee(Guid id, ClaimsPrincipal user)
         {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("account_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
             var account = await _unitOfWorkVigo.Accounts.GetDetailBy(e => e.Id == id);
             var info = await _unitOfWorkVigo.SystemEmployees.GetDetailBy(e => e.AccountId == id);
             var DateNow = DateTime.Now;
@@ -145,8 +187,14 @@ namespace vigo.Service.Admin.Service
             await _unitOfWorkVigo.Complete();
         }
 
-        public async Task<BusinessPartnerDetailDTO> GetBusinessPartnerDetail(int id)
+        public async Task<BusinessPartnerDetailDTO> GetBusinessPartnerDetail(int id, ClaimsPrincipal user)
         {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("account_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
             var info = await _unitOfWorkVigo.BusinessPartners.GetById(id);
             var account = await _unitOfWorkVigo.Accounts.GetDetailBy(e => e.Id == info.AccountId);
             BusinessPartnerDetailDTO data = new BusinessPartnerDetailDTO()
@@ -169,8 +217,14 @@ namespace vigo.Service.Admin.Service
             return data;
         }
 
-        public async Task<EmployeeDetailDTO> GetEmployeeDetail(int id)
+        public async Task<EmployeeDetailDTO> GetEmployeeDetail(int id, ClaimsPrincipal user)
         {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("account_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
             var info = await _unitOfWorkVigo.SystemEmployees.GetById(id);
             var account = await _unitOfWorkVigo.Accounts.GetDetailBy(e => e.Id == info.AccountId);
             EmployeeDetailDTO data = new EmployeeDetailDTO()
@@ -195,8 +249,14 @@ namespace vigo.Service.Admin.Service
             return data;
         }
 
-        public async Task<PagedResultCustom<BusinessPartnerDTO>> GetBusinessPartnerPaging(int page, int perPage, string? sortType, string? sortField, string? searchName)
+        public async Task<PagedResultCustom<BusinessPartnerDTO>> GetBusinessPartnerPaging(int page, int perPage, string? sortType, string? sortField, string? searchName, ClaimsPrincipal user)
         {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("account_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
             List<Expression<Func<BusinessPartner, bool>>> conditions = new List<Expression<Func<BusinessPartner, bool>>>()
             {
                 e => e.DeletedDate == null
@@ -227,8 +287,14 @@ namespace vigo.Service.Admin.Service
             return result;
         }
 
-        public async Task<PagedResultCustom<EmployeeDTO>> GetEmployeePaging(int page, int perPage, string? sortType, string? sortField, string? searchName)
+        public async Task<PagedResultCustom<EmployeeDTO>> GetEmployeePaging(int page, int perPage, string? sortType, string? sortField, string? searchName, ClaimsPrincipal user)
         {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("account_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
             List<Expression<Func<SystemEmployee, bool>>> conditions = new List<Expression<Func<SystemEmployee, bool>>>()
             {
                 e => e.DeletedDate == null
@@ -262,12 +328,26 @@ namespace vigo.Service.Admin.Service
 
         public async Task UpdateEmployee(UpdateEmployeeDTO dto, ClaimsPrincipal user)
         {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("account_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
             var info = await _unitOfWorkVigo.SystemEmployees.GetById(dto.Id);
             var account = await _unitOfWorkVigo.Accounts.GetDetailBy(e => e.Id == info.AccountId);
             var checkUnique = await _unitOfWorkVigo.Accounts.GetDetailBy(e => e.Email == dto.Email);
             if (dto.Email != account!.Email && checkUnique != null)
             {
                 throw new CustomException("email đã tồn tại");
+            }
+            if (!Regex.IsMatch(dto.Email, $@"{ConstRegex.EMAIL_REGEX}"))
+            {
+                throw new CustomException("email không hợp lệ");
+            }
+            if (!Regex.IsMatch(dto.PhoneNumber, $@"{ConstRegex.PHONE_REGEX}"))
+            {
+                throw new CustomException("số điện thoại không hợp lệ");
             }
             DateTime dateNow = DateTime.Now;
             info.Salary = dto.Salary;
@@ -290,12 +370,26 @@ namespace vigo.Service.Admin.Service
 
         public async Task UpdateBusiness(UpdateBusinessPartnerDTO dto, ClaimsPrincipal user)
         {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("account_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
             var info = await _unitOfWorkVigo.BusinessPartners.GetById(dto.Id);
             var account = await _unitOfWorkVigo.Accounts.GetDetailBy(e => e.Id == info.AccountId);
             var checkUnique = await _unitOfWorkVigo.Accounts.GetDetailBy(e => e.Email == dto.Email);
             if (dto.Email != account!.Email && checkUnique != null)
             {
                 throw new CustomException("email đã tồn tại");
+            }
+            if (!Regex.IsMatch(dto.Email, $@"{ConstRegex.EMAIL_REGEX}"))
+            {
+                throw new CustomException("email không hợp lệ");
+            }
+            if (!Regex.IsMatch(dto.PhoneNumber, $@"{ConstRegex.PHONE_REGEX}"))
+            {
+                throw new CustomException("số điện thoại không hợp lệ");
             }
             DateTime dateNow = DateTime.Now;
             info.CompanyName = dto.FullName;
@@ -312,13 +406,29 @@ namespace vigo.Service.Admin.Service
             await _unitOfWorkVigo.Complete();
         }
 
-        public async Task<List<BusinessPartnerShortDTO>> GetAllBusinessPartner()
+        public async Task<List<BusinessPartnerShortDTO>> GetAllBusinessPartner(ClaimsPrincipal user)
         {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("account_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
             List<Expression<Func<BusinessPartner, bool>>> conditions = new List<Expression<Func<BusinessPartner, bool>>>()
             {
                 e => e.DeletedDate == null
             };
             return _mapper.Map<List<BusinessPartnerShortDTO>>(await _unitOfWorkVigo.BusinessPartners.GetAll(conditions));
+        }
+
+        public async Task<PermissionDTO> GetPermission(ClaimsPrincipal user)
+        {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            return new PermissionDTO()
+            {
+                Permission = role.Permission.Split(",").ToList()
+            }; 
         }
     }
 }

@@ -35,7 +35,7 @@ namespace vigo.Admin.Controllers
         {
             try
             {
-                var userAuthen = await _accountService.AdminLogin(dto);
+                var userAuthen = await _accountService.Login(dto);
                 string token = CreateToken(userAuthen);
                 return CreateResponse(new TokenRes() { AccessToken = token, UserType = userAuthen.UserType}, "login success", 200, null);
             }
@@ -51,11 +51,12 @@ namespace vigo.Admin.Controllers
         }
 
         [HttpGet("business-partners")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetBusinessPartnerPaging(int page, int perPage, string? sortType, string? sortField, string? searchName)
         {
             try
             {
-                var data = await _accountService.GetBusinessPartnerPaging(page, perPage, sortType, sortField, searchName);
+                var data = await _accountService.GetBusinessPartnerPaging(page, perPage, sortType, sortField, searchName, User);
                 Option options = new Option()
                 {
                     Name = "",
@@ -77,11 +78,12 @@ namespace vigo.Admin.Controllers
         }
 
         [HttpGet("business-partners/get-all")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetAllBusinessPartner()
         {
             try
             {
-                var data = await _accountService.GetAllBusinessPartner();
+                var data = await _accountService.GetAllBusinessPartner(User);
                 Option options = new Option()
                 {
                     Name = "",
@@ -103,11 +105,12 @@ namespace vigo.Admin.Controllers
         }
 
         [HttpGet("business-partners/{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetBusinessPartnerDetail(int id)
         {
             try
             {
-                var data = await _accountService.GetBusinessPartnerDetail(id);
+                var data = await _accountService.GetBusinessPartnerDetail(id, User);
                 return CreateResponse(data, "get success", 200, null);
             }
             catch (CustomException e)
@@ -122,11 +125,12 @@ namespace vigo.Admin.Controllers
         }
 
         [HttpGet("system-employees")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetEmployeePaging(int page, int perPage, string? sortType, string? sortField, string? searchName)
         {
             try
             {
-                var data = await _accountService.GetEmployeePaging(page, perPage, sortType, sortField, searchName);
+                var data = await _accountService.GetEmployeePaging(page, perPage, sortType, sortField, searchName, User);
                 Option options = new Option()
                 {
                     Name = "",
@@ -147,12 +151,33 @@ namespace vigo.Admin.Controllers
             }
         }
 
+        [HttpGet("permission")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> GetPermission()
+        {
+            try
+            {
+                var data = await _accountService.GetPermission(User);
+                return CreateResponse(data, "get success", 200, null);
+            }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return CreateResponse(null, "get fail", 500, null);
+            }
+        }
+
         [HttpGet("system-employees/{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetEmployeeDetail(int id)
         {
             try
             {
-                var data = await _accountService.GetEmployeeDetail(id);
+                var data = await _accountService.GetEmployeeDetail(id, User);
                 return CreateResponse(data, "get success", 200, null);
             }
             catch (CustomException e)

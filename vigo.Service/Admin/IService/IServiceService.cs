@@ -13,9 +13,9 @@ namespace vigo.Service.Admin.IService
     {
         Task<PagedResultCustom<ServiceDTO>> GetPaging(int page, int perPage, string? sortType, string? sortField, string? searchName, ClaimsPrincipal user);
         Task<List<ServiceDTO>> GetAll(ClaimsPrincipal user);
-        Task<ServiceDTO> GetDetail(int id);
-        Task Create(ServiceCreateDTO dto);
-        Task Update(ServiceUpdateDTO dto);
-        Task Delete(int id);
+        Task<ServiceDTO> GetDetail(int id, ClaimsPrincipal user);
+        Task Create(ServiceCreateDTO dto, ClaimsPrincipal user);
+        Task Update(ServiceUpdateDTO dto, ClaimsPrincipal user);
+        Task Delete(int id, ClaimsPrincipal user);
     }
 }

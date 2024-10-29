@@ -26,7 +26,6 @@
   <ItemGroup>
     <Folder Include="DTO\Application\Service\" />
     <Folder Include="DTO\Application\Room\" />
-    <Folder Include="DTO\Application\Rating\" />
   </ItemGroup>
 
 </Project>

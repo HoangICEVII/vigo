@@ -28,6 +28,12 @@ namespace vigo.Service.Admin.Service
 
         public async Task Create(CreateDiscountCouponDTO dto, ClaimsPrincipal user)
         {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("discount_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
             var DateNow = DateTime.Now;
             List<Expression<Func<DiscountCoupon, bool>>> conditions = new List<Expression<Func<DiscountCoupon, bool>>>()
             {
@@ -58,6 +64,12 @@ namespace vigo.Service.Admin.Service
 
         public async Task Delete(int id, ClaimsPrincipal user)
         {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("discount_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
             var DateNow = DateTime.Now;
             var data = await _unitOfWorkVigo.DiscountCoupons.GetById(id);
             data.DeletedDate = DateNow;
@@ -66,12 +78,24 @@ namespace vigo.Service.Admin.Service
 
         public async Task<DiscountCouponDetailDTO> GetDetail(int id, ClaimsPrincipal user)
         {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("discount_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
             var data = await _unitOfWorkVigo.DiscountCoupons.GetById(id);
             return _mapper.Map<DiscountCouponDetailDTO>(data);
         }
 
         public async Task<PagedResultCustom<DiscountCouponDTO>> GetPaging(int page, int perPage, string? sortType, string? sortField, ClaimsPrincipal user)
         {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("discount_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
             List<Expression<Func<DiscountCoupon, bool>>> conditions = new List<Expression<Func<DiscountCoupon, bool>>>()
             {
                 e => e.DeletedDate == null,
@@ -102,6 +126,12 @@ namespace vigo.Service.Admin.Service
 
         public async Task Update(DiscountCouponUpdateDTO dto, ClaimsPrincipal user)
         {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("discount_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
             var data = await _unitOfWorkVigo.DiscountCoupons.GetById(dto.Id);
             data.DiscountMax = dto.DiscountMax;
             data.DiscountApply = dto.DiscountApply;

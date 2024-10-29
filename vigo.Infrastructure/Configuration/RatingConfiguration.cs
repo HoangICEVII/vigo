@@ -17,8 +17,7 @@ namespace vigo.Infrastructure.Configuration
             builder.ToTable("rating");
             builder.HasKey(e => e.Id);
             builder.Property(e => e.Id).ValueGeneratedOnAdd();
-            builder.Property(c => c.CreatedDate).HasColumnType("TIMESTAMP");
-            builder.Property(c => c.UpdatedDate).HasColumnType("TIMESTAMP");
+            builder.Property(c => c.LastUpdatedDate).HasColumnType("TIMESTAMP");
             builder.Property(c => c.DeletedDate).HasColumnType("TIMESTAMP");
             builder.HasOne<Tourist>().WithMany().HasForeignKey(e => e.TouristId).OnDelete(DeleteBehavior.NoAction);
             builder.HasOne<Room>().WithMany().HasForeignKey(e => e.RoomId).OnDelete(DeleteBehavior.NoAction);

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Claims;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,13 +27,19 @@ namespace vigo.Service.Admin.Service
             _mapper = mapper;
             _unitOfWorkVigo = unitOfWorkVigo;
         }
-        public async Task Create(RoleCreateDTO dto)
+        public async Task Create(RoleCreateDTO dto, ClaimsPrincipal user)
         {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("role_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
             var checkUnique = await _unitOfWorkVigo.Roles.GetDetailBy(e => e.Name.Equals(dto.Name));
             if (checkUnique != null) {
                 throw new CustomException("quyền đã tồn tại");
             }
-            var role = new Role()
+            var data = new Role()
             {
                 Name = dto.Name,
                 Permission = dto.Permission != null ? string.Join(",",dto.Permission) : "",
@@ -40,36 +47,62 @@ namespace vigo.Service.Admin.Service
                 UpdatedDate = DateTime.Now,
                 DeletedDate = null
             };
-            _unitOfWorkVigo.Roles.Create(role);
+            _unitOfWorkVigo.Roles.Create(data);
             await _unitOfWorkVigo.Complete();
         }
 
-        public async Task Delete(int id)
+        public async Task Delete(int id, ClaimsPrincipal user)
         {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("role_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
             var data = await _unitOfWorkVigo.Roles.GetById(id);
             data.DeletedDate = DateTime.Now;
             await _unitOfWorkVigo.Complete();
         }
 
-        public async Task<List<RoleDTO>> GetAll()
+        public async Task<List<RoleDTO>> GetAll(ClaimsPrincipal user)
         {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("role_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
             List<Expression<Func<Role, bool>>> conditions = new List<Expression<Func<Role, bool>>>()
             {
-                e => e.DeletedDate == null
+                e => e.DeletedDate == null,
+                e => e.Id != 1
             };
             return _mapper.Map<List<RoleDTO>>(await _unitOfWorkVigo.Roles.GetAll(conditions));
         }
 
-        public async Task<RoleDetailDTO> GetDetail(int id)
+        public async Task<RoleDetailDTO> GetDetail(int id, ClaimsPrincipal user)
         {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("role_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
             return _mapper.Map<RoleDetailDTO>(await _unitOfWorkVigo.Roles.GetById(id));
         }
 
-        public async Task<PagedResultCustom<RoleDTO>> GetPaging(int page, int perPage, string? sortType, string? sortField, string? searchName)
+        public async Task<PagedResultCustom<RoleDTO>> GetPaging(int page, int perPage, string? sortType, string? sortField, string? searchName, ClaimsPrincipal user)
         {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("role_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
             List<Expression<Func<Role, bool>>> conditions = new List<Expression<Func<Role, bool>>>()
             {
-                e => e.DeletedDate == null
+                e => e.DeletedDate == null,
+                e => e.Id != 1
             };
             if (searchName != null)
             {
@@ -89,13 +122,25 @@ namespace vigo.Service.Admin.Service
                                                              sortDown);
             return new PagedResultCustom<RoleDTO>(_mapper.Map<List<RoleDTO>>(data.Items), data.TotalRecords, data.PageIndex, data.PageSize);
         }
-        public async Task<List<RolePermissionDTO>> GetPermission()
+        public async Task<List<RolePermissionDTO>> GetPermission(ClaimsPrincipal user)
         {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("role_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
             return _mapper.Map<List<RolePermissionDTO>>(await _unitOfWorkVigo.RolePermissions.GetAll(null));
         }
 
-        public async Task Update(RoleUpdateDTO dto)
+        public async Task Update(RoleUpdateDTO dto, ClaimsPrincipal user)
         {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("role_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
             var data = await _unitOfWorkVigo.Roles.GetById(dto.Id);
             var checkUnique = await _unitOfWorkVigo.Roles.GetDetailBy(e => e.Name.Equals(dto.Name));
             if (dto.Name != data!.Name && checkUnique != null)

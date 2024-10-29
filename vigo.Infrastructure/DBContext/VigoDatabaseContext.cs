@@ -19,7 +19,6 @@ namespace vigo.Infrastructure.DBContext
         public DbSet<DiscountCoupon> Discounts { get; set; }
         public DbSet<District> Districts { get; set; }
         public DbSet<Image> Images { get; set; }
-        public DbSet<Invoice> Invoices { get; set; }
         public DbSet<Province> Provinces { get; set; }
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<Room> Rooms { get; set; }
@@ -48,8 +47,6 @@ namespace vigo.Infrastructure.DBContext
             modelBuilder.ApplyConfiguration(new DistrictConfiguration());
             modelBuilder.ApplyConfiguration(new ImageConfiguration());
 
-            modelBuilder.ApplyConfiguration(new InvoiceConfiguration());
-
             modelBuilder.ApplyConfiguration(new ProvinceConfiguration());
             modelBuilder.ApplyConfiguration(new RatingConfiguration());
 
@@ -71,11 +68,9 @@ namespace vigo.Infrastructure.DBContext
                 new RolePermission { Id = 2, Name = "quản lí đặt phòng", RoleLabel = "booking_manage" },
                 new RolePermission { Id = 3, Name = "quản lí quyền", RoleLabel = "role_manage" },
                 new RolePermission { Id = 4, Name = "quản lí giảm giá", RoleLabel = "discount_manage" },
-                new RolePermission { Id = 5, Name = "quản lí giao dịch", RoleLabel = "transaction_manage" },
                 new RolePermission { Id = 6, Name = "phản hồi, đánh giá", RoleLabel = "rating_manage" },
                 new RolePermission { Id = 7, Name = "quản lí phòng", RoleLabel = "room_manage" },
-                new RolePermission { Id = 8, Name = "quản lí dịch vụ", RoleLabel = "service_manage" },
-                new RolePermission { Id = 9, Name = "quản lí chi nhánh", RoleLabel = "showroom_manage" }
+                new RolePermission { Id = 8, Name = "quản lí dịch vụ", RoleLabel = "service_manage" }
             );
 
         }

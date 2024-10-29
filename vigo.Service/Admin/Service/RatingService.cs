@@ -29,6 +29,12 @@ namespace vigo.Service.Admin.Service
         }
         public async Task Approve(List<int> ids, ClaimsPrincipal user)
         {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("rating_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
             List<Rating> data = new List<Rating>();
             foreach (int id in ids) {
                 data.Add(await _unitOfWorkVigo.Ratings.GetById(id));
@@ -46,6 +52,12 @@ namespace vigo.Service.Admin.Service
 
         public async Task Delete(List<int> ids, ClaimsPrincipal user)
         {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("rating_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
             List<Rating> data = new List<Rating>();
             DateTime Datenow = DateTime.Now;
             foreach (int id in ids)
@@ -61,6 +73,12 @@ namespace vigo.Service.Admin.Service
 
         public async Task<PagedResultCustom<RatingDTO>> GetPaging(int page, int perPage, RatingType type, ClaimsPrincipal user)
         {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("rating_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
             List<Expression<Func<Rating, bool>>> conditions = new List<Expression<Func<Rating, bool>>>()
             {
                 e => e.DeletedDate == null
@@ -80,6 +98,12 @@ namespace vigo.Service.Admin.Service
 
         public async Task UnApprove(List<int> ids, ClaimsPrincipal user)
         {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("rating_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
             List<Rating> data = new List<Rating>();
             foreach (int id in ids)
             {

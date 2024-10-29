@@ -75,7 +75,6 @@ builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IDiscountCouponService, DiscountCouponService>();
 builder.Services.AddScoped<IImageService, ImageService>();
-builder.Services.AddScoped<IInvoiceService, InvoiceService>();
 builder.Services.AddScoped<IRatingService, RatingService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IRoomService, RoomService>();

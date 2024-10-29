@@ -17,7 +17,6 @@ namespace vigo.Domain.Interface.IUnitOfWork
 
         IImageRepository Images { get; }
 
-        IInvoiceRepository Invoices { get; }
         IProvinceRepository Provinces { get; }
 
         IRatingRepository Ratings { get; }

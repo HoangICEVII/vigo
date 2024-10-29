@@ -310,6 +310,8 @@ namespace vigo.Infrastructure.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     FullName = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    Avatar = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     DOB = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Gender = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -346,11 +348,11 @@ namespace vigo.Infrastructure.Migrations
                     RoomTypeId = table.Column<int>(type: "int", nullable: false),
                     BusinessPartnerId = table.Column<int>(type: "int", nullable: false),
                     DefaultDiscount = table.Column<int>(type: "int", nullable: false),
-                    Province = table.Column<string>(type: "longtext", nullable: false)
+                    ProvinceId = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    District = table.Column<string>(type: "longtext", nullable: false)
+                    DistrictId = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Street = table.Column<string>(type: "longtext", nullable: false)
+                    StreetId = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Address = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -444,8 +446,7 @@ namespace vigo.Infrastructure.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     UpdateComment = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
+                    LastUpdatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
                     DeletedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: true),
                     Status = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
@@ -490,29 +491,6 @@ namespace vigo.Infrastructure.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.CreateTable(
-                name: "invoice",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    BookingId = table.Column<int>(type: "int", nullable: false),
-                    TotalPrice = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
-                    DeletedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_invoice", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_invoice_booking_BookingId",
-                        column: x => x.BookingId,
-                        principalTable: "booking",
-                        principalColumn: "Id");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
             migrationBuilder.InsertData(
                 table: "rolePermission",
                 columns: new[] { "Id", "Name", "RoleLabel" },
@@ -522,11 +500,9 @@ namespace vigo.Infrastructure.Migrations
                     { 2, "quản lí đặt phòng", "booking_manage" },
                     { 3, "quản lí quyền", "role_manage" },
                     { 4, "quản lí giảm giá", "discount_manage" },
-                    { 5, "quản lí giao dịch", "transaction_manage" },
                     { 6, "phản hồi, đánh giá", "rating_manage" },
                     { 7, "quản lí phòng", "room_manage" },
-                    { 8, "quản lí dịch vụ", "service_manage" },
-                    { 9, "quản lí chi nhánh", "showroom_manage" }
+                    { 8, "quản lí dịch vụ", "service_manage" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -559,12 +535,6 @@ namespace vigo.Infrastructure.Migrations
                 name: "IX_image_RoomId",
                 table: "image",
                 column: "RoomId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_invoice_BookingId",
-                table: "invoice",
-                column: "BookingId",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_rating_RoomId",
@@ -618,13 +588,13 @@ namespace vigo.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "booking");
+
+            migrationBuilder.DropTable(
                 name: "discount");
 
             migrationBuilder.DropTable(
                 name: "image");
-
-            migrationBuilder.DropTable(
-                name: "invoice");
 
             migrationBuilder.DropTable(
                 name: "rating");
@@ -642,7 +612,10 @@ namespace vigo.Infrastructure.Migrations
                 name: "systemEmployee");
 
             migrationBuilder.DropTable(
-                name: "booking");
+                name: "tourist");
+
+            migrationBuilder.DropTable(
+                name: "room");
 
             migrationBuilder.DropTable(
                 name: "service");
@@ -651,19 +624,13 @@ namespace vigo.Infrastructure.Migrations
                 name: "district");
 
             migrationBuilder.DropTable(
-                name: "room");
-
-            migrationBuilder.DropTable(
-                name: "tourist");
-
-            migrationBuilder.DropTable(
-                name: "province");
-
-            migrationBuilder.DropTable(
                 name: "businessPartner");
 
             migrationBuilder.DropTable(
                 name: "roomType");
+
+            migrationBuilder.DropTable(
+                name: "province");
 
             migrationBuilder.DropTable(
                 name: "account");

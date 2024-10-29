@@ -143,12 +143,6 @@ namespace vigo.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = 5,
-                            Name = "quản lí giao dịch",
-                            RoleLabel = "transaction_manage"
-                        },
-                        new
-                        {
                             Id = 6,
                             Name = "phản hồi, đánh giá",
                             RoleLabel = "rating_manage"
@@ -164,12 +158,6 @@ namespace vigo.Infrastructure.Migrations
                             Id = 8,
                             Name = "quản lí dịch vụ",
                             RoleLabel = "service_manage"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Name = "quản lí chi nhánh",
-                            RoleLabel = "showroom_manage"
                         });
                 });
 
@@ -338,37 +326,6 @@ namespace vigo.Infrastructure.Migrations
                     b.ToTable("image", (string)null);
                 });
 
-            modelBuilder.Entity("vigo.Domain.Entity.Invoice", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BookingId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("TIMESTAMP");
-
-                    b.Property<DateTime>("DeletedDate")
-                        .HasColumnType("TIMESTAMP");
-
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(65,30)");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("TIMESTAMP");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BookingId")
-                        .IsUnique();
-
-                    b.ToTable("invoice", (string)null);
-                });
-
             modelBuilder.Entity("vigo.Domain.Entity.Province", b =>
                 {
                     b.Property<string>("Id")
@@ -395,10 +352,10 @@ namespace vigo.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("DeletedDate")
                         .HasColumnType("TIMESTAMP");
 
-                    b.Property<DateTime?>("DeletedDate")
+                    b.Property<DateTime>("LastUpdatedDate")
                         .HasColumnType("TIMESTAMP");
 
                     b.Property<int>("Rate")
@@ -416,9 +373,6 @@ namespace vigo.Infrastructure.Migrations
                     b.Property<string>("UpdateComment")
                         .IsRequired()
                         .HasColumnType("longtext");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("TIMESTAMP");
 
                     b.HasKey("Id");
 
@@ -460,7 +414,7 @@ namespace vigo.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("District")
+                    b.Property<string>("DistrictId")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -471,14 +425,14 @@ namespace vigo.Infrastructure.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(65,30)");
 
-                    b.Property<string>("Province")
+                    b.Property<string>("ProvinceId")
                         .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<int>("RoomTypeId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Street")
+                    b.Property<string>("StreetId")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -742,6 +696,10 @@ namespace vigo.Infrastructure.Migrations
                     b.Property<Guid>("AccountId")
                         .HasColumnType("char(36)");
 
+                    b.Property<string>("Avatar")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime(6)");
 
@@ -812,15 +770,6 @@ namespace vigo.Infrastructure.Migrations
                     b.HasOne("vigo.Domain.Entity.Room", null)
                         .WithMany()
                         .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("vigo.Domain.Entity.Invoice", b =>
-                {
-                    b.HasOne("vigo.Domain.Entity.Booking", null)
-                        .WithOne()
-                        .HasForeignKey("vigo.Domain.Entity.Invoice", "BookingId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });

@@ -78,7 +78,7 @@ namespace vigo.Admin.Controllers
         {
             try
             {
-                var data = await _serviceService.GetDetail(id);
+                var data = await _serviceService.GetDetail(id, User);
                 return CreateResponse(data, "get success", 200, null);
             }
             catch (CustomException e)
@@ -97,7 +97,7 @@ namespace vigo.Admin.Controllers
         {
             try
             {
-                await _serviceService.Create(dto);
+                await _serviceService.Create(dto, User);
                 return CreateResponse(null, "create success", 200, null);
             }
             catch (CustomException e)
@@ -116,7 +116,7 @@ namespace vigo.Admin.Controllers
         {
             try
             {
-                await _serviceService.Update(dto);
+                await _serviceService.Update(dto, User);
                 return CreateResponse(null, "update success", 200, null);
             }
             catch (CustomException e)
@@ -135,7 +135,7 @@ namespace vigo.Admin.Controllers
         {
             try
             {
-                await _serviceService.Delete(id);
+                await _serviceService.Delete(id, User);
                 return CreateResponse(null, "delete success", 200, null);
             }
             catch (CustomException e)

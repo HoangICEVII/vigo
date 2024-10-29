@@ -57,7 +57,7 @@ namespace vigo.Admin
                         {
                             Id = 1,
                             Name = "admin",
-                            Permission = "",
+                            Permission = "account_manage,booking_manage,role_manage,discount_manage,rating_manage,room_manage,service_manage",
                             CreatedDate = DateTime.Now,
                             UpdatedDate = DateTime.Now,
                             DeletedDate = null

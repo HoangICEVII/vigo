@@ -4,18 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace vigo.Domain.Entity
+namespace vigo.Service.DTO.Application.Rating
 {
-    public class Rating
+    public class RoomRatingDTO
     {
         public int Id { get; set; }
-        public int TouristId { get; set; }
-        public int RoomId { get; set; }
+        public string FullName { get; set; } = string.Empty;
+        public string Avatar {  get; set; } = string.Empty;
         public int Rate { get; set; }
         public string Comment { get; set; } = string.Empty;
-        public string UpdateComment { get; set; } = string.Empty;
         public DateTime LastUpdatedDate { get; set; }
-        public DateTime? DeletedDate { get; set; }
-        public bool Status { get; set; }
     }
 }

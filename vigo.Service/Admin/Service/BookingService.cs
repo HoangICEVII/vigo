@@ -31,6 +31,12 @@ namespace vigo.Service.Admin.Service
 
         public async Task<BookingDetailDTO> GetDetail(int id, ClaimsPrincipal user)
         {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("booking_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
             var booking = await _unitOfWorkVigo.Bookings.GetById(id);
             var tourist = await _unitOfWorkVigo.Tourists.GetById(booking.TouristId);
             var room = await _unitOfWorkVigo.Rooms.GetById(booking.RoomId);
@@ -42,6 +48,12 @@ namespace vigo.Service.Admin.Service
 
         public async Task<PagedResultCustom<BookingDTO>> GetPaging(int page, int perPage, bool? isReceived, string? sortType, string? sortField, ClaimsPrincipal user)
         {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("booking_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
             List<Expression<Func<Booking, bool>>> conditions = new List<Expression<Func<Booking, bool>>>()
             {
             };
@@ -66,6 +78,12 @@ namespace vigo.Service.Admin.Service
 
         public async Task ReceiveBooking(List<int> ids, ClaimsPrincipal user)
         {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("booking_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
             List<Booking> data = new List<Booking>();
             foreach (int id in ids) {
                 data.Add(await _unitOfWorkVigo.Bookings.GetById(id));

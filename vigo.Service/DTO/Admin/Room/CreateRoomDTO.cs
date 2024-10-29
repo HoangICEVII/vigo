@@ -15,12 +15,7 @@ namespace vigo.Service.DTO.Admin.Room
         public List<RoomImage> Images { get; set; } = new List<RoomImage>();
         public decimal Price { get; set; }
         public int Avaiable { get; set; }
-        public string Province { get; set; } = string.Empty;
-        public string District { get; set; } = string.Empty;
-        public string Street { get; set; } = string.Empty;
-        public string Address { get; set; } = string.Empty;
         public int RoomTypeId { get; set; }
-        public int BusinessPartnerId { get; set; }
         public List<int> Services { get; set; } = new List<int>();
     }
 
