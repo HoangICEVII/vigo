@@ -103,9 +103,10 @@ namespace vigo.Admin
                         string responseBodyP = await responseP.Content.ReadAsStringAsync();
                         DataTemp<Province> dataP = JsonConvert.DeserializeObject<DataTemp<Province>>(responseBodyP);
                         _vigoContext.Provinces.AddRange(dataP.Data);
-
+                        Random r = new Random();
                         foreach (Province province in dataP.Data)
                         {
+                            province.Image = $"http://localhost:2002/resource/{r.Next(1,12)}.jpg";
                             string urlD = $"https://esgoo.net/api-tinhthanh/2/{province.Id}.htm";
                             HttpResponseMessage responseD = await client.GetAsync(urlD);
                             string responseBodyD = await responseD.Content.ReadAsStringAsync();

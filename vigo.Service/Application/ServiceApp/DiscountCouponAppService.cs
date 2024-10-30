@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using vigo.Domain.Entity;
@@ -25,8 +26,9 @@ namespace vigo.Service.Application.ServiceApp
             _unitOfWorkVigo = unitOfWorkVigo;
             _mapper = mapper;
         }
-        public async Task<PagedResultCustom<DiscountCouponAppDTO>> GetPaging(int page, int perPage, string? searchName)
+        public async Task<PagedResultCustom<DiscountCouponAppDTO>> GetPaging(int page, int perPage, string? searchName, ClaimsPrincipal user)
         {
+            int? infoId = user.FindFirst("InfoId") != null ? int.Parse(user.FindFirst("InfoId")!.Value) : null;
             List<Expression<Func<DiscountCoupon, bool>>> conditions = new List<Expression<Func<DiscountCoupon, bool>>>()
             {
                 e => e.DeletedDate == null
@@ -42,8 +44,24 @@ namespace vigo.Service.Application.ServiceApp
                                                                        page,
                                                                        perPage,
                                                                        true);
-            var result = new PagedResultCustom<DiscountCouponAppDTO>(_mapper.Map<List<DiscountCouponAppDTO>>(data.Items), data.TotalRecords, data.PageIndex, data.PageSize);
-            return result;
+            var result = new List<DiscountCouponAppDTO>();
+            foreach (var item in data.Items) {
+                result.Add(new DiscountCouponAppDTO {
+                    Description = item.Description,
+                    DiscountCode = item.DiscountCode,
+                    DiscountCount = item.DiscountCount,
+                    DiscountMax = item.DiscountMax,
+                    DiscountType = item.DiscountType,
+                    DiscountValue = item.DiscountValue,
+                    EndDate = item.EndDate,
+                    Id = item.Id,
+                    Image = item.Image,
+                    Name = item.Name,
+                    StartDate = item.StartDate,
+                    IsReceived = item.UserUsed.Split(',').Contains(infoId.ToString())
+                });
+            }
+            return new PagedResultCustom<DiscountCouponAppDTO>(result, data.TotalRecords, data.PageIndex, data.PageSize);
         }
     }
 }

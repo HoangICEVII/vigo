@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using vigo.Domain.Entity;
@@ -26,17 +27,21 @@ namespace vigo.Service.Application.ServiceApp
             _mapper = mapper;
         }
 
-        public async Task<PagedResultCustom<BookingAppDTO>> Booking(int page, int perPage)
+        public async Task<PagedResultCustom<BookingAppDTO>> GetPaging(int page, int perPage, ClaimsPrincipal user)
         {
-            var data = await _unitOfWorkVigo.Bookings.GetPaging(null,
+            int infoId = int.Parse(user.FindFirst("InfoId")!.Value);
+            List<Expression<Func<Booking, bool>>> conditions = new List<Expression<Func<Booking, bool>>>()
+            {
+                e => e.TouristId == infoId
+            };
+            var data = await _unitOfWorkVigo.Bookings.GetPaging(conditions,
                                                                 null,
                                                                 null,
                                                                 e => e.CreatedDate,
                                                                 page,
                                                                 perPage,
                                                                 true);
-            var result = new PagedResultCustom<BookingAppDTO>(_mapper.Map<List<BookingAppDTO>>(data.Items), data.TotalRecords, data.PageIndex, data.PageSize);
-            return result;
+            return new PagedResultCustom<BookingAppDTO>(_mapper.Map<List<BookingAppDTO>>(data.Items), data.TotalRecords, data.PageIndex, data.PageSize);
         }
     }
 }

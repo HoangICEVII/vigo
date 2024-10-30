@@ -5,19 +5,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using vigo.Domain.AccountFolder;
 using vigo.Domain.Entity;
-using vigo.Domain.User;
 
 namespace vigo.Infrastructure.Configuration
 {
-    internal class ImageConfiguration : IEntityTypeConfiguration<Image>
+    internal class EmailAuthenConfiguration : IEntityTypeConfiguration<EmailAuthen>
     {
-        public void Configure(EntityTypeBuilder<Image> builder)
+        public void Configure(EntityTypeBuilder<EmailAuthen> builder)
         {
-            builder.ToTable("image");
+            builder.ToTable("emailAuthen");
             builder.HasKey(e => e.Id);
             builder.Property(e => e.Id).ValueGeneratedOnAdd();
-            builder.HasOne<Room>().WithMany().HasForeignKey(e => e.RoomId).OnDelete(DeleteBehavior.NoAction);
+            builder.HasOne<Account>().WithMany().HasForeignKey(e => e.AccountId).OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

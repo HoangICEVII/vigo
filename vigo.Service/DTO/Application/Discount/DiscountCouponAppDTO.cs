@@ -20,7 +20,7 @@ namespace vigo.Service.DTO.Application.Discount
         public DateTime EndDate { get; set; }
         public int DiscountMax { get; set; }
         public int DiscountCount { get; set; }
-        public bool IsAvaiable { get; set; }
+        public bool IsReceived { get; set; }
         // RoomAppDTO
     }
 }

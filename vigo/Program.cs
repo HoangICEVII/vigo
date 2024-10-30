@@ -8,8 +8,8 @@ using System.Text;
 using vigo.Domain.Interface.IUnitOfWork;
 using vigo.Infrastructure.DBContext;
 using vigo.Infrastructure.UnitOfWork;
-using vigo.Service.Admin.IService;
-using vigo.Service.Admin.Service;
+using vigo.Service.Application.IServiceApp;
+using vigo.Service.Application.ServiceApp;
 using vigo.Service.Helper;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -66,27 +66,22 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 //Service Dependency Injection
-//#region service
-//builder.Services.AddScoped<IAccountService, AccountService>();
-//builder.Services.AddScoped<IBookingService, BookingService>();
-//builder.Services.AddScoped<IDiscountCouponService, DiscountCouponService>();
-//builder.Services.AddScoped<IImageService, ImageService>();
-//builder.Services.AddScoped<IInvoiceService, InvoiceService>();
-//builder.Services.AddScoped<IRatingService, RatingService>();
-//builder.Services.AddScoped<IRoleService, RoleService>();
-//builder.Services.AddScoped<IRoomService, RoomService>();
-//builder.Services.AddScoped<IRoomTypeService, RoomTypeService>();
-//builder.Services.AddScoped<IServiceService, ServiceService>();
-//builder.Services.AddScoped<IShowRoomService, ShowRoomService>();
-//builder.Services.AddScoped<ISystemEmployeeService, SystemEmployeeService>();
-//builder.Services.AddScoped<ITouristService, TouristService>();
-//#endregion
+#region service
+builder.Services.AddScoped<IAccountAppService, AccountAppService>();
+builder.Services.AddScoped<IBookingAppService, BookingAppService>();
+builder.Services.AddScoped<IDiscountCouponAppService, DiscountCouponAppService>();
+builder.Services.AddScoped<IRatingAppService, RatingAppService>();
+builder.Services.AddScoped<IRoomAppService, RoomAppService>();
+builder.Services.AddScoped<IRoomTypeAppService, RoomTypeAppService>();
+builder.Services.AddScoped<IServiceAppService, ServiceAppService>();
+builder.Services.AddScoped<IUIService, UIService>();
+#endregion
 
-////UnitOfWork Dependency Injection
-//builder.Services.AddScoped<IUnitOfWorkVigo, UnitOfWorkVigo>();
+//UnitOfWork Dependency Injection
+builder.Services.AddScoped<IUnitOfWorkVigo, UnitOfWorkVigo>();
 
-////DbContext Denpendency Injection
-//builder.Services.AddScoped<VigoDatabaseContext, VigoDatabaseContext>();
+//DbContext Denpendency Injection
+builder.Services.AddScoped<VigoDatabaseContext, VigoDatabaseContext>();
 
 
 builder.Services.AddControllers();

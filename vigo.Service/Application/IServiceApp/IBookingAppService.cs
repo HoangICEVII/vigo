@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using vigo.Domain.Helper;
@@ -10,6 +11,6 @@ namespace vigo.Service.Application.IServiceApp
 {
     public interface IBookingAppService
     {
-        Task<PagedResultCustom<BookingAppDTO>> Booking(int page, int perPage);
+        Task<PagedResultCustom<BookingAppDTO>> GetPaging(int page, int perPage, ClaimsPrincipal user);
     }
 }

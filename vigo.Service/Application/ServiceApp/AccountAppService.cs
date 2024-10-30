@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -10,7 +11,9 @@ using vigo.Domain.Helper;
 using vigo.Domain.Interface.IUnitOfWork;
 using vigo.Domain.User;
 using vigo.Service.Application.IServiceApp;
+using vigo.Service.DTO;
 using vigo.Service.DTO.Application.Account;
+using vigo.Service.EmailAuthenModule;
 
 namespace vigo.Service.Application.ServiceApp
 {
@@ -18,11 +21,25 @@ namespace vigo.Service.Application.ServiceApp
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWorkVigo _unitOfWorkVigo;
+        private readonly EmailAuthenProducer _emailAuthenProducer;
 
         public AccountAppService(IUnitOfWorkVigo unitOfWorkVigo, IMapper mapper)
         {
             _unitOfWorkVigo = unitOfWorkVigo;
             _mapper = mapper;
+            _emailAuthenProducer = EmailAuthenProducer.Instance;
+        }
+
+        public async Task ActiveEmail(string token)
+        {
+            var emailAuthen = await _unitOfWorkVigo.EmailAuthens.GetDetailBy(e => e.Token.Equals(token));
+            if (emailAuthen!.ExprireDate < DateTime.Now)
+            {
+                throw new CustomException("hết thời hạn xác thực, hãy đăng ký xác thực lại");
+            }
+            var account = await _unitOfWorkVigo.Accounts.GetDetailBy(e => e.Id == emailAuthen.AccountId);
+            account!.EmailActive = true;
+            await _unitOfWorkVigo.Complete();
         }
 
         public async Task<TouristDTO> GetTouristInfo(ClaimsPrincipal user)
@@ -43,6 +60,7 @@ namespace vigo.Service.Application.ServiceApp
             Guid accountId = Guid.NewGuid();
             var DateNow = DateTime.Now;
             string[] temp = dto.FullName.Split(' ');
+
             Account account = new Account()
             {
                 Id = accountId,
@@ -57,6 +75,7 @@ namespace vigo.Service.Application.ServiceApp
                 Salt = salt
             };
             _unitOfWorkVigo.Accounts.Create(account);
+
             Tourist info = new Tourist()
             {
                 AccountId = accountId,
@@ -69,7 +88,46 @@ namespace vigo.Service.Application.ServiceApp
                 Gender = dto.Gender
             };
             _unitOfWorkVigo.Tourists.Create(info);
+
+            EmailAuthen emailAuthen = new EmailAuthen()
+            {
+                AccountId = accountId,
+                ExprireDate = DateNow.AddDays(1),
+                Token = PasswordHasher.HashPassword(dto.Email + DateNow.AddDays(1).ToString(), PasswordHasher.CreateSalt())
+            };
+            _unitOfWorkVigo.EmailAuthens.Create(emailAuthen);
             await _unitOfWorkVigo.Complete();
+
+            EmailAuthenDTO emailAuthenDTO = new EmailAuthenDTO()
+            {
+                Email = dto.Email,
+                Url = $"http://localhost:2002/api/application/accounts/active-email/{emailAuthen.Token}"
+            };
+            _emailAuthenProducer.SendEmailAuthen(emailAuthenDTO);
+        }
+
+        public async Task ResendActiveEmail(string email)
+        {
+            var data = await _unitOfWorkVigo.Accounts.GetDetailBy(e => e.Email.Equals(email));
+            if (data == null) {
+                throw new CustomException("tài khoản không tồn tại");
+            }
+            DateTime DateNow = DateTime.Now;
+            EmailAuthen emailAuthen = new EmailAuthen()
+            {
+                AccountId = data.Id,
+                ExprireDate = DateNow.AddDays(1),
+                Token = PasswordHasher.HashPassword(data.Email + DateNow.AddDays(1).ToString(), PasswordHasher.CreateSalt())
+            };
+            _unitOfWorkVigo.EmailAuthens.Create(emailAuthen);
+            await _unitOfWorkVigo.Complete();
+
+            EmailAuthenDTO emailAuthenDTO = new EmailAuthenDTO()
+            {
+                Email = data.Email,
+                Url = $"http://localhost:2002/api/application/accounts/active-email/{emailAuthen.Token}"
+            };
+            _emailAuthenProducer.SendEmailAuthen(emailAuthenDTO);
         }
 
         public async Task UpdateTouristInfo(TouristUpdateDTO dto, ClaimsPrincipal user)

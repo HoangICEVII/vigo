@@ -33,6 +33,7 @@ namespace vigo.Domain.Interface.IUnitOfWork
 
         ITouristRepository Tourists { get; }
         ISystemEmployeeRepository SystemEmployees { get; }
+        IEmailAuthenRepository EmailAuthens { get; }
 
         Task<int> Complete();
     }
