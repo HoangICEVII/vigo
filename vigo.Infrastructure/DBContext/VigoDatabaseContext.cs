@@ -63,6 +63,8 @@ namespace vigo.Infrastructure.DBContext
             modelBuilder.ApplyConfiguration(new TouristConfiguration());
             modelBuilder.ApplyConfiguration(new StreetConfiguration());
 
+            modelBuilder.ApplyConfiguration(new EmailAuthenConfiguration());
+
             modelBuilder.Entity<RolePermission>().HasData(
                 new RolePermission { Id = 1, Name = "quản lí tài khoản", RoleLabel = "account_manage"},
                 new RolePermission { Id = 2, Name = "quản lí đặt phòng", RoleLabel = "booking_manage" },
