@@ -73,6 +73,7 @@ namespace vigo.Admin
                             DeletedDate = null
                         };
                         _vigoContext.Roles.Add(role);
+                        _vigoContext.Roles.Add(role2);
                         _vigoContext.SaveChanges();
                     }
                     var admin = _vigoContext.Accounts.Where(e => e.Email == "admin456@gmail.com").FirstOrDefault();

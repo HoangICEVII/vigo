@@ -265,6 +265,28 @@ namespace vigo.Infrastructure.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "emailAuthen",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    AccountId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Token = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ExprireDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_emailAuthen", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_emailAuthen_account_AccountId",
+                        column: x => x.AccountId,
+                        principalTable: "account",
+                        principalColumn: "Id");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "systemEmployee",
                 columns: table => new
                 {
@@ -534,6 +556,11 @@ namespace vigo.Infrastructure.Migrations
                 column: "ProvinceId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_emailAuthen_AccountId",
+                table: "emailAuthen",
+                column: "AccountId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_image_RoomId",
                 table: "image",
                 column: "RoomId");
@@ -594,6 +621,9 @@ namespace vigo.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "discount");
+
+            migrationBuilder.DropTable(
+                name: "emailAuthen");
 
             migrationBuilder.DropTable(
                 name: "image");

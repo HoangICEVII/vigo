@@ -12,7 +12,7 @@ using vigo.Infrastructure.DBContext;
 namespace vigo.Infrastructure.Migrations
 {
     [DbContext(typeof(VigoDatabaseContext))]
-    [Migration("20241030105526_vigo")]
+    [Migration("20241030114557_vigo")]
     partial class vigo
     {
         /// <inheritdoc />
@@ -67,6 +67,31 @@ namespace vigo.Infrastructure.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("account", (string)null);
+                });
+
+            modelBuilder.Entity("vigo.Domain.AccountFolder.EmailAuthen", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<Guid>("AccountId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("ExprireDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.ToTable("emailAuthen", (string)null);
                 });
 
             modelBuilder.Entity("vigo.Domain.AccountFolder.Role", b =>
@@ -744,6 +769,15 @@ namespace vigo.Infrastructure.Migrations
                     b.HasOne("vigo.Domain.AccountFolder.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("vigo.Domain.AccountFolder.EmailAuthen", b =>
+                {
+                    b.HasOne("vigo.Domain.AccountFolder.Account", null)
+                        .WithMany()
+                        .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });

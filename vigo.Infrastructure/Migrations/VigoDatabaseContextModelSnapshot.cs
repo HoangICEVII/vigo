@@ -66,6 +66,31 @@ namespace vigo.Infrastructure.Migrations
                     b.ToTable("account", (string)null);
                 });
 
+            modelBuilder.Entity("vigo.Domain.AccountFolder.EmailAuthen", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<Guid>("AccountId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("ExprireDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.ToTable("emailAuthen", (string)null);
+                });
+
             modelBuilder.Entity("vigo.Domain.AccountFolder.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -741,6 +766,15 @@ namespace vigo.Infrastructure.Migrations
                     b.HasOne("vigo.Domain.AccountFolder.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("vigo.Domain.AccountFolder.EmailAuthen", b =>
+                {
+                    b.HasOne("vigo.Domain.AccountFolder.Account", null)
+                        .WithMany()
+                        .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
