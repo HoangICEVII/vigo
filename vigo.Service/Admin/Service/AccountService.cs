@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -148,7 +149,7 @@ namespace vigo.Service.Admin.Service
                 Salary = dto.Salary,
                 Bank = dto.Bank,
                 Address = dto.Address,
-                Avatar = dto.Avatar
+                Avatar = dto.Avatar.IsNullOrEmpty() ? "http://localhost:2002/resource/default-avatar.jpg" : dto.Avatar
             };
             _unitOfWorkVigo.SystemEmployees.Create(info);
             await _unitOfWorkVigo.Complete();
@@ -442,11 +443,13 @@ namespace vigo.Service.Admin.Service
             {
                 var info = await _unitOfWorkVigo.SystemEmployees.GetById(infoId);
                 result.Name = info.Name;
+                result.Image = info.Avatar;
             }
             else if (userType.Equals("BusinessPartner"))
             {
                 var info = await _unitOfWorkVigo.BusinessPartners.GetById(infoId);
                 result.Name = info.Name;
+                result.Image = info.Logo;
             }
             return result;
         }

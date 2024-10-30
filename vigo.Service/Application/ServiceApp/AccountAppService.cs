@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -90,7 +91,8 @@ namespace vigo.Service.Application.ServiceApp
                 Name = temp.Last(),
                 FullName = dto.FullName,
                 DOB = dto.DOB,
-                Gender = dto.Gender
+                Gender = dto.Gender,
+                Avatar = dto.Avatar.IsNullOrEmpty() ? "http://localhost:2002/resource/default-avatar.jpg" : dto.Avatar
             };
             _unitOfWorkVigo.Tourists.Create(info);
 

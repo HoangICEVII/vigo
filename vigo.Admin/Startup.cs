@@ -101,7 +101,7 @@ namespace vigo.Admin
                         {
                             AccountId = accountId,
                             Address = string.Empty,
-                            Avatar = string.Empty,
+                            Avatar = "http://localhost:2002/resource/default-avatar.jpg",
                             Bank = string.Empty,
                             BankNumber = string.Empty,
                             CreatedDate = DateNow,
