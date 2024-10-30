@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using vigo.Domain.AccountFolder;
 using vigo.Domain.Helper;
@@ -54,6 +55,10 @@ namespace vigo.Service.Application.ServiceApp
             if (checkUnique != null)
             {
                 throw new CustomException("email đã tồn tại");
+            }
+            if (!Regex.IsMatch(dto.Email, $@"{ConstRegex.EMAIL_REGEX}"))
+            {
+                throw new CustomException("email không hợp lệ");
             }
             var salt = PasswordHasher.CreateSalt();
             var hashedPassword = PasswordHasher.HashPassword(dto.Password, salt);

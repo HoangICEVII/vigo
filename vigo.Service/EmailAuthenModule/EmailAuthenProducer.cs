@@ -20,7 +20,7 @@ namespace vigo.Service.EmailAuthenModule
         {
             _connectionFactory = new ConnectionFactory
             {
-                Uri = new Uri("amqp://admin:admin@localhost:5672")
+                Uri = new Uri("amqp://admin:admin@rabbitmq:5672")
             };
             _connection = _connectionFactory.CreateConnection();
             _channel = _connection.CreateModel();

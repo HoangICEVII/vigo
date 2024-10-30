@@ -21,7 +21,7 @@ builder.Services.AddDbContext<VigoDatabaseContext>(options =>
 
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "VigoAdminApi", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "VigoApplicationApi", Version = "v1" });
 
     var securityScheme = new OpenApiSecurityScheme
     {
@@ -112,7 +112,7 @@ builder.WebHost.ConfigureKestrel(serverOptions =>
 var app = builder.Build();
 
 app.UseSwagger();
-app.UseSwaggerUI(option => option.SwaggerEndpoint("/swagger/v1/swagger.json", "Vigo Admin Api"));
+app.UseSwaggerUI(option => option.SwaggerEndpoint("/swagger/v1/swagger.json", "Vigo Application Api"));
 
 app.UseRouting();
 app.UseCors("CorsPolicy");
