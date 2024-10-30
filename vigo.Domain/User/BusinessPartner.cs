@@ -16,7 +16,6 @@ namespace vigo.Domain.User
         public string Address {  get; set; } = string.Empty;
         public string ProvinceId { get; set; } = string.Empty;
         public string DistrictId { get; set; } = string.Empty;
-        public string StreetId { get; set; } = string.Empty;
         public string Logo {  get; set; } = string.Empty;
         public Guid AccountId { get; set; }
         public DateTime CreatedDate { get; set; }

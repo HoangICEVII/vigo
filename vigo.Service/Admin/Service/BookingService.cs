@@ -43,6 +43,11 @@ namespace vigo.Service.Admin.Service
             var bookingDTO = _mapper.Map<BookingDetailDTO>(booking);
             bookingDTO.Tourist = _mapper.Map<TouristDetailDTO>(tourist);
             bookingDTO.Room = _mapper.Map<RoomDetailDTO>(room);
+            var province = await _unitOfWorkVigo.Provinces.GetDetailBy(e => e.Id.Equals(room.ProvinceId));
+            var district = await _unitOfWorkVigo.Districts.GetDetailBy(e => e.Id.Equals(room.DistrictId));
+            bookingDTO.Room.Province = province!.Name;
+            bookingDTO.Room.District = district!.Name;
+
             return bookingDTO;
         }
 

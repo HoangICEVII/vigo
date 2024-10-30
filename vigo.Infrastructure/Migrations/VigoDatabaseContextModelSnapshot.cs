@@ -461,10 +461,6 @@ namespace vigo.Infrastructure.Migrations
                     b.Property<int>("RoomTypeId")
                         .HasColumnType("int");
 
-                    b.Property<string>("StreetId")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<string>("Thumbnail")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -634,10 +630,6 @@ namespace vigo.Infrastructure.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("ProvinceId")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("StreetId")
                         .IsRequired()
                         .HasColumnType("longtext");
 

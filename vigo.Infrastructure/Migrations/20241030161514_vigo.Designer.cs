@@ -12,7 +12,7 @@ using vigo.Infrastructure.DBContext;
 namespace vigo.Infrastructure.Migrations
 {
     [DbContext(typeof(VigoDatabaseContext))]
-    [Migration("20241030114557_vigo")]
+    [Migration("20241030161514_vigo")]
     partial class vigo
     {
         /// <inheritdoc />
@@ -464,10 +464,6 @@ namespace vigo.Infrastructure.Migrations
                     b.Property<int>("RoomTypeId")
                         .HasColumnType("int");
 
-                    b.Property<string>("StreetId")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<string>("Thumbnail")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -637,10 +633,6 @@ namespace vigo.Infrastructure.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("ProvinceId")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("StreetId")
                         .IsRequired()
                         .HasColumnType("longtext");
 

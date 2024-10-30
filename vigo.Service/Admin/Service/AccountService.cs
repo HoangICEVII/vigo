@@ -88,7 +88,6 @@ namespace vigo.Service.Admin.Service
                 PhoneNumber = dto.PhoneNumber,
                 DistrictId = dto.DistrictId,
                 ProvinceId = dto.ProvinceId,
-                StreetId = dto.StreetId,
                 BusinessKey = PasswordHasher.HashPassword(dto.FullName, DateNow.ToString())
             };
             _unitOfWorkVigo.BusinessPartners.Create(info);
@@ -197,6 +196,8 @@ namespace vigo.Service.Admin.Service
             }
             var info = await _unitOfWorkVigo.BusinessPartners.GetById(id);
             var account = await _unitOfWorkVigo.Accounts.GetDetailBy(e => e.Id == info.AccountId);
+            var province = await _unitOfWorkVigo.Provinces.GetDetailBy(e => e.Id.Equals(info.ProvinceId));
+            var district = await _unitOfWorkVigo.Districts.GetDetailBy(e => e.Id.Equals(info.DistrictId));
             BusinessPartnerDetailDTO data = new BusinessPartnerDetailDTO()
             {
                 Id = info.Id,
@@ -210,6 +211,10 @@ namespace vigo.Service.Admin.Service
                 PhoneNumber = info.PhoneNumber,
                 Logo = info.Logo,
                 Address = info.Address,
+                DistrictId = info.DistrictId,
+                ProvinceId = info.ProvinceId,
+                Province = province!.Name,
+                District = district!.Name,
                 CompanyName = info.CompanyName,
                 RoleId = account.RoleId,
                 RoleName = (await _unitOfWorkVigo.Roles.GetById(account.RoleId)).Name
@@ -398,6 +403,8 @@ namespace vigo.Service.Admin.Service
             info.UpdatedDate = dateNow;
             info.Address = dto.Address;
             info.Logo = dto.Logo;
+            info.ProvinceId = dto.ProvinceId;
+            info.DistrictId = dto.DistrictId;
 
             account!.UpdatedDate = dateNow;
             account.Email = dto.Email;
@@ -424,11 +431,24 @@ namespace vigo.Service.Admin.Service
         public async Task<PermissionDTO> GetPermission(ClaimsPrincipal user)
         {
             int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            int infoId = int.Parse(user.FindFirst("InfoId")!.Value);
+            string userType = user.FindFirst("UserType")!.Value;
             var role = await _unitOfWorkVigo.Roles.GetById(roleId);
-            return new PermissionDTO()
+            var result = new PermissionDTO()
             {
                 Permission = role.Permission.Split(",").ToList()
-            }; 
+            };
+            if (userType.Equals("SystemEmployee"))
+            {
+                var info = await _unitOfWorkVigo.SystemEmployees.GetById(infoId);
+                result.Name = info.Name;
+            }
+            else if (userType.Equals("BusinessPartner"))
+            {
+                var info = await _unitOfWorkVigo.BusinessPartners.GetById(infoId);
+                result.Name = info.Name;
+            }
+            return result;
         }
     }
 }

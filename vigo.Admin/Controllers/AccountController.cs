@@ -151,7 +151,7 @@ namespace vigo.Admin.Controllers
             }
         }
 
-        [HttpGet("permission")]
+        [HttpGet("get-info")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetPermission()
         {
@@ -321,7 +321,8 @@ namespace vigo.Admin.Controllers
                 {
                     new Claim("InfoId", userAuthen.InfoId != null ? userAuthen.InfoId.ToString()! : string.Empty),
                     new Claim("RoleId", userAuthen.RoleId.ToString()),
-                    new Claim("BusinessKey", userAuthen.BusinessKey)
+                    new Claim("BusinessKey", userAuthen.BusinessKey),
+                    new Claim("UserType", userAuthen.UserType)
                 }),
                 Expires = DateTime.UtcNow.AddDays(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature)

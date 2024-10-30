@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System.Data;
 using vigo.Domain.AccountFolder;
 using vigo.Domain.Entity;
+using vigo.Domain.User;
 using vigo.Infrastructure.DBContext;
 using vigo.Service.DTO;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -79,10 +80,12 @@ namespace vigo.Admin
                     var admin = _vigoContext.Accounts.Where(e => e.Email == "admin456@gmail.com").FirstOrDefault();
                     if (admin == null)
                     {
+                        var accountId = Guid.NewGuid();
+                        var DateNow = DateTime.Now;
                         var salt = PasswordHasher.CreateSalt();
                         var hashedPassword = PasswordHasher.HashPassword("admin", salt);
                         Account account = new Account() {
-                            Id = Guid.NewGuid(),
+                            Id = accountId,
                             Email = "admin456@gmail.com",
                             Password = hashedPassword,
                             Salt = salt,
@@ -94,6 +97,23 @@ namespace vigo.Admin
                             UserType = "SystemEmployee"
                         };
                         _vigoContext.Accounts.Add(account);
+                        SystemEmployee systemEmployee = new SystemEmployee()
+                        {
+                            AccountId = accountId,
+                            Address = "",
+                            Avatar = "",
+                            Bank = "",
+                            BankNumber = "",
+                            CreatedDate = DateNow,
+                            DeletedDate= null,
+                            DOB = DateNow,
+                            FullName = "admin",
+                            Name = "admin",
+                            PhoneNumber = "",
+                            Salary = 0,
+                            UpdatedDate= DateNow,
+                        };
+                        _vigoContext.SystemEmployees.Add(systemEmployee);
                         _vigoContext.SaveChanges();
                     }
 

@@ -19,7 +19,6 @@ namespace vigo.Domain.Entity
         public int DefaultDiscount { get; set; }
         public string ProvinceId {  get; set; } = string.Empty;
         public string DistrictId {  get; set; } = string.Empty;
-        public string StreetId { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }

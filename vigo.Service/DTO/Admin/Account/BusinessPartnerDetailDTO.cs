@@ -15,6 +15,10 @@ namespace vigo.Service.DTO.Admin.Account
         public string BusinessKey { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;
+        public string ProvinceId { get; set; } = string.Empty;
+        public string DistrictId { get; set; } = string.Empty;
+        public string Province { get; set; } = string.Empty;
+        public string District { get; set; } = string.Empty;
         public string Logo { get; set; } = string.Empty;
         public Guid AccountId { get; set; }
         public int RoleId { get; set; }

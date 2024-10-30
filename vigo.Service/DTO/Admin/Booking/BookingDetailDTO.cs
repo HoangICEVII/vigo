@@ -17,7 +17,7 @@ namespace vigo.Service.DTO.Admin.Booking
         public DateTime CheckOutDate { get; set; }
         public RoomDetailDTO Room { get; set; }
         public decimal Price { get; set; }
-        public string DiscountCode { get; set; }
+        public string DiscountCode { get; set; } = string.Empty;
         public decimal DiscountPrice { get; set; }
         public decimal TotalPrice { get; set; }
     }

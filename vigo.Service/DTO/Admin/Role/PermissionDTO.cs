@@ -8,6 +8,7 @@ namespace vigo.Service.DTO.Admin.Role
 {
     public class PermissionDTO
     {
+        public string Name { get; set; } = string.Empty;
         public List<string> Permission { get; set; } = new List<string>();
     }
 }

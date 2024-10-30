@@ -53,7 +53,6 @@ namespace vigo.Service.Admin.Service
                 Address = businessPartner!.Address,
                 DistrictId = businessPartner.DistrictId,
                 ProvinceId = businessPartner.ProvinceId,
-                StreetId = businessPartner.StreetId,
                 DefaultDiscount = dto.DefaultDiscount,
                 BusinessPartnerId = businessPartner.Id
             };
@@ -123,7 +122,8 @@ namespace vigo.Service.Admin.Service
             {
                 throw new CustomException("không có quyền");
             }
-            var result = _mapper.Map<RoomDetailDTO>(await _unitOfWorkVigo.Rooms.GetById(id));
+            var room = await _unitOfWorkVigo.Rooms.GetById(id);
+            var result = _mapper.Map<RoomDetailDTO>(room);
             List<Expression<Func<RoomServiceR, bool>>> con = new List<Expression<Func<RoomServiceR, bool>>>()
             {
                 e => e.RoomId == result.Id
@@ -155,6 +155,8 @@ namespace vigo.Service.Admin.Service
                     result.Images.Add(temp);
                 }
             }
+            var roomType = await _unitOfWorkVigo.RoomTypes.GetById(room.RoomTypeId);
+            result.RoomType = roomType.Name;
             return result;
         }
 
@@ -232,7 +234,6 @@ namespace vigo.Service.Admin.Service
             data.Name = dto.Name;
             data.RoomTypeId = dto.RoomTypeId;
             data.Address = businessPartner.Address;
-            data.StreetId = businessPartner.StreetId;
             data.ProvinceId = businessPartner.ProvinceId;
             data.DistrictId = businessPartner.DistrictId;
             data.DefaultDiscount = dto.DefaultDiscount;
