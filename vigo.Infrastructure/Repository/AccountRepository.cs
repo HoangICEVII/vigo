@@ -42,8 +42,10 @@ namespace vigo.Infrastructure.Repository
                 }
                 else if(data.UserType.Equals("SystemEmployee"))
                 {
+                    var info = await _context.SystemEmployees.Where(e => e.AccountId.Equals(data.Id)).FirstOrDefaultAsync();
                     userAuthen.RoleId = data.RoleId;
                     userAuthen.UserType = "SystemEmployee";
+                    userAuthen.InfoId = info!.Id;
                 }
                 else
                 {

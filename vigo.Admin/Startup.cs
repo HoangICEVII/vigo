@@ -100,16 +100,16 @@ namespace vigo.Admin
                         SystemEmployee systemEmployee = new SystemEmployee()
                         {
                             AccountId = accountId,
-                            Address = "",
-                            Avatar = "",
-                            Bank = "",
-                            BankNumber = "",
+                            Address = string.Empty,
+                            Avatar = string.Empty,
+                            Bank = string.Empty,
+                            BankNumber = string.Empty,
                             CreatedDate = DateNow,
                             DeletedDate= null,
                             DOB = DateNow,
                             FullName = "admin",
                             Name = "admin",
-                            PhoneNumber = "",
+                            PhoneNumber = string.Empty,
                             Salary = 0,
                             UpdatedDate= DateNow,
                         };
