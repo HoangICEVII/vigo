@@ -523,6 +523,8 @@ namespace vigo.Service.Admin.Service
             info.Gender = dto.Gender != null ? dto.Gender : info.Gender;
             info.Address = dto.Address != null ? dto.Address : "";
             info.PhoneNumber = dto.PhoneNumber != null ? dto.PhoneNumber : "";
+            account.EmailActive = dto.Active;
+
             await _unitOfWorkVigo.Complete();
         }
 
