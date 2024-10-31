@@ -91,7 +91,10 @@ namespace vigo.Service.Application.ServiceApp
                 UpdatedDate = DateNow,
                 Name = temp.Last(),
                 FullName = dto.FullName,
-                Avatar = "http://localhost:2002/resource/default-avatar.jpg"
+                Avatar = "http://localhost:2002/resource/default-avatar.jpg",
+                Address = "",
+                Gender = "",
+                PhoneNumber = ""
             };
             _unitOfWorkVigo.Tourists.Create(info);
 
@@ -146,16 +149,22 @@ namespace vigo.Service.Application.ServiceApp
             {
                 throw new CustomException("email đã tồn tại");
             }
+            if (!dto.PhoneNumber.IsNullOrEmpty() && !Regex.IsMatch(dto.PhoneNumber!, $@"{ConstRegex.PHONE_REGEX}"))
+            {
+                throw new CustomException("số điện thoại không hợp lệ");
+            }
             DateTime dateNow = DateTime.Now;
             account.Email = dto.Email;
             account.UpdatedDate = dateNow;
 
             info.UpdatedDate = dateNow;
-            info.DOB = dto.DOB;
-            info.Gender = dto.Gender;
+            info.DOB = dto.DOB != null ? (DateTime)dto.DOB : info.DOB;
+            info.Gender = dto.Gender != null ? dto.Gender : "";
             info.FullName = dto.FullName;
             info.Name = dto.FullName.Split(' ').Last();
             info.Avatar = dto.Avatar;
+            info.PhoneNumber = dto.PhoneNumber != null ? dto.PhoneNumber : "";
+            info.Address = dto.Address != null ? dto.Address : "";
 
             await _unitOfWorkVigo.Complete();
         }

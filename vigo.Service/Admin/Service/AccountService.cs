@@ -518,9 +518,11 @@ namespace vigo.Service.Admin.Service
             account!.Email = dto.Email;
             info.FullName = dto.FullName;
             info.Name = dto.FullName.Split('.').Last();
-            info.DOB = dto.DOB;
+            info.DOB = dto.DOB != null ? (DateTime)dto.DOB : info.DOB;
             info.Avatar = dto.Avatar;
-            info.Gender = dto.Gender;
+            info.Gender = dto.Gender != null ? dto.Gender : info.Gender;
+            info.Address = dto.Address != null ? dto.Address : "";
+            info.PhoneNumber = dto.PhoneNumber != null ? dto.PhoneNumber : "";
             await _unitOfWorkVigo.Complete();
         }
 
