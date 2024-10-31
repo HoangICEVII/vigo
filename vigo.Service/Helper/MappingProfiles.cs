@@ -35,9 +35,9 @@ namespace vigo.Service.Helper
             .ForMember(dest => dest.Permission, opt => opt.MapFrom(src => SplitPermissions(src.Permission)));
             CreateMap<RolePermission, RolePermissionDTO>();
             CreateMap<BusinessPartner, BusinessPartnerDTO>();
-            CreateMap<SystemEmployee, EmployeeDTO>().ForMember(dest => dest.Name, opt => opt.MapFrom(e => e.FullName)); ;
+            CreateMap<SystemEmployee, EmployeeDTO>().ForMember(dest => dest.Name, opt => opt.MapFrom(e => e.FullName));
             CreateMap<Booking, BookingDetailDTO>();
-            CreateMap<Tourist, TouristDetailDTO>();
+            CreateMap<Tourist, TouristDetailDTO>().ForMember(dest => dest.Name, opt => opt.MapFrom(e => e.FullName));
             CreateMap<Room, RoomDetailDTO>();
             CreateMap<Booking, BookingDTO>();
             CreateMap<DiscountCoupon, DiscountCouponDetailDTO>();
@@ -49,7 +49,7 @@ namespace vigo.Service.Helper
             CreateMap<RoomType, RoomTypeDTO>();
             CreateMap<ServiceR, ServiceDTO>();
             CreateMap<BusinessPartner, BusinessPartnerShortDTO>();
-            CreateMap<Tourist, TouristDTO>();
+            CreateMap<Tourist, TouristDTO>().ForMember(dest => dest.Name, opt => opt.MapFrom(e => e.FullName));
             CreateMap<Booking, BookingAppDTO>();
             CreateMap<DiscountCoupon, DiscountCouponAppDTO>();
             CreateMap<Rating, RoomRatingDTO>();

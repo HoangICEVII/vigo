@@ -18,6 +18,7 @@ using vigo.Service.Admin.IService;
 using vigo.Service.DTO;
 using vigo.Service.DTO.Admin.Account;
 using vigo.Service.DTO.Admin.Role;
+using vigo.Service.DTO.Application.Account;
 
 namespace vigo.Service.Admin.Service
 {
@@ -452,6 +453,85 @@ namespace vigo.Service.Admin.Service
                 result.Image = info.Logo;
             }
             return result;
+        }
+
+        public async Task<PagedResultCustom<TouristDTO>> GetTouristPaging(int page, int perPage, string? searchName, ClaimsPrincipal user)
+        {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("account_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
+            List<Expression<Func<Tourist, bool>>> conditions = new List<Expression<Func<Tourist, bool>>>()
+            {
+                e => e.DeletedDate == null
+            };
+            if (searchName != null)
+            {
+                conditions.Add(e => e.Name.ToLower().Contains(searchName.ToLower()));
+            }
+            var data = await _unitOfWorkVigo.Tourists.GetPaging(conditions,
+                                                                null,
+                                                                null,
+                                                                null,
+                                                                page,
+                                                                perPage);
+            var result = new PagedResultCustom<TouristDTO>(_mapper.Map<List<TouristDTO>>(data.Items), data.TotalRecords, data.PageIndex, data.PageSize);
+            foreach (var item in result.Items)
+            {
+                var account = await _unitOfWorkVigo.Accounts.GetDetailBy(e => e.Id == item.AccountId);
+                item.Email = account!.Email;
+            }
+            return result;
+        }
+
+        public async Task<TouristDetailDTO> GetTouristDetail(int id, ClaimsPrincipal user)
+        {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("account_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
+            var info = await _unitOfWorkVigo.Tourists.GetById(id);
+            var account = await _unitOfWorkVigo.Accounts.GetDetailBy(e => e.Id == info.AccountId);
+            TouristDetailDTO data = new TouristDetailDTO()
+            {
+                Id = info.Id,
+                AccountId = account!.Id,
+                CreatedDate = info.CreatedDate,
+                DeletedDate = info.DeletedDate,
+                UpdatedDate = info.UpdatedDate,
+                Email = account.Email,
+                Name = info.FullName,
+                DOB = info.DOB,
+                Avatar = info.Avatar
+            };
+            return data;
+        }
+
+        public async Task UpdateTourist(TouristUpdateDTO dto, ClaimsPrincipal user)
+        {
+            var info = await _unitOfWorkVigo.Tourists.GetById(dto.Id);
+            var account = await _unitOfWorkVigo.Accounts.GetDetailBy(e => e.Id == info.AccountId);
+            account!.Email = dto.Email;
+            info.FullName = dto.FullName;
+            info.Name = dto.FullName.Split('.').Last();
+            info.DOB = dto.DOB;
+            info.Avatar = dto.Avatar;
+            info.Gender = dto.Gender;
+            await _unitOfWorkVigo.Complete();
+        }
+
+        public async Task DeleteTourist(Guid accountId, ClaimsPrincipal user)
+        {
+            var account = await _unitOfWorkVigo.Accounts.GetDetailBy(e => e.Id == accountId);
+            var info = await _unitOfWorkVigo.Tourists.GetDetailBy(e => e.AccountId == accountId);
+            DateTime DateNow = DateTime.Now;
+            account!.DeletedDate = DateNow;
+            info!.DeletedDate = DateNow;
+            await _unitOfWorkVigo.Complete();
         }
     }
 }

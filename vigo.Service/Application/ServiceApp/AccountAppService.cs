@@ -14,6 +14,7 @@ using vigo.Domain.Interface.IUnitOfWork;
 using vigo.Domain.User;
 using vigo.Service.Application.IServiceApp;
 using vigo.Service.DTO;
+using vigo.Service.DTO.Admin.Account;
 using vigo.Service.DTO.Application.Account;
 using vigo.Service.EmailAuthenModule;
 
@@ -90,9 +91,7 @@ namespace vigo.Service.Application.ServiceApp
                 UpdatedDate = DateNow,
                 Name = temp.Last(),
                 FullName = dto.FullName,
-                DOB = dto.DOB,
-                Gender = dto.Gender,
-                Avatar = dto.Avatar.IsNullOrEmpty() ? "http://localhost:2002/resource/default-avatar.jpg" : dto.Avatar
+                Avatar = "http://localhost:2002/resource/default-avatar.jpg"
             };
             _unitOfWorkVigo.Tourists.Create(info);
 
@@ -156,6 +155,7 @@ namespace vigo.Service.Application.ServiceApp
             info.Gender = dto.Gender;
             info.FullName = dto.FullName;
             info.Name = dto.FullName.Split(' ').Last();
+            info.Avatar = dto.Avatar;
 
             await _unitOfWorkVigo.Complete();
         }

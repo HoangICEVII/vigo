@@ -14,10 +14,12 @@ namespace vigo.Controllers
     public class RoomController : BaseController
     {
         private readonly IRoomAppService _roomAppService;
+        private readonly IRoomTypeAppService _roomTypeAppService;
         private readonly IConfiguration _configuration;
-        public RoomController(IRoomAppService roomAppService, IConfiguration configuration)
+        public RoomController(IRoomAppService roomAppService, IRoomTypeAppService roomTypeAppService, IConfiguration configuration)
         {
             _roomAppService = roomAppService;
+            _roomTypeAppService = roomTypeAppService;
             _configuration = configuration;
         }
 
@@ -35,6 +37,32 @@ namespace vigo.Controllers
                     TotalRecords = data.TotalRecords
                 };
                 return CreateResponse(data.Items, "get success", 200, options);
+            }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return CreateResponse(null, "get fail", 500, null);
+            }
+        }
+
+        [HttpGet("roomType/get-all")]
+        public async Task<IActionResult> GetAll()
+        {
+            try
+            {
+                var data = await _roomTypeAppService.GetAll();
+                Option options = new Option()
+                {
+                    Name = "",
+                    PageSize = data.Count(),
+                    Page = 1,
+                    TotalRecords = data.Count()
+                };
+                return CreateResponse(data, "get success", 200, options);
             }
             catch (CustomException e)
             {

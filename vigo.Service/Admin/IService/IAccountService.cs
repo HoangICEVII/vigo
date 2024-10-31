@@ -9,7 +9,7 @@ using vigo.Domain.Helper;
 using vigo.Service.DTO;
 using vigo.Service.DTO.Admin.Account;
 using vigo.Service.DTO.Admin.Role;
-using vigo.Service.DTO.Admin.Room;
+using vigo.Service.DTO.Application.Account;
 
 namespace vigo.Service.Admin.IService
 {
@@ -26,7 +26,12 @@ namespace vigo.Service.Admin.IService
         Task CreateEmployee(CreateEmployeeAccount dto, ClaimsPrincipal user);
         Task UpdateEmployee(UpdateEmployeeDTO dto, ClaimsPrincipal user);
         Task UpdateBusiness(UpdateBusinessPartnerDTO dto, ClaimsPrincipal user);
-        Task DeleteEmployee(Guid id, ClaimsPrincipal user);
-        Task DeleteBusinessPartner(Guid id, ClaimsPrincipal user);
+        Task DeleteEmployee(Guid accountId, ClaimsPrincipal user);
+        Task DeleteBusinessPartner(Guid accountId, ClaimsPrincipal user);
+        Task<PagedResultCustom<TouristDTO>> GetTouristPaging(int page, int perPage, string? searchName, ClaimsPrincipal user);
+        Task<TouristDetailDTO> GetTouristDetail(int id, ClaimsPrincipal user);
+        Task UpdateTourist(TouristUpdateDTO dto, ClaimsPrincipal user);
+        Task DeleteTourist(Guid accountId, ClaimsPrincipal user);
+
     }
 }
