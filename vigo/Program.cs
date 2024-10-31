@@ -75,6 +75,7 @@ builder.Services.AddScoped<IRoomAppService, RoomAppService>();
 builder.Services.AddScoped<IRoomTypeAppService, RoomTypeAppService>();
 builder.Services.AddScoped<IServiceAppService, ServiceAppService>();
 builder.Services.AddScoped<IUIService, UIService>();
+builder.Services.AddScoped<ISearchAppService, SearchAppService>();
 #endregion
 
 //UnitOfWork Dependency Injection
