@@ -10,5 +10,6 @@ namespace vigo.Service.DTO.Application.Search
     {
         public string Name { get; set; } = string.Empty;
         public string Image {  get; set; } = string.Empty;
+        public int RoomNumber { get; set; }
     }
 }

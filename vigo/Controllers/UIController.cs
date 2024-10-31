@@ -19,6 +19,25 @@ namespace vigo.Controllers
             _configuration = configuration;
         }
 
+        [HttpGet("get-popular-visit")]
+        public async Task<IActionResult> GetPopularVisit()
+        {
+            try
+            {
+                var data = await _UIService.GetPopularVisit();
+                return CreateResponse(data, "get success", 200, null);
+            }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return CreateResponse(null, "get fail", 500, null);
+            }
+        }
+
         [HttpGet("get-province")]
         public async Task<IActionResult> GetAllProvince()
         {
