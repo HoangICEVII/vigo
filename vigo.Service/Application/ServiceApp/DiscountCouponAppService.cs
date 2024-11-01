@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,8 @@ using vigo.Domain.Interface.IUnitOfWork;
 using vigo.Domain.User;
 using vigo.Service.Application.IServiceApp;
 using vigo.Service.DTO.Admin.Account;
+using vigo.Service.DTO.Admin.Room;
+using vigo.Service.DTO.Admin.Service;
 using vigo.Service.DTO.Application.Discount;
 
 namespace vigo.Service.Application.ServiceApp
@@ -26,6 +29,60 @@ namespace vigo.Service.Application.ServiceApp
             _unitOfWorkVigo = unitOfWorkVigo;
             _mapper = mapper;
         }
+
+        public async Task<List<DiscountCouponAppDTO>> GetAllUseAble(int roomId, ClaimsPrincipal user)
+        {
+            int? infoId = user.FindFirst("InfoId") != null ? int.Parse(user.FindFirst("InfoId")!.Value) : null;
+            List<DiscountCouponAppDTO> result = new List<DiscountCouponAppDTO>();
+            var data = await _unitOfWorkVigo.DiscountCoupons.GetAll(null);
+            foreach (var item in data) {
+                if (item.RoomApply.Split(",").Contains(roomId.ToString()))
+                {
+                    result.Add(new DiscountCouponAppDTO()
+                    {
+                        Description = item.Description,
+                        DiscountCode = item.DiscountCode,
+                        DiscountCount = item.DiscountCount,
+                        DiscountMax = item.DiscountMax,
+                        DiscountType = item.DiscountType,
+                        DiscountValue = item.DiscountValue,
+                        EndDate = item.EndDate,
+                        Id = item.Id,
+                        Image = item.Image,
+                        Name = item.Name,
+                        StartDate = item.StartDate,
+                        UseAble = !item.UserUsed.Split(',').Contains(infoId.ToString())
+                    });
+                }
+            }
+            return result;
+        }
+
+        public async Task<List<RoomDTO>> GetAllUseAbleRoom(int couponId, ClaimsPrincipal user)
+        {
+            var data = await _unitOfWorkVigo.DiscountCoupons.GetById(couponId);
+            List<int> roomIds = new List<int>();
+            foreach (var item in data.RoomApply.Split(",")) {
+                roomIds.Add(int.Parse(item));
+            }
+            List<RoomDTO> result = new List<RoomDTO>();
+            foreach (var item in roomIds) {
+                var temp = _mapper.Map<RoomDTO>(await _unitOfWorkVigo.Rooms.GetById(item));
+                List<Expression<Func<RoomServiceR, bool>>> con = new List<Expression<Func<RoomServiceR, bool>>>()
+                {
+                    e => e.RoomId == item,
+                };
+                var roomServices = await _unitOfWorkVigo.RoomServices.GetAll(con);
+                foreach (var service in roomServices)
+                {
+                    temp.Services.Add(_mapper.Map<ServiceDTO>(await _unitOfWorkVigo.Services.GetById(service.ServiceId)));
+                }
+                temp.BusinessPartner = _mapper.Map<BusinessPartnerShortDTO>(await _unitOfWorkVigo.BusinessPartners.GetById(temp.BusinessPartnerId));
+                result.Add(temp);
+            }
+            return result;
+        }
+
         public async Task<PagedResultCustom<DiscountCouponAppDTO>> GetPaging(int page, int perPage, string? searchName, ClaimsPrincipal user)
         {
             int? infoId = user.FindFirst("InfoId") != null ? int.Parse(user.FindFirst("InfoId")!.Value) : null;
@@ -58,7 +115,7 @@ namespace vigo.Service.Application.ServiceApp
                     Image = item.Image,
                     Name = item.Name,
                     StartDate = item.StartDate,
-                    IsReceived = item.UserUsed.Split(',').Contains(infoId.ToString())
+                    UseAble = !item.UserUsed.Split(',').Contains(infoId.ToString())
                 });
             }
             return new PagedResultCustom<DiscountCouponAppDTO>(result, data.TotalRecords, data.PageIndex, data.PageSize);

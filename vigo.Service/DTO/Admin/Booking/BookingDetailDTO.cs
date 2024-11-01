@@ -20,5 +20,6 @@ namespace vigo.Service.DTO.Admin.Booking
         public string DiscountCode { get; set; } = string.Empty;
         public decimal DiscountPrice { get; set; }
         public decimal TotalPrice { get; set; }
+        public bool Approved { get; set; }
     }
 }

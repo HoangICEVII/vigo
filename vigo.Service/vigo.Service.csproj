@@ -24,9 +24,4 @@
     <ProjectReference Include="..\vigo.Infrastructure\vigo.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DTO\Application\Service\" />
-    <Folder Include="DTO\Application\Room\" />
-  </ItemGroup>
-
 </Project>

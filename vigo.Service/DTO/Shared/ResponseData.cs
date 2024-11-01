@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace vigo.Service.DTO
+namespace vigo.Service.DTO.Shared
 {
     public class ResponseData
     {

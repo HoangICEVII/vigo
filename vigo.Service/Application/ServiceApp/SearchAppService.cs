@@ -9,6 +9,8 @@ using vigo.Domain.Entity;
 using vigo.Domain.Interface.IUnitOfWork;
 using vigo.Domain.User;
 using vigo.Service.Application.IServiceApp;
+using vigo.Service.DTO.Application.Account;
+using vigo.Service.DTO.Application.Room;
 using vigo.Service.DTO.Application.Search;
 using vigo.Service.EmailAuthenModule;
 
@@ -25,35 +27,140 @@ namespace vigo.Service.Application.ServiceApp
             _mapper = mapper;
         }
 
-        public async Task<SearchResultDTO> ReturnSearchTyping(string searchInput)
+        public async Task<SearchResultReturnDTO> ReturnSearchResult(string searchInput)
         {
             List<Expression<Func<Province, bool>>> conditions = new List<Expression<Func<Province, bool>>>()
             {
                 e => e.Name.ToLower().Contains(searchInput.ToLower())
             };
-            List<Expression<Func<BusinessPartner, bool>>> conditions2 = new List<Expression<Func<BusinessPartner, bool>>>()
-            {
-                e => e.Name.ToLower().Contains(searchInput.ToLower())
-            };
             var province = await _unitOfWorkVigo.Provinces.GetAll(conditions);
-            var business = await _unitOfWorkVigo.BusinessPartners.GetAll(conditions2);
-            var result = new SearchResultDTO();
-            foreach (var item in province) {
-                result.ProvinceShortDTOs.Add(new ProvinceShortDTO()
+            if (province.Count() != 0) {
+                SearchResultReturnDTO result = new SearchResultReturnDTO();
+                foreach (var item in province)
                 {
-                    Name = item.Name,
-                    Image = item.Image
-                });
+                    List<Expression<Func<BusinessPartner, bool>>> con2 = new List<Expression<Func<BusinessPartner, bool>>>()
+                    {
+                        e => e.ProvinceId.Equals(item.Id)
+                    };
+                    var business = await _unitOfWorkVigo.BusinessPartners.GetAll(con2);
+                    List<BusinessAppDTO> businessAppDTOs = new List<BusinessAppDTO>();
+                    foreach (var businessPartner in business)
+                    {
+                        List<Expression<Func<Room, bool>>> conRoom = new List<Expression<Func<Room, bool>>>()
+                        {
+                            e => e.BusinessPartnerId == businessPartner.Id
+                        };
+                        BusinessAppDTO businessAppDTO = new BusinessAppDTO();
+                        businessAppDTO.Address = businessPartner.Address;
+                        businessAppDTO.PhoneNumber = businessPartner.PhoneNumber;
+                        businessAppDTO.CompanyName = businessPartner.CompanyName;
+
+                        var rooms = await _unitOfWorkVigo.Rooms.GetAll(conRoom);
+                        foreach (var room in rooms)
+                        {
+                            businessAppDTO.RoomAppDTOs.Add(new RoomAppDTO()
+                            {
+                                Id = room.Id,
+                                Name = room.Name,
+                                Address = room.Address,
+                                Avaiable = room.Avaiable,
+                                DefaultDiscount = room.DefaultDiscount,
+                                Description = room.Description,
+                                Price = room.Price,
+                                Thumbnail = room.Thumbnail
+                            });
+                        }
+                        result.BusinessPartnerDTOs.Add(businessAppDTO);
+                    }
+                }
+                return result;
             }
-            foreach (var item in business)
+            else
             {
-                result.BPShortDTOs.Add(new BPShortDTO()
+                SearchResultReturnDTO result = new SearchResultReturnDTO();
+                List<Expression<Func<BusinessPartner, bool>>> con2 = new List<Expression<Func<BusinessPartner, bool>>>()
                 {
-                    Name = item.Name,
-                    Logo = item.Logo
-                });
+                    e => e.Name.ToLower().Contains(searchInput.ToLower())
+                };
+                var business = await _unitOfWorkVigo.BusinessPartners.GetAll(con2);
+                List<BusinessAppDTO> businessAppDTOs = new List<BusinessAppDTO>();
+                foreach (var businessPartner in business) {
+                    List<Expression<Func<Room, bool>>> conRoom = new List<Expression<Func<Room, bool>>>()
+                    {
+                        e => e.BusinessPartnerId == businessPartner.Id
+                    };
+                    BusinessAppDTO businessAppDTO = new BusinessAppDTO();
+                    businessAppDTO.Address = businessPartner.Address;
+                    businessAppDTO.PhoneNumber = businessPartner.PhoneNumber;
+                    businessAppDTO.CompanyName = businessPartner.CompanyName;
+                    
+                    var rooms = await _unitOfWorkVigo.Rooms.GetAll(conRoom);
+                    foreach (var room in rooms) {
+                        businessAppDTO.RoomAppDTOs.Add(new RoomAppDTO()
+                        {
+                            Id = room.Id,
+                            Name = room.Name,
+                            Address = room.Address,
+                            Avaiable = room.Avaiable,
+                            DefaultDiscount = room.DefaultDiscount,
+                            Description = room.Description,
+                            Price = room.Price,
+                            Thumbnail = room.Thumbnail
+                        });
+                    }
+                    result.BusinessPartnerDTOs.Add(businessAppDTO);
+                }
+                return result;
             }
-            return result;
+        }
+
+        public async Task<SearchResultDTO> ReturnSearchTyping(string? searchInput)
+        {
+            if (searchInput != null)
+            {
+                List<Expression<Func<Province, bool>>> conditions = new List<Expression<Func<Province, bool>>>()
+                {
+                    e => e.Name.ToLower().Contains(searchInput.ToLower())
+                };
+                    List<Expression<Func<BusinessPartner, bool>>> conditions2 = new List<Expression<Func<BusinessPartner, bool>>>()
+                {
+                    e => e.Name.ToLower().Contains(searchInput.ToLower())
+                };
+                var province = await _unitOfWorkVigo.Provinces.GetAll(conditions);
+                var business = await _unitOfWorkVigo.BusinessPartners.GetAll(conditions2);
+                var result = new SearchResultDTO();
+                foreach (var item in province)
+                {
+                    result.ProvinceShortDTOs.Add(new ProvinceShortDTO()
+                    {
+                        Name = item.Name,
+                        Image = item.Image
+                    });
+                }
+                foreach (var item in business)
+                {
+                    result.BPShortDTOs.Add(new BPShortDTO()
+                    {
+                        Name = item.Name,
+                        Logo = item.Logo
+                    });
+                }
+                return result;
+            }
+            else
+            {
+                var result = new SearchResultDTO();
+                var province = await _unitOfWorkVigo.Provinces.GetAll(null);
+                foreach (var item in province)
+                {
+                    result.ProvinceShortDTOs.Add(new ProvinceShortDTO()
+                    {
+                        Name = item.Name,
+                        Image = item.Image
+                    });
+                }
+                return result;
+            }
         }
     }
 }

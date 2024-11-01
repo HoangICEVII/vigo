@@ -13,9 +13,9 @@ using vigo.Domain.Helper;
 using vigo.Domain.Interface.IUnitOfWork;
 using vigo.Domain.User;
 using vigo.Service.Application.IServiceApp;
-using vigo.Service.DTO;
 using vigo.Service.DTO.Admin.Account;
 using vigo.Service.DTO.Application.Account;
+using vigo.Service.DTO.Shared;
 using vigo.Service.EmailAuthenModule;
 
 namespace vigo.Service.Application.ServiceApp

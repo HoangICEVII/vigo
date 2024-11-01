@@ -15,10 +15,10 @@ using vigo.Domain.Interface.IUnitOfWork;
 using vigo.Domain.User;
 using vigo.Infrastructure.UnitOfWork;
 using vigo.Service.Admin.IService;
-using vigo.Service.DTO;
 using vigo.Service.DTO.Admin.Account;
 using vigo.Service.DTO.Admin.Role;
 using vigo.Service.DTO.Application.Account;
+using vigo.Service.DTO.Shared;
 
 namespace vigo.Service.Admin.Service
 {

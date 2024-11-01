@@ -6,7 +6,7 @@ using vigo.Domain.AccountFolder;
 using vigo.Domain.Entity;
 using vigo.Domain.User;
 using vigo.Infrastructure.DBContext;
-using vigo.Service.DTO;
+using vigo.Service.DTO.Shared;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace vigo.Admin
@@ -58,7 +58,7 @@ namespace vigo.Admin
                         {
                             Id = 1,
                             Name = "admin",
-                            Permission = "account_manage,booking_manage,role_manage,discount_manage,rating_manage,room_manage,service_manage",
+                            Permission = "account_manage,booking_manage,role_manage,discount_manage,rating_manage,room_manage,service_manage,bank_manage",
                             CreatedDate = DateTime.Now,
                             UpdatedDate = DateTime.Now,
                             DeletedDate = null

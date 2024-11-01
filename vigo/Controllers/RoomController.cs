@@ -5,7 +5,7 @@ using vigo.Controllers.Base;
 using vigo.Domain.Helper;
 using vigo.Service.Application.IServiceApp;
 using vigo.Service.Application.ServiceApp;
-using vigo.Service.DTO;
+using vigo.Service.DTO.Shared;
 
 namespace vigo.Controllers
 {
@@ -37,6 +37,25 @@ namespace vigo.Controllers
                     TotalRecords = data.TotalRecords
                 };
                 return CreateResponse(data.Items, "get success", 200, options);
+            }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return CreateResponse(null, "get fail", 500, null);
+            }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetDetail(int id)
+        {
+            try
+            {
+                var data = await _roomAppService.GetDetail(id);
+                return CreateResponse(data, "get success", 200, null);
             }
             catch (CustomException e)
             {

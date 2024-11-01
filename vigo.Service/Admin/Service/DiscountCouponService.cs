@@ -47,7 +47,6 @@ namespace vigo.Service.Admin.Service
                 CreatedDate = DateNow,
                 DeletedDate = null,
                 Description = dto.Description,
-                DiscountApply = dto.DiscountApply,
                 DiscountCode = GenerateString.GenerateRandomString(6) + count,
                 DiscountCount = 0,
                 DiscountMax = dto.DiscountMax,
@@ -134,7 +133,6 @@ namespace vigo.Service.Admin.Service
             }
             var data = await _unitOfWorkVigo.DiscountCoupons.GetById(dto.Id);
             data.DiscountMax = dto.DiscountMax;
-            data.DiscountApply = dto.DiscountApply;
             data.RoomApply = string.Join(",", dto.RoomApplyIds);
             data.StartDate = dto.StartDate;
             data.EndDate = dto.EndDate;

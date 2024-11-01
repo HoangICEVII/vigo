@@ -5,7 +5,7 @@ using vigo.Admin.Controllers.Base;
 using vigo.Domain.Helper;
 using vigo.Service.Admin.IService;
 using vigo.Service.Admin.Service;
-using vigo.Service.DTO;
+using vigo.Service.DTO.Shared;
 
 namespace vigo.Admin.Controllers
 {

@@ -64,6 +64,8 @@ namespace vigo.Infrastructure.DBContext
             modelBuilder.ApplyConfiguration(new StreetConfiguration());
 
             modelBuilder.ApplyConfiguration(new EmailAuthenConfiguration());
+            modelBuilder.ApplyConfiguration(new BankConfiguration());
+            modelBuilder.ApplyConfiguration(new BusinessPartnerBankConfiguration());
 
             modelBuilder.Entity<RolePermission>().HasData(
                 new RolePermission { Id = 1, Name = "quản lí tài khoản", RoleLabel = "account_manage"},
@@ -72,7 +74,8 @@ namespace vigo.Infrastructure.DBContext
                 new RolePermission { Id = 4, Name = "quản lí giảm giá", RoleLabel = "discount_manage" },
                 new RolePermission { Id = 6, Name = "phản hồi, đánh giá", RoleLabel = "rating_manage" },
                 new RolePermission { Id = 7, Name = "quản lí phòng", RoleLabel = "room_manage" },
-                new RolePermission { Id = 8, Name = "quản lí dịch vụ", RoleLabel = "service_manage" }
+                new RolePermission { Id = 8, Name = "quản lí dịch vụ", RoleLabel = "service_manage" },
+                new RolePermission { Id = 9, Name = "quản lí tài khoản ngân hàng", RoleLabel = "bank_manage" }
             );
 
         }

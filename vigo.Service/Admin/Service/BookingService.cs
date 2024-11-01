@@ -64,7 +64,7 @@ namespace vigo.Service.Admin.Service
             };
             if (isReceived != null)
             {
-                conditions.Add(e => e.IsReceived == isReceived);
+                conditions.Add(e => e.Approved == isReceived);
             }
             bool sortDown = false;
             if (sortType != null && sortType == "DESC")
@@ -94,7 +94,7 @@ namespace vigo.Service.Admin.Service
                 data.Add(await _unitOfWorkVigo.Bookings.GetById(id));
             }
             foreach (Booking item in data) {
-                item.IsReceived = true;
+                item.Approved = true;
             }
             await _unitOfWorkVigo.Complete();
         }

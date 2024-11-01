@@ -20,7 +20,7 @@ namespace vigo.Controllers
         }
 
         [HttpGet("suggest-result")]
-        public async Task<IActionResult> ReturnSearchTyping(string searchInput)
+        public async Task<IActionResult> ReturnSearchTyping(string? searchInput)
         {
             try
             {

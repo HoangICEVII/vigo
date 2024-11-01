@@ -27,6 +27,7 @@ namespace vigo.Service.Application.ServiceApp
 
         public async Task<List<RoomRatingDTO>> GetRoomRating(int roomId, ClaimsPrincipal user)
         {
+            int info = int.Parse(user.FindFirst("Info")!.Value);
             List<Expression<Func<Rating, bool>>> conditions = new List<Expression<Func<Rating, bool>>>()
             {
                 e => e.RoomId == roomId,
@@ -49,15 +50,29 @@ namespace vigo.Service.Application.ServiceApp
             return result;
         }
 
-        public Task RateRoom(RateRoomDTO dto, ClaimsPrincipal user)
+        public async Task RateRoom(RateRoomDTO dto, ClaimsPrincipal user)
         {
-            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
-            throw new NotImplementedException();
+            int info = int.Parse(user.FindFirst("Info")!.Value);
+            DateTime DateNow = DateTime.Now;
+            var data = new Rating()
+            {
+                Comment = dto.Comment,
+                DeletedDate = null,
+                RoomId = dto.RoomId,
+                LastUpdatedDate = DateNow,
+                Rate = dto.Rate,
+                Status = false,
+                TouristId = info,
+            };
+            _unitOfWorkVigo.Ratings.Create(data);
+            await _unitOfWorkVigo.Complete();
         }
 
-        public Task UpdateRateRoom(UpdateRateRoomDTO dto, ClaimsPrincipal user)
+        public async Task UpdateRateRoom(UpdateRateRoomDTO dto, ClaimsPrincipal user)
         {
-            throw new NotImplementedException();
+            var data = await _unitOfWorkVigo.Ratings.GetById(dto.Id);
+            data.UpdateComment = dto.UpdateComment;
+            await _unitOfWorkVigo.Complete();
         }
     }
 }

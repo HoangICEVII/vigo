@@ -6,10 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using vigo.Domain.AccountFolder;
 using vigo.Domain.Helper;
-using vigo.Service.DTO;
 using vigo.Service.DTO.Admin.Account;
 using vigo.Service.DTO.Admin.Role;
 using vigo.Service.DTO.Application.Account;
+using vigo.Service.DTO.Shared;
 
 namespace vigo.Service.Admin.IService
 {

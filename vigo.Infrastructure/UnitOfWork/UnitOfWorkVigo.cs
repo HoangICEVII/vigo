@@ -34,6 +34,8 @@ namespace vigo.Infrastructure.UnitOfWork
         private Lazy<IRoomRepository> _rooms;
         private Lazy<IStreetRepository> _streets;
         private Lazy<IEmailAuthenRepository> _emailAuthens;
+        private Lazy<IBankRepository> _banks;
+        private Lazy<IBusinessPartnerBankRepository> _businessPartnerBank;
         #endregion
 
         #region b
@@ -55,6 +57,8 @@ namespace vigo.Infrastructure.UnitOfWork
         public IRoomRepository Rooms => _rooms.Value;
         public IStreetRepository Streets => _streets.Value;
         public IEmailAuthenRepository EmailAuthens => _emailAuthens.Value;
+        public IBankRepository Banks => _banks.Value;
+        public IBusinessPartnerBankRepository BusinessPartnerBanks => _businessPartnerBank.Value;
         #endregion
 
         public UnitOfWorkVigo(VigoDatabaseContext context)
@@ -85,6 +89,9 @@ namespace vigo.Infrastructure.UnitOfWork
             _streets = new Lazy<IStreetRepository>(() => new StreetRepository(_context));
 
             _emailAuthens = new Lazy<IEmailAuthenRepository>(() => new EmailAuthenRepository(_context));
+            _banks = new Lazy<IBankRepository>(() => new BankRepository(_context));
+
+            _businessPartnerBank = new Lazy<IBusinessPartnerBankRepository>(() => new BusinessPartnerBankRepository(_context));
         }
         public async Task<int> Complete()
         {

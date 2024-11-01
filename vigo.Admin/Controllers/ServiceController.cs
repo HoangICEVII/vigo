@@ -3,10 +3,10 @@ using vigo.Admin.Controllers.Base;
 using vigo.Domain.Helper;
 using vigo.Service.Admin.IService;
 using vigo.Service.DTO.Admin.Room;
-using vigo.Service.DTO;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using vigo.Service.DTO.Admin.Service;
+using vigo.Service.DTO.Shared;
 
 namespace vigo.Admin.Controllers
 {

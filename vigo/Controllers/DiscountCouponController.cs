@@ -6,12 +6,13 @@ using vigo.Domain.Helper;
 using vigo.Service.Application.IServiceApp;
 using vigo.Service.Application.ServiceApp;
 using static System.Runtime.InteropServices.JavaScript.JSType;
-using vigo.Service.DTO;
+using vigo.Service.DTO.Shared;
 
 namespace vigo.Controllers
 {
     [Route("api/application/discount-coupons")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class DiscountCouponController : BaseController
     {
         private readonly IDiscountCouponAppService _discountCouponAppService;
@@ -23,7 +24,6 @@ namespace vigo.Controllers
         }
 
         [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetPaging(int page, int perPage, string? searchName)
         {
             try
@@ -37,6 +37,58 @@ namespace vigo.Controllers
                     TotalRecords = data.TotalRecords
                 };
                 return CreateResponse(data.Items, "get success", 200, options);
+            }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return CreateResponse(null, "get fail", 500, null);
+            }
+        }
+
+        [HttpGet("use-able-room")]
+        public async Task<IActionResult> GetAllUseAbleRoom(int couponId)
+        {
+            try
+            {
+                var data = await _discountCouponAppService.GetAllUseAbleRoom(couponId, User);
+                Option options = new Option()
+                {
+                    Name = "",
+                    PageSize = data.Count(),
+                    Page = 1,
+                    TotalRecords = data.Count()
+                };
+                return CreateResponse(data, "get success", 200, options);
+            }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return CreateResponse(null, "get fail", 500, null);
+            }
+        }
+
+        [HttpGet("use-able-coupon")]
+        public async Task<IActionResult> GetAllUseAble(int roomId)
+        {
+            try
+            {
+                var data = await _discountCouponAppService.GetAllUseAble(roomId, User);
+                Option options = new Option()
+                {
+                    Name = "",
+                    PageSize = data.Count(),
+                    Page = 1,
+                    TotalRecords = data.Count()
+                };
+                return CreateResponse(data, "get success", 200, options);
             }
             catch (CustomException e)
             {

@@ -18,6 +18,48 @@ namespace vigo.Infrastructure.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "bank",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Code = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Logo = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_bank", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "businessPartnerBank",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    OwnerName = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    BankId = table.Column<int>(type: "int", nullable: false),
+                    BusinessPartnerId = table.Column<int>(type: "int", nullable: false),
+                    BankNumber = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Status = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
+                    DeletedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_businessPartnerBank", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "discount",
                 columns: table => new
                 {
@@ -43,7 +85,6 @@ namespace vigo.Infrastructure.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     BusinessKey = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    DiscountApply = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
                     DeletedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: true)
@@ -416,7 +457,7 @@ namespace vigo.Infrastructure.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     DiscountPrice = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
                     TotalPrice = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    IsReceived = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                    Approved = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -526,7 +567,8 @@ namespace vigo.Infrastructure.Migrations
                     { 4, "quản lí giảm giá", "discount_manage" },
                     { 6, "phản hồi, đánh giá", "rating_manage" },
                     { 7, "quản lí phòng", "room_manage" },
-                    { 8, "quản lí dịch vụ", "service_manage" }
+                    { 8, "quản lí dịch vụ", "service_manage" },
+                    { 9, "quản lí tài khoản ngân hàng", "bank_manage" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -617,7 +659,13 @@ namespace vigo.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "bank");
+
+            migrationBuilder.DropTable(
                 name: "booking");
+
+            migrationBuilder.DropTable(
+                name: "businessPartnerBank");
 
             migrationBuilder.DropTable(
                 name: "discount");

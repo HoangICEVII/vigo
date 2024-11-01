@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using vigo.Service.DTO;
+using vigo.Service.DTO.Shared;
 
 namespace vigo.Service.EmailAuthenModule
 {

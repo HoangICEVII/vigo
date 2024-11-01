@@ -12,9 +12,9 @@ using vigo.Domain.AccountFolder;
 using vigo.Domain.Helper;
 using vigo.Service.Admin.IService;
 using vigo.Service.Admin.Service;
-using vigo.Service.DTO;
 using vigo.Service.DTO.Admin.Account;
 using vigo.Service.DTO.Application.Account;
+using vigo.Service.DTO.Shared;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace vigo.Admin.Controllers

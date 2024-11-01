@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using vigo.Domain.Entity;
 
-namespace vigo.Service.DTO
+namespace vigo.Service.DTO.Shared
 {
     public class DataTemp<T> where T : class
     {
-        public List<T> Data {  get; set; } = new List<T>();
+        public List<T> Data { get; set; } = new List<T>();
     }
 }

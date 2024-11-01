@@ -23,7 +23,6 @@ namespace vigo.Domain.Entity
         public string UserUsed { get; set; } = string.Empty;
         public string RoomApply {  get; set; } = string.Empty;
         public string BusinessKey {  get; set; } = string.Empty;
-        public DiscountApply DiscountApply { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
         public DateTime? DeletedDate { get; set; }

@@ -2,7 +2,7 @@
 using vigo.Controllers.Base;
 using vigo.Domain.Helper;
 using vigo.Service.Application.IServiceApp;
-using vigo.Service.DTO;
+using vigo.Service.DTO.Shared;
 
 namespace vigo.Controllers
 {

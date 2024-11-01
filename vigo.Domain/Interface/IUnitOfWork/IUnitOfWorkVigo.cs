@@ -34,6 +34,8 @@ namespace vigo.Domain.Interface.IUnitOfWork
         ITouristRepository Tourists { get; }
         ISystemEmployeeRepository SystemEmployees { get; }
         IEmailAuthenRepository EmailAuthens { get; }
+        IBankRepository Banks { get; }
+        IBusinessPartnerBankRepository BusinessPartnerBanks { get; }
 
         Task<int> Complete();
     }

@@ -9,6 +9,7 @@ namespace vigo.Service.Application.IServiceApp
 {
     public interface ISearchAppService
     {
-        Task<SearchResultDTO> ReturnSearchTyping(string searchInput);
+        Task<SearchResultDTO> ReturnSearchTyping(string? searchInput);
+        Task<SearchResultReturnDTO> ReturnSearchResult(string searchInput);
     }
 }

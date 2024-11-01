@@ -80,6 +80,7 @@ builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IRoomService, RoomService>();
 builder.Services.AddScoped<IServiceService, ServiceService>();
 builder.Services.AddScoped<IRoomTypeService, RoomTypeService>();
+builder.Services.AddScoped<IBankService, BankService>();
 //builder.Services.AddScoped<ISystemEmployeeService, SystemEmployeeService>();
 //builder.Services.AddScoped<ITouristService, TouristService>();
 #endregion

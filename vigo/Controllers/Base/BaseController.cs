@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using vigo.Service.DTO;
+using vigo.Service.DTO.Shared;
 
 namespace vigo.Controllers.Base
 {

@@ -14,5 +14,6 @@ namespace vigo.Service.DTO.Application.Rating
         public int Rate { get; set; }
         public string Comment { get; set; } = string.Empty;
         public DateTime LastUpdatedDate { get; set; }
+        public bool UpdateAble {  get; set; } 
     }
 }

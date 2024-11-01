@@ -12,7 +12,7 @@ using vigo.Infrastructure.DBContext;
 namespace vigo.Infrastructure.Migrations
 {
     [DbContext(typeof(VigoDatabaseContext))]
-    [Migration("20241031161214_vigo")]
+    [Migration("20241101153122_vigo")]
     partial class vigo
     {
         /// <inheritdoc />
@@ -186,7 +186,38 @@ namespace vigo.Infrastructure.Migrations
                             Id = 8,
                             Name = "quản lí dịch vụ",
                             RoleLabel = "service_manage"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "quản lí tài khoản ngân hàng",
+                            RoleLabel = "bank_manage"
                         });
+                });
+
+            modelBuilder.Entity("vigo.Domain.Entity.Bank", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Logo")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("bank", (string)null);
                 });
 
             modelBuilder.Entity("vigo.Domain.Entity.Booking", b =>
@@ -196,6 +227,9 @@ namespace vigo.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Approved")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime>("CheckInDate")
                         .HasColumnType("TIMESTAMP");
@@ -212,9 +246,6 @@ namespace vigo.Infrastructure.Migrations
 
                     b.Property<decimal>("DiscountPrice")
                         .HasColumnType("decimal(65,30)");
-
-                    b.Property<bool>("IsReceived")
-                        .HasColumnType("tinyint(1)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(65,30)");
@@ -235,6 +266,45 @@ namespace vigo.Infrastructure.Migrations
                     b.HasIndex("TouristId");
 
                     b.ToTable("booking", (string)null);
+                });
+
+            modelBuilder.Entity("vigo.Domain.Entity.BusinessPartnerBank", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BankId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("BankNumber")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("BusinessPartnerId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("TIMESTAMP");
+
+                    b.Property<DateTime?>("DeletedDate")
+                        .HasColumnType("TIMESTAMP");
+
+                    b.Property<string>("OwnerName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("TIMESTAMP");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("businessPartnerBank", (string)null);
                 });
 
             modelBuilder.Entity("vigo.Domain.Entity.DiscountCoupon", b =>
@@ -258,9 +328,6 @@ namespace vigo.Infrastructure.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("longtext");
-
-                    b.Property<int>("DiscountApply")
-                        .HasColumnType("int");
 
                     b.Property<string>("DiscountCode")
                         .IsRequired()
