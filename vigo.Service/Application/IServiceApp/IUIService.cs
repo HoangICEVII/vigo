@@ -13,7 +13,7 @@ namespace vigo.Service.Application.IServiceApp
     public interface IUIService
     {
         Task<List<VisitProvinceDTO>> GetVisitProvince();
-        Task<List<ProvinceShortDTO>> GetPopularVisit();
+        Task<List<RecommendPlaceDTO>> GetPopularVisit();
         Task<List<BusinessPartnerShortDTO>> GetAllBusinessPartnerShort();
     }
 }

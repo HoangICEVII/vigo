@@ -44,7 +44,7 @@ namespace vigo.Service.Application.ServiceApp
                     FullName = tourist.FullName,
                     LastUpdatedDate = item.LastUpdatedDate,
                     Id = item.Id,
-                    Rate = item.Rate,
+                    Rate = item.Star,
                     UpdateAble = item.TouristId.Equals(infoId) ? true : false
                 });
             }
@@ -61,7 +61,7 @@ namespace vigo.Service.Application.ServiceApp
                 DeletedDate = null,
                 RoomId = dto.RoomId,
                 LastUpdatedDate = DateNow,
-                Rate = dto.Rate,
+                Star = dto.Rate,
                 Status = false,
                 TouristId = info,
             };

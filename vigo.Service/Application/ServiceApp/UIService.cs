@@ -10,6 +10,7 @@ using vigo.Domain.Interface.IUnitOfWork;
 using vigo.Domain.User;
 using vigo.Service.Application.IServiceApp;
 using vigo.Service.DTO.Admin.Account;
+using vigo.Service.DTO.Application.Room;
 using vigo.Service.DTO.Application.Search;
 using vigo.Service.DTO.Application.UI;
 
@@ -35,43 +36,46 @@ namespace vigo.Service.Application.ServiceApp
             return _mapper.Map<List<BusinessPartnerShortDTO>>((await _unitOfWorkVigo.BusinessPartners.GetAll(conditions)).Take(12));
         }
 
-        public async Task<List<ProvinceShortDTO>> GetPopularVisit()
+        public async Task<List<RecommendPlaceDTO>> GetPopularVisit()
         {
-            List<ProvinceShortDTO> result = new List<ProvinceShortDTO>();
-            List<string> Ids = new List<string>()
+            List<string> provinceIds = new List<string>()
             {
-                "01","79","48","77","92","94","31","25","36","73"
+                "79","48","01","77","92"
             };
-            var data = await _unitOfWorkVigo.Provinces.GetAll(null);
-            foreach (var item in Ids) {
-                int count = 0;
-                var temp = data.Where(e => e.Id.Equals(item)).FirstOrDefault();
-                List<Expression<Func<BusinessPartner, bool>>> conditions = new List<Expression<Func<BusinessPartner, bool>>>()
+            List<RecommendPlaceDTO> result = new List<RecommendPlaceDTO>();
+            foreach (string provinceId in provinceIds)
+            {
+                RecommendPlaceDTO temp = new RecommendPlaceDTO();
+                var province = await _unitOfWorkVigo.Provinces.GetDetailBy(e => e.Id.Equals(provinceId));
+                temp.Name = province!.Name;
+                List<Expression<Func<Room, bool>>> conditions = new List<Expression<Func<Room, bool>>>()
                 {
-                    e => e.ProvinceId.Equals(item)
+                    e => e.DeletedDate == null
                 };
-                var bps = await _unitOfWorkVigo.BusinessPartners.GetAll(conditions);
-                foreach(var bp in bps)
-                {
-                    List<Expression<Func<Room, bool>>> conditions2 = new List<Expression<Func<Room, bool>>>()
-                    {
-                        e => e.BusinessPartnerId == bp.Id
-                    };
-                    count += (await _unitOfWorkVigo.Rooms.GetAll(conditions2)).Count();
-                }
-                result.Add(new ProvinceShortDTO()
-                {
-                    Image = temp!.Image,
-                    Name = temp.Name,
-                    RoomNumber = count
-                });
+                temp.Rooms = _mapper.Map<List<RoomAppDTO>>((await _unitOfWorkVigo.Rooms.GetPaging(conditions, null, e => e.Star, null, 1, 6)).Items);
+                result.Add(temp);
             }
             return result;
         }
 
         public async Task<List<VisitProvinceDTO>> GetVisitProvince()
         {
-            return _mapper.Map<List<VisitProvinceDTO>>(await _unitOfWorkVigo.Provinces.GetAll(null));
+            var data = await _unitOfWorkVigo.Provinces.GetAll(null);
+            List<VisitProvinceDTO> result = new List<VisitProvinceDTO>();
+            foreach (var province in data) {
+                List<Expression<Func<Room, bool>>> conditions = new List<Expression<Func<Room, bool>>>()
+                {
+                    e => e.ProvinceId.Equals(province.Id)
+                };
+                result.Add(new VisitProvinceDTO()
+                {
+                    Id = province.Id,
+                    Name = province.Name,
+                    Image = province.Image,
+                    RoomNumber = (await _unitOfWorkVigo.Rooms.GetAll(conditions)).Count()
+                });
+            }
+            return result;
         }
     }
 }

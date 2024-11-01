@@ -14,7 +14,7 @@ namespace vigo.Service.DTO.Application.Room
         public string Thumbnail { get; set; } = string.Empty;
         public decimal Price { get; set; }
         public int Avaiable { get; set; }
-        public int DefaultDiscount { get; set; }
+        public decimal DefaultDiscount { get; set; }
         public string Address { get; set; } = string.Empty;
     }
 }

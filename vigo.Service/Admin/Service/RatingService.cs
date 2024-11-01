@@ -14,6 +14,7 @@ using vigo.Domain.User;
 using vigo.Service.Admin.IService;
 using vigo.Service.DTO.Admin.Account;
 using vigo.Service.DTO.Admin.Rating;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace vigo.Service.Admin.Service
 {
@@ -46,6 +47,19 @@ namespace vigo.Service.Admin.Service
                 if (!rating.UpdateComment.IsNullOrEmpty()) {
                     rating.Comment = rating.UpdateComment;
                 }
+
+                List<Expression<Func<Rating, bool>>> conditions = new List<Expression<Func<Rating, bool>>>()
+                {
+                    e => e.RoomId == rating.RoomId
+                };
+                var rates = await _unitOfWorkVigo.Ratings.GetAll(conditions);
+                var room = await _unitOfWorkVigo.Rooms.GetById(rating.RoomId);
+                decimal starTemp = rating.Star;
+                foreach (var rate in rates)
+                {
+                    starTemp += rate.Star;
+                }
+                room.Star = Math.Round(starTemp/(rates.Count() + 1), 1);
             }
             await _unitOfWorkVigo.Complete();
         }

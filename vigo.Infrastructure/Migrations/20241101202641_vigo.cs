@@ -413,8 +413,10 @@ namespace vigo.Infrastructure.Migrations
                     Price = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
                     Avaiable = table.Column<int>(type: "int", nullable: false),
                     RoomTypeId = table.Column<int>(type: "int", nullable: false),
+                    BookNumber = table.Column<int>(type: "int", nullable: false),
                     BusinessPartnerId = table.Column<int>(type: "int", nullable: false),
-                    DefaultDiscount = table.Column<int>(type: "int", nullable: false),
+                    DefaultDiscount = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Star = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
                     ProvinceId = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     DistrictId = table.Column<string>(type: "longtext", nullable: false)
@@ -506,7 +508,7 @@ namespace vigo.Infrastructure.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     TouristId = table.Column<int>(type: "int", nullable: false),
                     RoomId = table.Column<int>(type: "int", nullable: false),
-                    Rate = table.Column<int>(type: "int", nullable: false),
+                    Star = table.Column<int>(type: "int", nullable: false),
                     Comment = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     UpdateComment = table.Column<string>(type: "longtext", nullable: false)

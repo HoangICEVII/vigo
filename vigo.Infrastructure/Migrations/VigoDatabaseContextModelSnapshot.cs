@@ -454,10 +454,10 @@ namespace vigo.Infrastructure.Migrations
                     b.Property<DateTime>("LastUpdatedDate")
                         .HasColumnType("TIMESTAMP");
 
-                    b.Property<int>("Rate")
+                    b.Property<int>("RoomId")
                         .HasColumnType("int");
 
-                    b.Property<int>("RoomId")
+                    b.Property<int>("Star")
                         .HasColumnType("int");
 
                     b.Property<bool>("Status")
@@ -494,14 +494,17 @@ namespace vigo.Infrastructure.Migrations
                     b.Property<int>("Avaiable")
                         .HasColumnType("int");
 
+                    b.Property<int>("BookNumber")
+                        .HasColumnType("int");
+
                     b.Property<int>("BusinessPartnerId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("TIMESTAMP");
 
-                    b.Property<int>("DefaultDiscount")
-                        .HasColumnType("int");
+                    b.Property<decimal>("DefaultDiscount")
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<DateTime?>("DeletedDate")
                         .HasColumnType("TIMESTAMP");
@@ -527,6 +530,9 @@ namespace vigo.Infrastructure.Migrations
 
                     b.Property<int>("RoomTypeId")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("Star")
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("Thumbnail")
                         .IsRequired()
