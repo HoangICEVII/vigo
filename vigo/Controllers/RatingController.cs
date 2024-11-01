@@ -24,6 +24,7 @@ namespace vigo.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetRoomRating(int roomId)
         {
             try

@@ -27,7 +27,7 @@ namespace vigo.Service.Application.ServiceApp
 
         public async Task<List<RoomRatingDTO>> GetRoomRating(int roomId, ClaimsPrincipal user)
         {
-            int info = int.Parse(user.FindFirst("Info")!.Value);
+            int? infoId = user.FindFirst("InfoId") != null ? int.Parse(user.FindFirst("InfoId")!.Value) : null;
             List<Expression<Func<Rating, bool>>> conditions = new List<Expression<Func<Rating, bool>>>()
             {
                 e => e.RoomId == roomId,
@@ -44,7 +44,8 @@ namespace vigo.Service.Application.ServiceApp
                     FullName = tourist.FullName,
                     LastUpdatedDate = item.LastUpdatedDate,
                     Id = item.Id,
-                    Rate = item.Rate
+                    Rate = item.Rate,
+                    UpdateAble = item.TouristId.Equals(infoId) ? true : false
                 });
             }
             return result;

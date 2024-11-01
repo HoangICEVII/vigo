@@ -24,6 +24,7 @@ namespace vigo.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetPaging(int page, int perPage, string? searchName)
         {
             try
@@ -50,6 +51,7 @@ namespace vigo.Controllers
         }
 
         [HttpGet("use-able-room")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllUseAbleRoom(int couponId)
         {
             try
@@ -76,6 +78,7 @@ namespace vigo.Controllers
         }
 
         [HttpGet("use-able-coupon")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllUseAble(int roomId)
         {
             try

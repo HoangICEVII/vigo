@@ -81,7 +81,6 @@ namespace vigo.Controllers
         }
 
         [HttpPost("active-email/{token}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> ActiveEmail(string token)
         {
             try

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using vigo.Service.DTO.Admin.Account;
 using vigo.Service.DTO.Application.Search;
 using vigo.Service.DTO.Application.UI;
 
@@ -12,5 +14,6 @@ namespace vigo.Service.Application.IServiceApp
     {
         Task<List<VisitProvinceDTO>> GetVisitProvince();
         Task<List<ProvinceShortDTO>> GetPopularVisit();
+        Task<List<BusinessPartnerShortDTO>> GetAllBusinessPartnerShort();
     }
 }

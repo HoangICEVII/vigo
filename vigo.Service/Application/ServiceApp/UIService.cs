@@ -9,6 +9,7 @@ using vigo.Domain.Entity;
 using vigo.Domain.Interface.IUnitOfWork;
 using vigo.Domain.User;
 using vigo.Service.Application.IServiceApp;
+using vigo.Service.DTO.Admin.Account;
 using vigo.Service.DTO.Application.Search;
 using vigo.Service.DTO.Application.UI;
 
@@ -23,6 +24,15 @@ namespace vigo.Service.Application.ServiceApp
         {
             _unitOfWorkVigo = unitOfWorkVigo;
             _mapper = mapper;
+        }
+
+        public async Task<List<BusinessPartnerShortDTO>> GetAllBusinessPartnerShort()
+        {
+            List<Expression<Func<BusinessPartner, bool>>> conditions = new List<Expression<Func<BusinessPartner, bool>>>()
+            {
+                e => e.DeletedDate == null
+            };
+            return _mapper.Map<List<BusinessPartnerShortDTO>>((await _unitOfWorkVigo.BusinessPartners.GetAll(conditions)).Take(12));
         }
 
         public async Task<List<ProvinceShortDTO>> GetPopularVisit()

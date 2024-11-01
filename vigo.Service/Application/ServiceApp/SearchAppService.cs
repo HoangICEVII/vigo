@@ -123,7 +123,7 @@ namespace vigo.Service.Application.ServiceApp
                 {
                     e => e.Name.ToLower().Contains(searchInput!.ToLower())
                 };
-                    List<Expression<Func<BusinessPartner, bool>>> conditions2 = new List<Expression<Func<BusinessPartner, bool>>>()
+                List<Expression<Func<BusinessPartner, bool>>> conditions2 = new List<Expression<Func<BusinessPartner, bool>>>()
                 {
                     e => e.Name.ToLower().Contains(searchInput!.ToLower())
                 };
@@ -132,18 +132,28 @@ namespace vigo.Service.Application.ServiceApp
                 var result = new SearchResultDTO();
                 foreach (var item in province)
                 {
+                    List<Expression<Func<Room, bool>>> con = new List<Expression<Func<Room, bool>>>()
+                    {
+                        e => e.ProvinceId.Equals(item.Id)
+                    };
                     result.ProvinceShortDTOs.Add(new ProvinceShortDTO()
                     {
                         Name = item.Name,
-                        Image = item.Image
+                        Image = item.Image,
+                        RoomNumber = (await _unitOfWorkVigo.Rooms.GetAll(con)).Count()
                     });
                 }
                 foreach (var item in business)
                 {
+                    List<Expression<Func<Room, bool>>> con = new List<Expression<Func<Room, bool>>>()
+                    {
+                        e => e.BusinessPartnerId == item.Id
+                    };
                     result.BPShortDTOs.Add(new BPShortDTO()
                     {
                         Name = item.Name,
-                        Logo = item.Logo
+                        Logo = item.Logo,
+                        RoomNumber = (await _unitOfWorkVigo.Rooms.GetAll(con)).Count()
                     });
                 }
                 return result;
@@ -154,10 +164,15 @@ namespace vigo.Service.Application.ServiceApp
                 var province = await _unitOfWorkVigo.Provinces.GetAll(null);
                 foreach (var item in province)
                 {
+                    List<Expression<Func<Room, bool>>> con = new List<Expression<Func<Room, bool>>>()
+                    {
+                        e => e.ProvinceId.Equals(item.Id)
+                    };
                     result.ProvinceShortDTOs.Add(new ProvinceShortDTO()
                     {
                         Name = item.Name,
-                        Image = item.Image
+                        Image = item.Image,
+                        RoomNumber = (await _unitOfWorkVigo.Rooms.GetAll(con)).Count()
                     });
                 }
                 return result;

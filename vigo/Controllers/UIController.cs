@@ -38,6 +38,32 @@ namespace vigo.Controllers
             }
         }
 
+        [HttpGet("business-partner")]
+        public async Task<IActionResult> GetAllBusinessPartnerShort()
+        {
+            try
+            {
+                var data = await _UIService.GetAllBusinessPartnerShort();
+                Option options = new Option()
+                {
+                    Name = "",
+                    Page = 1,
+                    PageSize = data.Count(),
+                    TotalRecords = data.Count()
+                };
+                return CreateResponse(data, "get success", 200, options);
+            }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return CreateResponse(null, "get fail", 500, null);
+            }
+        }
+
         [HttpGet("get-province")]
         public async Task<IActionResult> GetAllProvince()
         {
