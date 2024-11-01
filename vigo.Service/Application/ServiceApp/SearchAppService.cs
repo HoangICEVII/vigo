@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -116,15 +117,15 @@ namespace vigo.Service.Application.ServiceApp
 
         public async Task<SearchResultDTO> ReturnSearchTyping(string? searchInput)
         {
-            if (searchInput != null)
+            if (!searchInput.IsNullOrEmpty())
             {
                 List<Expression<Func<Province, bool>>> conditions = new List<Expression<Func<Province, bool>>>()
                 {
-                    e => e.Name.ToLower().Contains(searchInput.ToLower())
+                    e => e.Name.ToLower().Contains(searchInput!.ToLower())
                 };
                     List<Expression<Func<BusinessPartner, bool>>> conditions2 = new List<Expression<Func<BusinessPartner, bool>>>()
                 {
-                    e => e.Name.ToLower().Contains(searchInput.ToLower())
+                    e => e.Name.ToLower().Contains(searchInput!.ToLower())
                 };
                 var province = await _unitOfWorkVigo.Provinces.GetAll(conditions);
                 var business = await _unitOfWorkVigo.BusinessPartners.GetAll(conditions2);
