@@ -25,7 +25,7 @@ namespace vigo.Infrastructure.Repository
             {
                 throw new Exception("user not found");
             }
-            if (data.UserType == "tourist" && !data.EmailActive)
+            if (data.UserType == "Tourist" && !data.EmailActive)
             {
                 throw new CustomException("Tài khoản chưa xác thực email");
             }

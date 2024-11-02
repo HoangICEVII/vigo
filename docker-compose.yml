@@ -67,7 +67,22 @@ services:
       - DB_USER=root
       - DB_PASSWORD=123456
       - ASPNETCORE_URLS=http://+:80
-
+  spring-app:
+    build:
+      context: ./Pro4EmailSend
+      dockerfile: Dockerfile
+    container_name: spring-app
+    networks:
+      - backend
+    depends_on:
+      - rabbitmq
+    environment:
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: admin
+      SPRING_RABBITMQ_PASSWORD: admin
+    ports:
+      - "2004:8080"
 volumes:
   vigo_volume:
     driver: local

@@ -10,6 +10,7 @@ using vigo.Infrastructure.DBContext;
 using vigo.Infrastructure.UnitOfWork;
 using vigo.Service.Application.IServiceApp;
 using vigo.Service.Application.ServiceApp;
+using vigo.Service.EmailAuthenModule;
 using vigo.Service.Helper;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -127,4 +128,7 @@ app.UseStaticFiles(new StaticFileOptions
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
+var temp = EmailAuthenProducer.Instance;
+
 app.Run();

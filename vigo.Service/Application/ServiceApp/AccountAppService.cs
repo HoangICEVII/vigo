@@ -78,7 +78,7 @@ namespace vigo.Service.Application.ServiceApp
                 Password = hashedPassword,
                 EmailActive = false,
                 RoleId = 2,
-                UserType = "SystemEmployee",
+                UserType = "Tourist",
                 Salt = salt
             };
             _unitOfWorkVigo.Accounts.Create(account);
