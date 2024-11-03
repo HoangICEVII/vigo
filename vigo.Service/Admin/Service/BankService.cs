@@ -84,6 +84,7 @@ namespace vigo.Service.Admin.Service
                 Status = data.Status,
                 UpdatedDate = data.UpdatedDate,
                 OwnerName = data.OwnerName,
+                Logo = (await _unitOfWorkVigo.Banks.GetById(data.BankId)).Name,
                 BankName = (await _unitOfWorkVigo.Banks.GetById(data.BankId)).Name
             };
         }
@@ -125,6 +126,7 @@ namespace vigo.Service.Admin.Service
                     Id = item.Id,
                     Status = item.Status,
                     OwnerName = item.OwnerName,
+                    Logo = (await _unitOfWorkVigo.Banks.GetById(item.BankId)).Name,
                     UpdatedDate = item.UpdatedDate
                 });
             }
