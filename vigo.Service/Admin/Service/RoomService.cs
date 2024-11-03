@@ -124,6 +124,8 @@ namespace vigo.Service.Admin.Service
             }
             var room = await _unitOfWorkVigo.Rooms.GetById(id);
             var result = _mapper.Map<RoomDetailDTO>(room);
+            result.Province = (await _unitOfWorkVigo.Provinces.GetDetailBy(e => e.Id.Equals(room.ProvinceId)))!.Name;
+            result.District = (await _unitOfWorkVigo.Districts.GetDetailBy(e => e.Id.Equals(room.DistrictId)))!.Name;
             List<Expression<Func<RoomServiceR, bool>>> con = new List<Expression<Func<RoomServiceR, bool>>>()
             {
                 e => e.RoomId == result.Id

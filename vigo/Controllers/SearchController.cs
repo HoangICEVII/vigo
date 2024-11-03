@@ -44,7 +44,7 @@ namespace vigo.Controllers
             try
             {
                 var data = await _searchAppService.ReturnSearchResult(searchInput);
-                return CreateResponse(data, "get success", 200, null);
+                return CreateResponse(data.BusinessPartnerDTOs, "get success", 200, null);
             }
             catch (CustomException e)
             {

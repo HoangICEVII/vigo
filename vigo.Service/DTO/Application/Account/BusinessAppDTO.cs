@@ -13,6 +13,6 @@ namespace vigo.Service.DTO.Application.Account
         public string PhoneNumber { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;
         public string Logo { get; set; } = string.Empty;
-        public List<RoomAppDTO> RoomAppDTOs = new List<RoomAppDTO>();
+        public List<RoomAppDTO> RoomAppDTOs { get; set; } = new List<RoomAppDTO>();
     }
 }

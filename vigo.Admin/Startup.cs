@@ -137,19 +137,6 @@ namespace vigo.Admin
                                 district.ProvinceId = province.Id;
                             }
                             _vigoContext.Districts.AddRange(dataD.Data);
-
-                            foreach (District district in dataD.Data)
-                            {
-                                string urlS = $"https://esgoo.net/api-tinhthanh/3/{district.Id}.htm";
-                                HttpResponseMessage responseS = await client.GetAsync(urlS);
-                                string responseBodyS = await responseS.Content.ReadAsStringAsync();
-                                DataTemp<Street> dataS = JsonConvert.DeserializeObject<DataTemp<Street>>(responseBodyS);
-                                foreach(var street in dataS.Data)
-                                {
-                                    street.DistrictId = district.Id;
-                                }
-                                _vigoContext.Streets.AddRange(dataS.Data);
-                            }
                         }
                         _vigoContext.SaveChanges();
                     }

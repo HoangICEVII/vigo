@@ -32,7 +32,6 @@ namespace vigo.Infrastructure.UnitOfWork
         private Lazy<ISystemEmployeeRepository> _systemEmployees;
         private Lazy<ITouristRepository> _tourists;
         private Lazy<IRoomRepository> _rooms;
-        private Lazy<IStreetRepository> _streets;
         private Lazy<IEmailAuthenRepository> _emailAuthens;
         private Lazy<IBankRepository> _banks;
         private Lazy<IBusinessPartnerBankRepository> _businessPartnerBank;
@@ -55,7 +54,6 @@ namespace vigo.Infrastructure.UnitOfWork
         public ISystemEmployeeRepository SystemEmployees => _systemEmployees.Value;
         public ITouristRepository Tourists => _tourists.Value;
         public IRoomRepository Rooms => _rooms.Value;
-        public IStreetRepository Streets => _streets.Value;
         public IEmailAuthenRepository EmailAuthens => _emailAuthens.Value;
         public IBankRepository Banks => _banks.Value;
         public IBusinessPartnerBankRepository BusinessPartnerBanks => _businessPartnerBank.Value;
@@ -86,7 +84,6 @@ namespace vigo.Infrastructure.UnitOfWork
             _systemEmployees = new Lazy<ISystemEmployeeRepository>(() => new SystemEmployeeRepository(_context));
             _tourists = new Lazy<ITouristRepository>(() => new TouristRepository(_context));
             _rooms = new Lazy<IRoomRepository>(() => new RoomRepository(_context));
-            _streets = new Lazy<IStreetRepository>(() => new StreetRepository(_context));
 
             _emailAuthens = new Lazy<IEmailAuthenRepository>(() => new EmailAuthenRepository(_context));
             _banks = new Lazy<IBankRepository>(() => new BankRepository(_context));

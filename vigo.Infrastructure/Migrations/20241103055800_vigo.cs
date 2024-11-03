@@ -244,28 +244,6 @@ namespace vigo.Infrastructure.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "street",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Name = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    DistrictId = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_street", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_street_district_DistrictId",
-                        column: x => x.DistrictId,
-                        principalTable: "district",
-                        principalColumn: "Id");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "businessPartner",
                 columns: table => new
                 {
@@ -640,11 +618,6 @@ namespace vigo.Infrastructure.Migrations
                 column: "ServiceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_street_DistrictId",
-                table: "street",
-                column: "DistrictId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_systemEmployee_AccountId",
                 table: "systemEmployee",
                 column: "AccountId",
@@ -673,6 +646,9 @@ namespace vigo.Infrastructure.Migrations
                 name: "discount");
 
             migrationBuilder.DropTable(
+                name: "district");
+
+            migrationBuilder.DropTable(
                 name: "emailAuthen");
 
             migrationBuilder.DropTable(
@@ -688,10 +664,10 @@ namespace vigo.Infrastructure.Migrations
                 name: "roomService");
 
             migrationBuilder.DropTable(
-                name: "street");
+                name: "systemEmployee");
 
             migrationBuilder.DropTable(
-                name: "systemEmployee");
+                name: "province");
 
             migrationBuilder.DropTable(
                 name: "tourist");
@@ -703,16 +679,10 @@ namespace vigo.Infrastructure.Migrations
                 name: "service");
 
             migrationBuilder.DropTable(
-                name: "district");
-
-            migrationBuilder.DropTable(
                 name: "businessPartner");
 
             migrationBuilder.DropTable(
                 name: "roomType");
-
-            migrationBuilder.DropTable(
-                name: "province");
 
             migrationBuilder.DropTable(
                 name: "account");

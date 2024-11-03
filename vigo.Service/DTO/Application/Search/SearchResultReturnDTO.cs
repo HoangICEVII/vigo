@@ -10,6 +10,6 @@ namespace vigo.Service.DTO.Application.Search
 {
     public class SearchResultReturnDTO
     {
-        public List<BusinessAppDTO> BusinessPartnerDTOs = new List<BusinessAppDTO>();
+        public List<BusinessAppDTO> BusinessPartnerDTOs { get; set; } = new List<BusinessAppDTO>();
     }
 }

@@ -35,7 +35,7 @@ namespace vigo.Service.Application.ServiceApp
                 e => e.Name.ToLower().Contains(searchInput!.ToLower())
             };
             var province = await _unitOfWorkVigo.Provinces.GetAll(conditions);
-            if (province.Count() != 0) {
+            if (province.Count() > 0.1m) {
                 SearchResultReturnDTO result = new SearchResultReturnDTO();
                 foreach (var item in province)
                 {

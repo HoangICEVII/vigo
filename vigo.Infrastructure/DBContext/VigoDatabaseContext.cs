@@ -28,7 +28,6 @@ namespace vigo.Infrastructure.DBContext
         public DbSet<BusinessPartner> BusinessPartners { get; set; }
         public DbSet<SystemEmployee> SystemEmployees { get; set; }
         public DbSet<Tourist> Tourists { get; set; }
-        public DbSet<Street> Streets { get; set; }
 
         public VigoDatabaseContext(DbContextOptions<VigoDatabaseContext> options) : base(options)
         {
@@ -61,7 +60,6 @@ namespace vigo.Infrastructure.DBContext
 
             modelBuilder.ApplyConfiguration(new SystemEmployeeConfiguration());
             modelBuilder.ApplyConfiguration(new TouristConfiguration());
-            modelBuilder.ApplyConfiguration(new StreetConfiguration());
 
             modelBuilder.ApplyConfiguration(new EmailAuthenConfiguration());
             modelBuilder.ApplyConfiguration(new BankConfiguration());

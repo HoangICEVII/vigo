@@ -637,26 +637,6 @@ namespace vigo.Infrastructure.Migrations
                     b.ToTable("service", (string)null);
                 });
 
-            modelBuilder.Entity("vigo.Domain.Entity.Street", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("DistrictId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DistrictId");
-
-                    b.ToTable("street", (string)null);
-                });
-
             modelBuilder.Entity("vigo.Domain.User.BusinessPartner", b =>
                 {
                     b.Property<int>("Id")
@@ -926,15 +906,6 @@ namespace vigo.Infrastructure.Migrations
                     b.HasOne("vigo.Domain.Entity.ServiceR", null)
                         .WithMany()
                         .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("vigo.Domain.Entity.Street", b =>
-                {
-                    b.HasOne("vigo.Domain.Entity.District", null)
-                        .WithMany()
-                        .HasForeignKey("DistrictId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
