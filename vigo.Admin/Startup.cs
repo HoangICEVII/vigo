@@ -28,6 +28,7 @@ namespace vigo.Admin
             {
                 try
                 {
+                    Thread.Sleep(1000);
                     using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
                     {
                         var dbContext = scope.ServiceProvider.GetRequiredService<VigoDatabaseContext>();
@@ -38,6 +39,10 @@ namespace vigo.Admin
                                 dbContext.Database.Migrate();
                             }
                             conActive = true;
+                        }
+                        else
+                        {
+                            dbContext.Database.Migrate();
                         }
                     }
                 }
