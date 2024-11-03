@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +31,7 @@ namespace vigo.Service.Admin.Service
         {
             int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
             var role = await _unitOfWorkVigo.Roles.GetById(roleId);
-            if (!role.Permission.Split(",").Contains("discount_manage"))
+            if (!role.Permission.Split(",").Contains("discount_manage") || user.FindFirst("BusinessKey")!.Value.IsNullOrEmpty())
             {
                 throw new CustomException("không có quyền");
             }
@@ -121,6 +122,18 @@ namespace vigo.Service.Admin.Service
                                                                        perPage,
                                                                        sortDown);
             return new PagedResultCustom<DiscountCouponDTO>(_mapper.Map<List<DiscountCouponDTO>>(data.Items), data.TotalRecords, data.PageIndex, data.PageSize);
+        }
+
+        public async Task<List<RoomShortDTO>> GetRoomApplyDiscount(ClaimsPrincipal user)
+        {
+            int infoId = int.Parse(user.FindFirst("InfoId")!.Value);
+            List<Expression<Func<Room, bool>>> conditions = new List<Expression<Func<Room, bool>>>()
+            {
+                e => e.DeletedDate == null,
+                e => e.BusinessPartnerId == infoId
+            };
+            var data = await _unitOfWorkVigo.Rooms.GetAll(conditions);
+            return _mapper.Map<List<RoomShortDTO>>(data);
         }
 
         public async Task Update(DiscountCouponUpdateDTO dto, ClaimsPrincipal user)

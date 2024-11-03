@@ -50,6 +50,32 @@ namespace vigo.Admin.Controllers
             }
         }
 
+        [HttpGet("get-rooms")]
+        public async Task<IActionResult> GetRoomApplyDiscount()
+        {
+            try
+            {
+                var data = await _discountCouponService.GetRoomApplyDiscount(User);
+                Option options = new Option()
+                {
+                    Name = "",
+                    PageSize = data.Count(),
+                    Page = 1,
+                    TotalRecords = data.Count()
+                };
+                return CreateResponse(data, "get success", 200, options);
+            }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return CreateResponse(null, "get fail", 500, null);
+            }
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetDetail(int id)
         {

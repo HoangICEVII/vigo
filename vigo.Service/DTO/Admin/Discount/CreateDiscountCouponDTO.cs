@@ -17,6 +17,5 @@ namespace vigo.Service.DTO.Admin.Discount
         public DateTime EndDate { get; set; }
         public int DiscountMax { get; set; }
         public List<int> RoomApplyIds { get; set; } = new List<int>();
-        public int ShowRoomId { get; set; }
     }
 }
