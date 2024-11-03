@@ -96,6 +96,7 @@ namespace vigo.Service.Admin.Service
             foreach (Booking item in data) {
                 var room = await _unitOfWorkVigo.Rooms.GetById(item.RoomId);
                 room.BookNumber += 1;
+                room.Avaiable -=1;
                 item.Approved = true;
             }
             await _unitOfWorkVigo.Complete();

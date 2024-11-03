@@ -18,7 +18,7 @@ namespace vigo.Domain.Entity
         public int BookNumber { get; set; }
         public int BusinessPartnerId { get; set; }
         public decimal DefaultDiscount { get; set; }
-        public decimal Star {  get; set; }
+        public decimal Star { get; set; } = 5;
         public string ProvinceId {  get; set; } = string.Empty;
         public string DistrictId {  get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;

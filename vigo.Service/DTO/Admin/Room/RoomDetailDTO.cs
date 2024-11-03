@@ -18,6 +18,7 @@ namespace vigo.Service.DTO.Admin.Room
         public int RoomTypeId { get; set; }
         public string RoomType { get; set; } = string.Empty;
         public int BusinessPartnerId { get; set; }
+        public string BusinessPartnerName { get; set; } = string.Empty;
         public decimal Star { get; set; }
         public decimal DefaultDiscount { get; set; }
         public string ProvinceId { get; set; } = string.Empty;

@@ -122,7 +122,7 @@ namespace vigo.Admin
                         string urlP = "https://esgoo.net/api-tinhthanh/1/0.htm";
                         HttpResponseMessage responseP = await client.GetAsync(urlP);
                         string responseBodyP = await responseP.Content.ReadAsStringAsync();
-                        DataTemp<Province> dataP = JsonConvert.DeserializeObject<DataTemp<Province>>(responseBodyP);
+                        DataTemp<Province> dataP = JsonConvert.DeserializeObject<DataTemp<Province>>(responseBodyP)!;
                         _vigoContext.Provinces.AddRange(dataP.Data);
                         Random r = new Random();
                         foreach (Province province in dataP.Data)
@@ -131,13 +131,19 @@ namespace vigo.Admin
                             string urlD = $"https://esgoo.net/api-tinhthanh/2/{province.Id}.htm";
                             HttpResponseMessage responseD = await client.GetAsync(urlD);
                             string responseBodyD = await responseD.Content.ReadAsStringAsync();
-                            DataTemp<District> dataD = JsonConvert.DeserializeObject<DataTemp<District>>(responseBodyD);
-                            foreach (var district in dataD.Data)
+                            DataTemp<District> dataD = JsonConvert.DeserializeObject<DataTemp<District>>(responseBodyD)!;
+                            foreach (var district in dataD!.Data)
                             {
                                 district.ProvinceId = province.Id;
                             }
                             _vigoContext.Districts.AddRange(dataD.Data);
                         }
+
+                        string bankUrl = "https://api.vietqr.io/v2/banks";
+                        HttpResponseMessage responseBank = await client.GetAsync(bankUrl);
+                        string responseBodyBank = await responseBank.Content.ReadAsStringAsync();
+                        DataTemp<Bank> dataBank = JsonConvert.DeserializeObject<DataTemp<Bank>>(responseBodyBank)!;
+                        _vigoContext.Banks.AddRange(dataBank.Data);
                         _vigoContext.SaveChanges();
                     }
                 }

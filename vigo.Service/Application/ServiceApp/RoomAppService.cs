@@ -65,6 +65,7 @@ namespace vigo.Service.Application.ServiceApp
                     result.Images.Add(temp);
                 }
             }
+            result.BusinessPartnerName = (await _unitOfWorkVigo.BusinessPartners.GetById(result.BusinessPartnerId)).Name;
             return result;
         }
 
@@ -93,13 +94,34 @@ namespace vigo.Service.Application.ServiceApp
             if (provinceId != null)
             {
                 var province = await _unitOfWorkVigo.Provinces.GetDetailBy(e => e.Id.Equals(provinceId));
+                List<RoomAppDTO> temp = new List<RoomAppDTO>();
+                foreach(var item in room)
+                {
+                    temp.Add(new RoomAppDTO()
+                    {
+                        ProvinceId = item.ProvinceId,
+                        DistrictId = item.DistrictId,
+                        Address = item.Address,
+                        Avaiable = item.Avaiable,
+                        DefaultDiscount = item.DefaultDiscount,
+                        Description = item.Description,
+                        District = (await _unitOfWorkVigo.Districts.GetDetailBy(e => e.Id.Equals(item.DistrictId)))!.Name,
+                        Name = item.Name,
+                        Id = item.Id,
+                        Price = item.Price,
+                        Province = (await _unitOfWorkVigo.Provinces.GetDetailBy(e => e.Id.Equals(item.ProvinceId)))!.Name,
+                        Star = item.Star,
+                        Thumbnail = item.Thumbnail
+                    });
+                }
+                
                 result.Items.Add(new ProvinceV2DTO()
                 {
                     Id = province!.Id,
                     Image = province.Image,
                     Name = province.Name,
                     RoomNumber = room.Count(),
-                    Rooms = _mapper.Map<List<RoomAppDTO>>(room)
+                    Rooms = temp
                 });
             }
             else
@@ -107,13 +129,31 @@ namespace vigo.Service.Application.ServiceApp
                 var province = await _unitOfWorkVigo.Provinces.GetAll(null);
                 foreach (var item in province) {
                     var roomTemp = room.Where(e => e.ProvinceId.Equals(item.Id)).ToList();
+                    List<RoomAppDTO> temp = new List<RoomAppDTO>();
+                    foreach (var aa in roomTemp)
+                    {
+                        temp.Add(new RoomAppDTO()
+                        {
+                            Address = aa.Address,
+                            Avaiable = aa.Avaiable,
+                            DefaultDiscount = aa.DefaultDiscount,
+                            Description = aa.Description,
+                            District = (await _unitOfWorkVigo.Districts.GetDetailBy(e => e.Id.Equals(aa.DistrictId)))!.Name,
+                            Name = aa.Name,
+                            Id = aa.Id,
+                            Price = aa.Price,
+                            Province = (await _unitOfWorkVigo.Provinces.GetDetailBy(e => e.Id.Equals(aa.ProvinceId)))!.Name,
+                            Star = aa.Star,
+                            Thumbnail = aa.Thumbnail
+                        });
+                    }
                     result.Items.Add(new ProvinceV2DTO()
                     {
                         Id = item.Id,
                         Image = item.Image,
                         Name = item.Name,
                         RoomNumber = roomTemp.Count(),
-                        Rooms = _mapper.Map<List<RoomAppDTO>>(roomTemp)
+                        Rooms = temp
                     });
                 }
             }

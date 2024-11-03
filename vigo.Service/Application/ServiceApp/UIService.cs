@@ -53,7 +53,28 @@ namespace vigo.Service.Application.ServiceApp
                     e => e.DeletedDate == null,
                     e => e.ProvinceId.Equals(provinceId),
                 };
-                temp.Rooms = _mapper.Map<List<RoomAppDTO>>((await _unitOfWorkVigo.Rooms.GetPaging(conditions, null, e => e.Star, null, 1, 6)).Items);
+                var ttt = (await _unitOfWorkVigo.Rooms.GetPaging(conditions, null, e => e.Star, null, 1, 4)).Items;
+                List<RoomAppDTO> ttemp = new List<RoomAppDTO>();
+                foreach (var aa in ttt)
+                {
+                    ttemp.Add(new RoomAppDTO()
+                    {
+                        ProvinceId = aa.ProvinceId,
+                        DistrictId = aa.DistrictId,
+                        Address = aa.Address,
+                        Avaiable = aa.Avaiable,
+                        DefaultDiscount = aa.DefaultDiscount,
+                        Description = aa.Description,
+                        District = (await _unitOfWorkVigo.Districts.GetDetailBy(e => e.Id.Equals(aa.DistrictId)))!.Name,
+                        Name = aa.Name,
+                        Id = aa.Id,
+                        Price = aa.Price,
+                        Province = (await _unitOfWorkVigo.Provinces.GetDetailBy(e => e.Id.Equals(aa.ProvinceId)))!.Name,
+                        Star = aa.Star,
+                        Thumbnail = aa.Thumbnail
+                    });
+                }
+                temp.Rooms = ttemp;
                 result.Add(temp);
             }
             return result;
@@ -76,6 +97,7 @@ namespace vigo.Service.Application.ServiceApp
                     RoomNumber = (await _unitOfWorkVigo.Rooms.GetAll(conditions)).Count()
                 });
             }
+            result = result.OrderByDescending(e => e.RoomNumber).ToList();
             return result;
         }
     }

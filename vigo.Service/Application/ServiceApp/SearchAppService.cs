@@ -28,14 +28,14 @@ namespace vigo.Service.Application.ServiceApp
             _mapper = mapper;
         }
 
-        public async Task<SearchResultReturnDTO> ReturnSearchResult(string? searchInput)
+        public async Task<SearchResultReturnDTO> ReturnSearchResult(string? searchInput, DateTime checkIn, DateTime checkOut, int? roomTypeId)
         {
             var conditions = searchInput.IsNullOrEmpty() ? null : new List<Expression<Func<Province, bool>>>()
             {
                 e => e.Name.ToLower().Contains(searchInput!.ToLower())
             };
             var province = await _unitOfWorkVigo.Provinces.GetAll(conditions);
-            if (province.Count() > 0.1m) {
+            if (province.Count() != 0) {
                 SearchResultReturnDTO result = new SearchResultReturnDTO();
                 foreach (var item in province)
                 {
@@ -51,6 +51,10 @@ namespace vigo.Service.Application.ServiceApp
                         {
                             e => e.BusinessPartnerId == businessPartner.Id
                         };
+                        if (roomTypeId != null)
+                        {
+                            conRoom.Add(e => e.RoomTypeId == roomTypeId);
+                        }
                         BusinessAppDTO businessAppDTO = new BusinessAppDTO();
                         businessAppDTO.Address = businessPartner.Address;
                         businessAppDTO.PhoneNumber = businessPartner.PhoneNumber;
@@ -59,17 +63,49 @@ namespace vigo.Service.Application.ServiceApp
                         var rooms = await _unitOfWorkVigo.Rooms.GetAll(conRoom);
                         foreach (var room in rooms)
                         {
-                            businessAppDTO.RoomAppDTOs.Add(new RoomAppDTO()
+                            if (room.Avaiable > 0)
                             {
-                                Id = room.Id,
-                                Name = room.Name,
-                                Address = room.Address,
-                                Avaiable = room.Avaiable,
-                                DefaultDiscount = room.DefaultDiscount,
-                                Description = room.Description,
-                                Price = room.Price,
-                                Thumbnail = room.Thumbnail
-                            });
+                                businessAppDTO.RoomAppDTOs.Add(new RoomAppDTO()
+                                {
+                                    Id = room.Id,
+                                    ProvinceId = room.ProvinceId,
+                                    DistrictId = room.DistrictId,
+                                    Name = room.Name,
+                                    Address = room.Address,
+                                    Avaiable = room.Avaiable,
+                                    DefaultDiscount = room.DefaultDiscount,
+                                    Description = room.Description,
+                                    Price = room.Price,
+                                    Star = room.Star,
+                                    Thumbnail = room.Thumbnail
+                                });
+                            }
+                            else
+                            {
+                                DateTime DateNow = DateTime.Now;
+                                List<Expression<Func<Booking, bool>>> bookCon = new List<Expression<Func<Booking, bool>>>()
+                                {
+                                    e => e.RoomId == room.Id,
+                                    e => e.CheckOutDate > DateNow,
+                                    e => e.CheckOutDate < checkIn
+                                };
+                                var booking = await _unitOfWorkVigo.Bookings.GetAll(bookCon);
+                                if (booking.Count() > 0 - room.Avaiable)
+                                {
+                                    businessAppDTO.RoomAppDTOs.Add(new RoomAppDTO()
+                                    {
+                                        Id = room.Id,
+                                        Name = room.Name,
+                                        Address = room.Address,
+                                        Avaiable = room.Avaiable,
+                                        DefaultDiscount = room.DefaultDiscount,
+                                        Description = room.Description,
+                                        Price = room.Price,
+                                        Star = room.Star,
+                                        Thumbnail = room.Thumbnail
+                                    });
+                                }
+                            }
                         }
                         result.BusinessPartnerDTOs.Add(businessAppDTO);
                     }

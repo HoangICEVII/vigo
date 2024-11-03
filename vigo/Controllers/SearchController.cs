@@ -39,11 +39,11 @@ namespace vigo.Controllers
         }
 
         [HttpGet("get-result")]
-        public async Task<IActionResult> ReturnSearchResult(string? searchInput)
+        public async Task<IActionResult> ReturnSearchResult(string? searchInput, DateTime checkIn, DateTime checkOut, int? roomTypeId)
         {
             try
             {
-                var data = await _searchAppService.ReturnSearchResult(searchInput);
+                var data = await _searchAppService.ReturnSearchResult(searchInput, checkIn, checkOut, roomTypeId);
                 return CreateResponse(data.BusinessPartnerDTOs, "get success", 200, null);
             }
             catch (CustomException e)

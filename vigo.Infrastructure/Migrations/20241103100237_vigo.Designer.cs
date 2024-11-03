@@ -12,7 +12,7 @@ using vigo.Infrastructure.DBContext;
 namespace vigo.Infrastructure.Migrations
 {
     [DbContext(typeof(VigoDatabaseContext))]
-    [Migration("20241103055800_vigo")]
+    [Migration("20241103100237_vigo")]
     partial class vigo
     {
         /// <inheritdoc />

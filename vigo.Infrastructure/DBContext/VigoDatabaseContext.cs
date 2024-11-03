@@ -28,6 +28,8 @@ namespace vigo.Infrastructure.DBContext
         public DbSet<BusinessPartner> BusinessPartners { get; set; }
         public DbSet<SystemEmployee> SystemEmployees { get; set; }
         public DbSet<Tourist> Tourists { get; set; }
+        public DbSet<BusinessPartnerBank> BusinessPartnerBanks { get; set; }
+        public DbSet<Bank> Banks { get; set; }
 
         public VigoDatabaseContext(DbContextOptions<VigoDatabaseContext> options) : base(options)
         {
