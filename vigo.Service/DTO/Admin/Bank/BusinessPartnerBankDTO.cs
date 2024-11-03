@@ -10,6 +10,7 @@ namespace vigo.Service.DTO.Admin.Bank
     {
         public int Id { get; set; }
         public string OwnerName { get; set; } = string.Empty;
+        public int BankId { get; set; }
         public string BankName { get; set; } = string.Empty;
         public string BankNumber { get; set; } = string.Empty;
         public string Logo {  get; set; } = string.Empty;
