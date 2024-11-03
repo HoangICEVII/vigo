@@ -85,7 +85,7 @@ namespace vigo.Service.Admin.Service
                 Status = data.Status,
                 UpdatedDate = data.UpdatedDate,
                 OwnerName = data.OwnerName,
-                Logo = (await _unitOfWorkVigo.Banks.GetById(data.BankId)).Name,
+                Logo = (await _unitOfWorkVigo.Banks.GetById(data.BankId)).Logo,
                 BankName = (await _unitOfWorkVigo.Banks.GetById(data.BankId)).Name
             };
         }
@@ -128,7 +128,7 @@ namespace vigo.Service.Admin.Service
                     BankId = item.BankId,
                     Status = item.Status,
                     OwnerName = item.OwnerName,
-                    Logo = (await _unitOfWorkVigo.Banks.GetById(item.BankId)).Name,
+                    Logo = (await _unitOfWorkVigo.Banks.GetById(item.BankId)).Logo,
                     UpdatedDate = item.UpdatedDate
                 });
             }
@@ -141,7 +141,8 @@ namespace vigo.Service.Admin.Service
             var data = await _unitOfWorkVigo.BusinessPartnerBanks.GetById(dto.Id);
             var checkUnique = await _unitOfWorkVigo.BusinessPartnerBanks.GetDetailBy(e => e.BankId == data.BankId &&
                                                                                           e.BusinessPartnerId == infoId &&
-                                                                                          e.BankNumber == dto.BankNumber);
+                                                                                          e.BankNumber == dto.BankNumber &&
+                                                                                          e.Id != dto.Id);
             if (checkUnique != null)
             {
                 throw new CustomException("tài khoản ngân hàng đã tồn tại");
