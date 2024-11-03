@@ -37,5 +37,24 @@ namespace vigo.Controllers
                 return CreateResponse(null, "get fail", 500, null);
             }
         }
+
+        [HttpGet("get-result")]
+        public async Task<IActionResult> ReturnSearchResult(string? searchInput)
+        {
+            try
+            {
+                var data = await _searchAppService.ReturnSearchResult(searchInput);
+                return CreateResponse(data, "get success", 200, null);
+            }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return CreateResponse(null, "get fail", 500, null);
+            }
+        }
     }
 }

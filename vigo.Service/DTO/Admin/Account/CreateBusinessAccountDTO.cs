@@ -13,7 +13,6 @@ namespace vigo.Service.DTO.Admin.Account
         public string Address { get; set; } = string.Empty;
         public string ProvinceId { get; set; } = string.Empty;
         public string DistrictId {  get; set; } = string.Empty;
-        public string StreetId { get; set; } = string.Empty;
         public string Logo { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;

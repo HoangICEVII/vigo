@@ -50,7 +50,8 @@ namespace vigo.Service.Application.ServiceApp
                 temp.Name = province!.Name;
                 List<Expression<Func<Room, bool>>> conditions = new List<Expression<Func<Room, bool>>>()
                 {
-                    e => e.DeletedDate == null
+                    e => e.DeletedDate == null,
+                    e => e.ProvinceId.Equals(provinceId),
                 };
                 temp.Rooms = _mapper.Map<List<RoomAppDTO>>((await _unitOfWorkVigo.Rooms.GetPaging(conditions, null, e => e.Star, null, 1, 6)).Items);
                 result.Add(temp);

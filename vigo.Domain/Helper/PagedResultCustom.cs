@@ -8,12 +8,12 @@ namespace vigo.Domain.Helper
 {
     public class PagedResultCustom<T>
     {
-        public IEnumerable<T> Items { get; }
+        public List<T> Items { get; }
         public int TotalRecords { get; }
         public int PageIndex { get; }
         public int PageSize { get; }
 
-        public PagedResultCustom(IEnumerable<T> items, int totalRecords, int pageIndex, int pageSize)
+        public PagedResultCustom(List<T> items, int totalRecords, int pageIndex, int pageSize)
         {
             Items = items;
             TotalRecords = totalRecords;

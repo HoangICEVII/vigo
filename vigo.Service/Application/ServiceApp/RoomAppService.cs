@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ using vigo.Service.Application.IServiceApp;
 using vigo.Service.DTO.Admin.Account;
 using vigo.Service.DTO.Admin.Room;
 using vigo.Service.DTO.Admin.Service;
+using vigo.Service.DTO.Application.Room;
 
 namespace vigo.Service.Application.ServiceApp
 {
@@ -66,45 +68,54 @@ namespace vigo.Service.Application.ServiceApp
             return result;
         }
 
-        public async Task<PagedResultCustom<RoomDTO>> GetPaging(int page, int perPage, int? roomTypeId, string? sortType, string? sortField, string? searchName)
+        public async Task<PagedResultCustom<ProvinceV2DTO>> GetPaging(int page, int perPage, int? roomTypeId, string? provinceId, string? districtId, int? star)
         {
             List<Expression<Func<Room, bool>>> conditions = new List<Expression<Func<Room, bool>>>()
             {
-                e => e.DeletedDate == null,
             };
             if (roomTypeId != null)
             {
                 conditions.Add(e => e.RoomTypeId == roomTypeId);
             }
-            if (searchName != null)
+            if (provinceId != null)
             {
-                conditions.Add(e => e.Name.ToLower().Contains(searchName.ToLower()));
+                conditions.Add(e => e.ProvinceId == provinceId);
             }
-            bool sortDown = false;
-            if (sortType != null && sortType.Equals("DESC"))
-            {
-                sortDown = true;
+            if (districtId != null) {
+                conditions.Add(e => e.DistrictId == districtId);
             }
-            var data = await _unitOfWorkVigo.Rooms.GetPaging(conditions,
-                                                             null,
-                                                             sortField != null && sortField.Equals("price") ? e => e.Price : null,
-                                                             sortField != null && sortField.Equals("createdDate") ? e => e.CreatedDate : null,
-                                                             page,
-                                                             perPage,
-                                                             sortDown);
-            var result = new PagedResultCustom<RoomDTO>(_mapper.Map<List<RoomDTO>>(data.Items), data.TotalRecords, data.PageIndex, data.PageSize);
-            foreach (var item in result.Items)
+            var room = await _unitOfWorkVigo.Rooms.GetAll(conditions);
+            if (star != null)
             {
-                List<Expression<Func<RoomServiceR, bool>>> con = new List<Expression<Func<RoomServiceR, bool>>>()
+                room = room.Where(e => Math.Floor(e.Star) == star || Math.Floor(e.Star + 0.5m) == star).ToList();
+            }
+            PagedResultCustom<ProvinceV2DTO> result = new PagedResultCustom<ProvinceV2DTO>(new List<ProvinceV2DTO>(), 0, 0, 0);
+            if (provinceId != null)
+            {
+                var province = await _unitOfWorkVigo.Provinces.GetDetailBy(e => e.Id.Equals(provinceId));
+                result.Items.Add(new ProvinceV2DTO()
                 {
-                    e => e.RoomId == item.Id,
-                };
-                var roomServices = await _unitOfWorkVigo.RoomServices.GetAll(con);
-                foreach (var service in roomServices)
-                {
-                    item.Services.Add(_mapper.Map<ServiceDTO>(await _unitOfWorkVigo.Services.GetById(service.ServiceId)));
+                    Id = province!.Id,
+                    Image = province.Image,
+                    Name = province.Name,
+                    RoomNumber = room.Count(),
+                    Rooms = _mapper.Map<List<RoomAppDTO>>(room)
+                });
+            }
+            else
+            {
+                var province = await _unitOfWorkVigo.Provinces.GetAll(null);
+                foreach (var item in province) {
+                    var roomTemp = room.Where(e => e.ProvinceId.Equals(item.Id)).ToList();
+                    result.Items.Add(new ProvinceV2DTO()
+                    {
+                        Id = item.Id,
+                        Image = item.Image,
+                        Name = item.Name,
+                        RoomNumber = roomTemp.Count(),
+                        Rooms = _mapper.Map<List<RoomAppDTO>>(roomTemp)
+                    });
                 }
-                item.BusinessPartner = _mapper.Map<BusinessPartnerShortDTO>(await _unitOfWorkVigo.BusinessPartners.GetById(item.BusinessPartnerId));
             }
             return result;
         }

@@ -28,11 +28,11 @@ namespace vigo.Service.Application.ServiceApp
             _mapper = mapper;
         }
 
-        public async Task<SearchResultReturnDTO> ReturnSearchResult(string searchInput)
+        public async Task<SearchResultReturnDTO> ReturnSearchResult(string? searchInput)
         {
-            List<Expression<Func<Province, bool>>> conditions = new List<Expression<Func<Province, bool>>>()
+            var conditions = searchInput.IsNullOrEmpty() ? null : new List<Expression<Func<Province, bool>>>()
             {
-                e => e.Name.ToLower().Contains(searchInput.ToLower())
+                e => e.Name.ToLower().Contains(searchInput!.ToLower())
             };
             var province = await _unitOfWorkVigo.Provinces.GetAll(conditions);
             if (province.Count() != 0) {
@@ -81,7 +81,7 @@ namespace vigo.Service.Application.ServiceApp
                 SearchResultReturnDTO result = new SearchResultReturnDTO();
                 List<Expression<Func<BusinessPartner, bool>>> con2 = new List<Expression<Func<BusinessPartner, bool>>>()
                 {
-                    e => e.Name.ToLower().Contains(searchInput.ToLower())
+                    e => e.Name.ToLower().Contains(searchInput!.ToLower())
                 };
                 var business = await _unitOfWorkVigo.BusinessPartners.GetAll(con2);
                 List<BusinessAppDTO> businessAppDTOs = new List<BusinessAppDTO>();

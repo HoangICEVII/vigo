@@ -16,6 +16,5 @@ namespace vigo.Service.DTO.Application.Account
         public string? Address { get; set; } = string.Empty;
         public string? PhoneNumber {  get; set; } = string.Empty;
         public string Avatar { get; set; } = string.Empty;
-        public bool Active { get; set; }
     }
 }

@@ -6,12 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using vigo.Domain.Helper;
 using vigo.Service.DTO.Admin.Room;
+using vigo.Service.DTO.Application.Room;
 
 namespace vigo.Service.Application.IServiceApp
 {
     public interface IRoomAppService
     {
-        Task<PagedResultCustom<RoomDTO>> GetPaging(int page, int perPage, int? roomTypeId, string? sortType, string? sortField, string? searchName);
+        Task<PagedResultCustom<ProvinceV2DTO>> GetPaging(int page, int perPage, int? roomTypeId, string? provinceId, string? districtId, int? star);
         Task<RoomDetailDTO> GetDetail(int id);
     }
 }

@@ -23,6 +23,7 @@ using vigo.Service.DTO.Application.Discount;
 using vigo.Service.DTO.Application.Rating;
 using vigo.Service.DTO.Application.UI;
 using vigo.Service.DTO.Shared;
+using vigo.Service.DTO.Application.Room;
 
 namespace vigo.Service.Helper
 {
@@ -47,6 +48,7 @@ namespace vigo.Service.Helper
             CreateMap<RoomType, RoomTypeDTO>();
             CreateMap<Room, RoomDetailDTO > ();
             CreateMap<Room, RoomDTO> ();
+            CreateMap<Room, RoomAppDTO>();
             CreateMap<RoomType, RoomTypeDTO>();
             CreateMap<ServiceR, ServiceDTO>();
             CreateMap<BusinessPartner, BusinessPartnerShortDTO>();
