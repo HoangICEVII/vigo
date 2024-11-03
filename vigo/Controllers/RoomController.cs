@@ -68,6 +68,32 @@ namespace vigo.Controllers
             }
         }
 
+        [HttpGet("related-room")]
+        public async Task<IActionResult> GetRelatedRoom(int businessPartnerId)
+        {
+            try
+            {
+                var data = await _roomAppService.GetRelatedRoom(businessPartnerId);
+                Option options = new Option()
+                {
+                    Name = "",
+                    PageSize = data.Count(),
+                    Page = 1,
+                    TotalRecords = data.Count()
+                };
+                return CreateResponse(data, "get success", 200, options);
+            }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return CreateResponse(null, "get fail", 500, null);
+            }
+        }
+
         [HttpGet("roomType/get-all")]
         public async Task<IActionResult> GetAll()
         {

@@ -159,5 +159,33 @@ namespace vigo.Service.Application.ServiceApp
             }
             return result;
         }
+
+        public async Task<List<RoomAppDTO>> GetRelatedRoom(int businessPartnerId)
+        {
+            List<Expression<Func<Room, bool>>> conditions = new List<Expression<Func<Room, bool>>>()
+            {
+                e => e.BusinessPartnerId == businessPartnerId
+            };
+            var rooms = await _unitOfWorkVigo.Rooms.GetPaging(conditions, null, e => e.Star, null, 1, 8, true);
+            List<RoomAppDTO> temp = new List<RoomAppDTO>();
+            foreach (var room in rooms.Items)
+            {
+                temp.Add(new RoomAppDTO()
+                {
+                    Address = room.Address,
+                    Avaiable = room.Avaiable,
+                    DefaultDiscount = room.DefaultDiscount,
+                    Description = room.Description,
+                    District = (await _unitOfWorkVigo.Districts.GetDetailBy(e => e.Id.Equals(room.DistrictId)))!.Name,
+                    Name = room.Name,
+                    Id = room.Id,
+                    Price = room.Price,
+                    Province = (await _unitOfWorkVigo.Provinces.GetDetailBy(e => e.Id.Equals(room.ProvinceId)))!.Name,
+                    Star = room.Star,
+                    Thumbnail = room.Thumbnail
+                });
+            }
+            return temp;
+        }
     }
 }

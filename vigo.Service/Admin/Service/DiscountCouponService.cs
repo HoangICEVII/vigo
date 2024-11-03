@@ -54,6 +54,7 @@ namespace vigo.Service.Admin.Service
                 DiscountType = dto.DiscountType,
                 Image = dto.Image,
                 Name = dto.Name,
+                DiscountValue = dto.DiscountValue,
                 BusinessKey = "",
                 UpdatedDate = DateNow,
                 RoomApply = string.Join(",", dto.RoomApplyIds)
@@ -85,7 +86,23 @@ namespace vigo.Service.Admin.Service
                 throw new CustomException("không có quyền");
             }
             var data = await _unitOfWorkVigo.DiscountCoupons.GetById(id);
-            return _mapper.Map<DiscountCouponDetailDTO>(data);
+            return new DiscountCouponDetailDTO()
+            {
+                CreatedDate = data.CreatedDate,
+                DeletedDate = data.DeletedDate,
+                Description = data.Description,
+                DiscountCode = data.DiscountCode,
+                DiscountCount = data.DiscountCount,
+                DiscountMax = data.DiscountMax,
+                DiscountType = data.DiscountType,
+                EndDate = data.EndDate,
+                Id = data.Id,
+                Image = data.Image,
+                Name = data.Name,
+                RoomApply = data.RoomApply.Split(",").ToList(),
+                StartDate = data.StartDate,
+                UpdatedDate = data.UpdatedDate
+            };
         }
 
         public async Task<PagedResultCustom<DiscountCouponDTO>> GetPaging(int page, int perPage, string? sortType, string? sortField, ClaimsPrincipal user)
@@ -152,6 +169,7 @@ namespace vigo.Service.Admin.Service
             data.UpdatedDate = DateTime.Now;
             data.Description = dto.Description;
             data.Image = dto.Image;
+            data.DiscountValue = dto.DiscountValue;
             data.DiscountType = dto.DiscountType;
             data.Name = dto.Name;
             await _unitOfWorkVigo.Complete();
