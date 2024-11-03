@@ -58,6 +58,7 @@ namespace vigo.Service.Helper
             CreateMap<Rating, RoomRatingDTO>();
             CreateMap<Province, VisitProvinceDTO>();
             CreateMap<Bank, BankDTO>();
+            CreateMap<Room, RoomShortDTO>();
         }
         public static List<string> SplitPermissions(string permissions)
         {
