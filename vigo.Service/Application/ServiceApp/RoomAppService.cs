@@ -166,7 +166,7 @@ namespace vigo.Service.Application.ServiceApp
             {
                 e => e.BusinessPartnerId == businessPartnerId
             };
-            var rooms = await _unitOfWorkVigo.Rooms.GetPaging(conditions, null, e => e.Star, null, 1, 8, true);
+            var rooms = await _unitOfWorkVigo.Rooms.GetPaging(conditions, null, e => e.BookNumber, null, 1, 8, true);
             List<RoomAppDTO> temp = new List<RoomAppDTO>();
             foreach (var room in rooms.Items)
             {

@@ -312,9 +312,8 @@ namespace vigo.Infrastructure.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("BusinessKey")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int>("BusinessPartnerId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("TIMESTAMP");

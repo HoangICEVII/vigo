@@ -83,8 +83,7 @@ namespace vigo.Infrastructure.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     RoomApply = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    BusinessKey = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    BusinessPartnerId = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
                     DeletedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: true)

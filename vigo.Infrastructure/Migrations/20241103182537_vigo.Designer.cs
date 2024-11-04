@@ -12,7 +12,7 @@ using vigo.Infrastructure.DBContext;
 namespace vigo.Infrastructure.Migrations
 {
     [DbContext(typeof(VigoDatabaseContext))]
-    [Migration("20241103100237_vigo")]
+    [Migration("20241103182537_vigo")]
     partial class vigo
     {
         /// <inheritdoc />
@@ -315,9 +315,8 @@ namespace vigo.Infrastructure.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("BusinessKey")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int>("BusinessPartnerId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("TIMESTAMP");

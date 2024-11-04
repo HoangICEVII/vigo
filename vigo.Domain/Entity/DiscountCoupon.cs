@@ -22,7 +22,7 @@ namespace vigo.Domain.Entity
         public int DiscountCount { get; set; }
         public string UserUsed { get; set; } = string.Empty;
         public string RoomApply {  get; set; } = string.Empty;
-        public string BusinessKey {  get; set; } = string.Empty;
+        public int BusinessPartnerId {  get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
         public DateTime? DeletedDate { get; set; }

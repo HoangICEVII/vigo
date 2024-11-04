@@ -15,6 +15,7 @@ namespace vigo.Service.DTO.Admin.Discount
         public string Description { get; set; }
         public DiscountType DiscountType { get; set; }
         public string DiscountCode { get; set; }
+        public decimal DiscountValue { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public int DiscountMax { get; set; }

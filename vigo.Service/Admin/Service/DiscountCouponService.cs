@@ -29,6 +29,7 @@ namespace vigo.Service.Admin.Service
 
         public async Task Create(CreateDiscountCouponDTO dto, ClaimsPrincipal user)
         {
+            int infoId = int.Parse(user.FindFirst("InfoId")!.Value);
             int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
             var role = await _unitOfWorkVigo.Roles.GetById(roleId);
             if (!role.Permission.Split(",").Contains("discount_manage") || user.FindFirst("BusinessKey")!.Value.IsNullOrEmpty())
@@ -55,7 +56,7 @@ namespace vigo.Service.Admin.Service
                 Image = dto.Image,
                 Name = dto.Name,
                 DiscountValue = dto.DiscountValue,
-                BusinessKey = "",
+                BusinessPartnerId = infoId,
                 UpdatedDate = DateNow,
                 RoomApply = string.Join(",", dto.RoomApplyIds)
             };
@@ -96,10 +97,11 @@ namespace vigo.Service.Admin.Service
                 DiscountMax = data.DiscountMax,
                 DiscountType = data.DiscountType,
                 EndDate = data.EndDate,
+                DiscountValue = data.DiscountValue,
                 Id = data.Id,
                 Image = data.Image,
                 Name = data.Name,
-                RoomApply = data.RoomApply.Split(",").ToList(),
+                RoomApplyIds = data.RoomApply.Split(",").Select(int.Parse).ToList(),
                 StartDate = data.StartDate,
                 UpdatedDate = data.UpdatedDate
             };
@@ -108,6 +110,7 @@ namespace vigo.Service.Admin.Service
         public async Task<PagedResultCustom<DiscountCouponDTO>> GetPaging(int page, int perPage, string? sortType, string? sortField, ClaimsPrincipal user)
         {
             int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            string userType = user.FindFirst("UserType")!.Value;
             var role = await _unitOfWorkVigo.Roles.GetById(roleId);
             if (!role.Permission.Split(",").Contains("discount_manage"))
             {
@@ -117,6 +120,10 @@ namespace vigo.Service.Admin.Service
             {
                 e => e.DeletedDate == null,
             };
+            if (userType.Equals("BusinessPartner"))
+            {
+                conditions.Add(e => e.BusinessPartnerId == int.Parse(user.FindFirst("InfoId")!.Value));
+            }
             bool sortDown = false;
             if (sortType != null && sortType.Equals("DESC"))
             {
@@ -143,6 +150,13 @@ namespace vigo.Service.Admin.Service
 
         public async Task<List<RoomShortDTO>> GetRoomApplyDiscount(ClaimsPrincipal user)
         {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            string userType = user.FindFirst("UserType")!.Value;
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("discount_manage") || !userType.Equals("BusinessPartner"))
+            {
+                throw new CustomException("không có quyền");
+            }
             int infoId = int.Parse(user.FindFirst("InfoId")!.Value);
             List<Expression<Func<Room, bool>>> conditions = new List<Expression<Func<Room, bool>>>()
             {

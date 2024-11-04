@@ -170,6 +170,7 @@ namespace vigo.Service.Admin.Service
             {
                 throw new CustomException("không có quyền");
             }
+            string userType = user.FindFirst("UserType")!.Value;
             List<Expression<Func<Room, bool>>> conditions = new List<Expression<Func<Room, bool>>>()
             {
                 e => e.DeletedDate == null,
@@ -185,6 +186,10 @@ namespace vigo.Service.Admin.Service
             if (searchName != null)
             {
                 conditions.Add(e => e.Name.ToLower().Contains(searchName.ToLower()));
+            }
+            if (userType.Equals("BusinessPartner"))
+            {
+                conditions.Add(e => e.BusinessPartnerId == int.Parse(user.FindFirst("InfoId")!.Value));
             }
             bool sortDown = false;
             if (sortType != null && sortType.Equals("DESC"))

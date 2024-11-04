@@ -21,6 +21,5 @@ namespace vigo.Service.DTO.Application.Discount
         public int DiscountMax { get; set; }
         public int DiscountCount { get; set; }
         public bool UseAble { get; set; }
-        // RoomAppDTO
     }
 }

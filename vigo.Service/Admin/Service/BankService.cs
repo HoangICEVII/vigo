@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,13 @@ namespace vigo.Service.Admin.Service
         public async Task AddBankAccount(CreateBankAccountDTO dto, ClaimsPrincipal user)
         {
             int infoId = int.Parse(user.FindFirst("InfoId")!.Value);
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            string businessKey = user.FindFirst("BusinessKey")!.Value;
+            if (businessKey.IsNullOrEmpty() || !role.Permission.Split(",").Contains("bank_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
             var checkUnique = await _unitOfWorkVigo.BusinessPartnerBanks.GetDetailBy(e => e.BankId == dto.BankId &&
                                                                                           e.BusinessPartnerId == infoId &&
                                                                                           e.BankNumber == dto.BankNumber);
@@ -54,7 +62,12 @@ namespace vigo.Service.Admin.Service
 
         public async Task DeleteBankAccount(int id, ClaimsPrincipal user)
         {
-            int infoId = int.Parse(user.FindFirst("InfoId")!.Value);
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("bank_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
             var data = await _unitOfWorkVigo.BusinessPartnerBanks.GetById(id);
             _unitOfWorkVigo.BusinessPartnerBanks.Delete(data);
             await _unitOfWorkVigo.Complete();
@@ -62,13 +75,18 @@ namespace vigo.Service.Admin.Service
 
         public async Task<List<BankDTO>> GetAll(ClaimsPrincipal user)
         {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("bank_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
             return _mapper.Map<List<BankDTO>>(await _unitOfWorkVigo.Banks.GetAll(null));
         }
 
         public async Task<BusinessPartnerBankDTO> GetBusinessBankDetail(int id, ClaimsPrincipal user)
         {
             int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
-            string userType = user.FindFirst("UserType")!.Value;
             var role = await _unitOfWorkVigo.Roles.GetById(roleId);
             if (!role.Permission.Split(",").Contains("bank_manage"))
             {
@@ -138,6 +156,12 @@ namespace vigo.Service.Admin.Service
         public async Task UpdateBankAccount(UpdateBankAccountDTO dto, ClaimsPrincipal user)
         {
             int infoId = int.Parse(user.FindFirst("InfoId")!.Value);
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("bank_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
             var data = await _unitOfWorkVigo.BusinessPartnerBanks.GetById(dto.Id);
             var checkUnique = await _unitOfWorkVigo.BusinessPartnerBanks.GetDetailBy(e => e.BankId == data.BankId &&
                                                                                           e.BusinessPartnerId == infoId &&
