@@ -69,18 +69,15 @@ namespace vigo.Service.Application.ServiceApp
             return result;
         }
 
-        public async Task<PagedResultCustom<ProvinceV2DTO>> GetPaging(int page, int perPage, int? roomTypeId, string? provinceId, string? districtId, int? star)
+        public async Task<ProvinceV2DTO> GetPaging(int page, int perPage, int? roomTypeId, string provinceId, string? districtId, int? star)
         {
             List<Expression<Func<Room, bool>>> conditions = new List<Expression<Func<Room, bool>>>()
             {
+                e => e.ProvinceId.Equals(provinceId)
             };
             if (roomTypeId != null)
             {
                 conditions.Add(e => e.RoomTypeId == roomTypeId);
-            }
-            if (provinceId != null)
-            {
-                conditions.Add(e => e.ProvinceId == provinceId);
             }
             if (districtId != null) {
                 conditions.Add(e => e.DistrictId == districtId);
@@ -90,74 +87,37 @@ namespace vigo.Service.Application.ServiceApp
             {
                 room = room.Where(e => Math.Floor(e.Star) == star || Math.Floor(e.Star + 0.5m) == star).ToList();
             }
-            PagedResultCustom<ProvinceV2DTO> result = new PagedResultCustom<ProvinceV2DTO>(new List<ProvinceV2DTO>(), 0, 0, 0);
-            if (provinceId != null)
+            var tempRoomCount = room.Count();
+            room = room.Skip(page).Take(perPage).ToList();
+            var province = await _unitOfWorkVigo.Provinces.GetDetailBy(e => e.Id.Equals(provinceId));
+            List<RoomAppDTO> temp = new List<RoomAppDTO>();
+            foreach (var item in room)
             {
-                var province = await _unitOfWorkVigo.Provinces.GetDetailBy(e => e.Id.Equals(provinceId));
-                List<RoomAppDTO> temp = new List<RoomAppDTO>();
-                foreach(var item in room)
+                temp.Add(new RoomAppDTO()
                 {
-                    temp.Add(new RoomAppDTO()
-                    {
-                        ProvinceId = item.ProvinceId,
-                        DistrictId = item.DistrictId,
-                        Address = item.Address,
-                        Avaiable = item.Avaiable,
-                        DefaultDiscount = item.DefaultDiscount,
-                        Description = item.Description,
-                        District = (await _unitOfWorkVigo.Districts.GetDetailBy(e => e.Id.Equals(item.DistrictId)))!.Name,
-                        Name = item.Name,
-                        Id = item.Id,
-                        Price = item.Price,
-                        Province = (await _unitOfWorkVigo.Provinces.GetDetailBy(e => e.Id.Equals(item.ProvinceId)))!.Name,
-                        Star = item.Star,
-                        Thumbnail = item.Thumbnail
-                    });
-                }
-                
-                result.Items.Add(new ProvinceV2DTO()
-                {
-                    Id = province!.Id,
-                    Image = province.Image,
-                    Name = province.Name,
-                    RoomNumber = room.Count(),
-                    Rooms = temp
+                    ProvinceId = item.ProvinceId,
+                    DistrictId = item.DistrictId,
+                    Address = item.Address,
+                    Avaiable = item.Avaiable,
+                    DefaultDiscount = item.DefaultDiscount,
+                    Description = item.Description,
+                    District = (await _unitOfWorkVigo.Districts.GetDetailBy(e => e.Id.Equals(item.DistrictId)))!.Name,
+                    Name = item.Name,
+                    Id = item.Id,
+                    Price = item.Price,
+                    Province = (await _unitOfWorkVigo.Provinces.GetDetailBy(e => e.Id.Equals(item.ProvinceId)))!.Name,
+                    Star = item.Star,
+                    Thumbnail = item.Thumbnail
                 });
             }
-            else
+            return new ProvinceV2DTO()
             {
-                var province = await _unitOfWorkVigo.Provinces.GetAll(null);
-                foreach (var item in province) {
-                    var roomTemp = room.Where(e => e.ProvinceId.Equals(item.Id)).ToList();
-                    List<RoomAppDTO> temp = new List<RoomAppDTO>();
-                    foreach (var aa in roomTemp)
-                    {
-                        temp.Add(new RoomAppDTO()
-                        {
-                            Address = aa.Address,
-                            Avaiable = aa.Avaiable,
-                            DefaultDiscount = aa.DefaultDiscount,
-                            Description = aa.Description,
-                            District = (await _unitOfWorkVigo.Districts.GetDetailBy(e => e.Id.Equals(aa.DistrictId)))!.Name,
-                            Name = aa.Name,
-                            Id = aa.Id,
-                            Price = aa.Price,
-                            Province = (await _unitOfWorkVigo.Provinces.GetDetailBy(e => e.Id.Equals(aa.ProvinceId)))!.Name,
-                            Star = aa.Star,
-                            Thumbnail = aa.Thumbnail
-                        });
-                    }
-                    result.Items.Add(new ProvinceV2DTO()
-                    {
-                        Id = item.Id,
-                        Image = item.Image,
-                        Name = item.Name,
-                        RoomNumber = roomTemp.Count(),
-                        Rooms = temp
-                    });
-                }
-            }
-            return result;
+                Id = province!.Id,
+                Image = province.Image,
+                Name = province.Name,
+                RoomNumber = tempRoomCount,
+                Rooms = temp
+            };
         }
 
         public async Task<List<RoomAppDTO>> GetRelatedRoom(int businessPartnerId)

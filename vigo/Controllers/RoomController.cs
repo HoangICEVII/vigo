@@ -24,7 +24,7 @@ namespace vigo.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPaging(int page, int perPage, int? roomTypeId, string? provinceId, string? districtId, int? star)
+        public async Task<IActionResult> GetPaging(int page, int perPage, int? roomTypeId, string provinceId, string? districtId, int? star)
         {
             try
             {
@@ -32,11 +32,11 @@ namespace vigo.Controllers
                 Option options = new Option()
                 {
                     Name = "",
-                    PageSize = data.PageSize,
-                    Page = data.PageIndex,
-                    TotalRecords = data.TotalRecords
+                    PageSize = perPage,
+                    Page = page,
+                    TotalRecords = data.RoomNumber
                 };
-                return CreateResponse(data.Items, "get success", 200, options);
+                return CreateResponse(data, "get success", 200, options);
             }
             catch (CustomException e)
             {
