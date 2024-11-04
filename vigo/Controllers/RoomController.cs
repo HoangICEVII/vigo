@@ -5,6 +5,7 @@ using vigo.Controllers.Base;
 using vigo.Domain.Helper;
 using vigo.Service.Application.IServiceApp;
 using vigo.Service.Application.ServiceApp;
+using vigo.Service.DTO.Application.Room;
 using vigo.Service.DTO.Shared;
 
 namespace vigo.Controllers
@@ -24,16 +25,16 @@ namespace vigo.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetPaging(int page, int perPage, int? roomTypeId, string provinceId, string? districtId, DateTime checkIn, DateTime checkOut, List<int> star)
+        public async Task<IActionResult> GetPaging(GetRoomDTO dto)
         {
             try
             {
-                var data = await _roomAppService.GetPaging(page, perPage, roomTypeId, provinceId, districtId, checkIn, checkOut, star);
+                var data = await _roomAppService.GetPaging(dto.Page, dto.PerPage, dto.RoomTypeId, dto.ProvinceId, dto.DistrictId, dto.CheckIn, dto.CheckOut, dto.Stars);
                 Option options = new Option()
                 {
                     Name = "",
-                    PageSize = perPage,
-                    Page = page,
+                    PageSize = dto.PerPage,
+                    Page = dto.Page,
                     TotalRecords = data.RoomNumber
                 };
                 return CreateResponse(data, "get success", 200, options);
