@@ -93,6 +93,11 @@ namespace vigo.Service.Application.ServiceApp
             List<RoomAppDTO> temp = new List<RoomAppDTO>();
             foreach (var item in room)
             {
+                List<Expression<Func<Image, bool>>> imageCon = new List<Expression<Func<Image, bool>>>()
+                {
+                    e => e.RoomId == item.Id
+                };
+                var imageTemp = await _unitOfWorkVigo.Images.GetPaging(imageCon, null, null, null, 1, 8);
                 temp.Add(new RoomAppDTO()
                 {
                     ProvinceId = item.ProvinceId,
@@ -104,6 +109,7 @@ namespace vigo.Service.Application.ServiceApp
                     District = (await _unitOfWorkVigo.Districts.GetDetailBy(e => e.Id.Equals(item.DistrictId)))!.Name,
                     Name = item.Name,
                     Id = item.Id,
+                    Images = imageTemp.Items.Select(e => e.Url).ToList(),
                     Price = item.Price,
                     Province = (await _unitOfWorkVigo.Provinces.GetDetailBy(e => e.Id.Equals(item.ProvinceId)))!.Name,
                     Star = item.Star,
@@ -130,6 +136,11 @@ namespace vigo.Service.Application.ServiceApp
             List<RoomAppDTO> temp = new List<RoomAppDTO>();
             foreach (var room in rooms.Items)
             {
+                List<Expression<Func<Image, bool>>> imageCon = new List<Expression<Func<Image, bool>>>()
+                {
+                    e => e.RoomId == room.Id
+                };
+                var imageTemp = await _unitOfWorkVigo.Images.GetPaging(imageCon, null, null, null, 1, 8);
                 temp.Add(new RoomAppDTO()
                 {
                     Address = room.Address,
@@ -140,6 +151,9 @@ namespace vigo.Service.Application.ServiceApp
                     Name = room.Name,
                     Id = room.Id,
                     Price = room.Price,
+                    Images = imageTemp.Items.Select(e => e.Url).ToList(),
+                    DistrictId = room.DistrictId,
+                    ProvinceId = room.ProvinceId,
                     Province = (await _unitOfWorkVigo.Provinces.GetDetailBy(e => e.Id.Equals(room.ProvinceId)))!.Name,
                     Star = room.Star,
                     Thumbnail = room.Thumbnail

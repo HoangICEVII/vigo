@@ -19,6 +19,7 @@ namespace vigo.Service.DTO.Application.Room
         public decimal Price { get; set; }
         public decimal Star { get; set; }
         public int Avaiable { get; set; }
+        public List<string> Images { get; set; } = new List<string>();
         public decimal DefaultDiscount { get; set; }
         public string Address { get; set; } = string.Empty;
     }
