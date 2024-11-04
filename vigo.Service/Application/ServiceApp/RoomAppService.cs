@@ -88,7 +88,7 @@ namespace vigo.Service.Application.ServiceApp
                 room = room.Where(e => Math.Floor(e.Star) == star || Math.Floor(e.Star + 0.5m) == star).ToList();
             }
             var tempRoomCount = room.Count();
-            room = room.Skip(page).Take(perPage).ToList();
+            room = room.Skip((page - 1)*perPage).Take(perPage).ToList();
             var province = await _unitOfWorkVigo.Provinces.GetDetailBy(e => e.Id.Equals(provinceId));
             List<RoomAppDTO> temp = new List<RoomAppDTO>();
             foreach (var item in room)
