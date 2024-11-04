@@ -15,6 +15,7 @@ using vigo.Service.Application.IServiceApp;
 using vigo.Service.DTO.Admin.Account;
 using vigo.Service.DTO.Admin.Room;
 using vigo.Service.DTO.Admin.Service;
+using vigo.Service.DTO.Application.Account;
 using vigo.Service.DTO.Application.Room;
 
 namespace vigo.Service.Application.ServiceApp
@@ -69,7 +70,7 @@ namespace vigo.Service.Application.ServiceApp
             return result;
         }
 
-        public async Task<ProvinceV2DTO> GetPaging(int page, int perPage, int? roomTypeId, string provinceId, string? districtId, int? star)
+        public async Task<ProvinceV2DTO> GetPaging(int page, int perPage, int? roomTypeId, string provinceId, string? districtId, DateTime checkIn, DateTime checkOut, List<int> star)
         {
             List<Expression<Func<Room, bool>>> conditions = new List<Expression<Func<Room, bool>>>()
             {
@@ -83,15 +84,38 @@ namespace vigo.Service.Application.ServiceApp
                 conditions.Add(e => e.DistrictId == districtId);
             }
             var room = await _unitOfWorkVigo.Rooms.GetAll(conditions);
-            if (star != null)
+            var roomResult = new List<Room>();
+            if (star.Any())
             {
-                room = room.Where(e => Math.Floor(e.Star) == star || Math.Floor(e.Star + 0.5m) == star).ToList();
+                foreach (var item in star) {
+                    roomResult.AddRange(room.Where(e => Math.Floor(e.Star + 0.5m) == item));
+                }
             }
-            var tempRoomCount = room.Count();
-            room = room.Skip((page - 1)*perPage).Take(perPage).ToList();
+            else
+            {
+                roomResult = room.ToList();
+            }
+            foreach (var roomTempResult in roomResult)
+            {
+                DateTime DateNow = DateTime.Now;
+                List<Expression<Func<Booking, bool>>> bookCon = new List<Expression<Func<Booking, bool>>>()
+                                {
+                                    e => e.RoomId == roomTempResult.Id,
+                                    e => e.CheckOutDate > DateNow,
+                                    e => e.CheckOutDate < checkIn
+                                };
+                var booking = await _unitOfWorkVigo.Bookings.GetAll(bookCon);
+                if (!(booking.Count() > 0 - roomTempResult.Avaiable))
+                {
+                    roomResult.Remove(roomTempResult);
+                }
+            }
+            
+            var tempRoomCount = roomResult.Count();
+            roomResult = roomResult.Skip((page - 1)*perPage).Take(perPage).ToList();
             var province = await _unitOfWorkVigo.Provinces.GetDetailBy(e => e.Id.Equals(provinceId));
             List<RoomAppDTO> temp = new List<RoomAppDTO>();
-            foreach (var item in room)
+            foreach (var item in roomResult)
             {
                 List<Expression<Func<Image, bool>>> imageCon = new List<Expression<Func<Image, bool>>>()
                 {

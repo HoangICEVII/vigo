@@ -12,7 +12,7 @@ namespace vigo.Service.Application.IServiceApp
 {
     public interface IRoomAppService
     {
-        Task<ProvinceV2DTO> GetPaging(int page, int perPage, int? roomTypeId, string provinceId, string? districtId, int? star);
+        Task<ProvinceV2DTO> GetPaging(int page, int perPage, int? roomTypeId, string provinceId, string? districtId, DateTime checkIn, DateTime checkOut, List<int> star);
         Task<List<RoomAppDTO>> GetRelatedRoom(int businessPartnerId);
         Task<RoomDetailDTO> GetDetail(int id);
     }

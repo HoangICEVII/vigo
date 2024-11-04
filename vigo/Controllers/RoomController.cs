@@ -24,11 +24,11 @@ namespace vigo.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPaging(int page, int perPage, int? roomTypeId, string provinceId, string? districtId, int? star)
+        public async Task<IActionResult> GetPaging(int page, int perPage, int? roomTypeId, string provinceId, string? districtId, DateTime checkIn, DateTime checkOut, List<int> star)
         {
             try
             {
-                var data = await _roomAppService.GetPaging(page, perPage, roomTypeId, provinceId, districtId, star);
+                var data = await _roomAppService.GetPaging(page, perPage, roomTypeId, provinceId, districtId, checkIn, checkOut, star);
                 Option options = new Option()
                 {
                     Name = "",
