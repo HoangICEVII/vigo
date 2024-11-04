@@ -23,7 +23,7 @@ namespace vigo.Controllers
             _configuration = configuration;
         }
 
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> GetPaging(int page, int perPage, int? roomTypeId, string provinceId, string? districtId, DateTime checkIn, DateTime checkOut, List<int> star)
         {
             try
