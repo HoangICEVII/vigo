@@ -518,7 +518,6 @@ namespace vigo.Service.Admin.Service
         {
             var info = await _unitOfWorkVigo.Tourists.GetById(dto.Id);
             var account = await _unitOfWorkVigo.Accounts.GetDetailBy(e => e.Id == info.AccountId);
-            account!.Email = dto.Email;
             info.FullName = dto.FullName;
             info.Name = dto.FullName.Split('.').Last();
             info.DOB = dto.DOB != null ? (DateTime)dto.DOB : info.DOB;

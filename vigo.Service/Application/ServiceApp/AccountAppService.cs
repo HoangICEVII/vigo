@@ -48,7 +48,11 @@ namespace vigo.Service.Application.ServiceApp
         public async Task<TouristDTO> GetTouristInfo(ClaimsPrincipal user)
         {
             int infoId = int.Parse(user.FindFirst("InfoId")!.Value);
-            return _mapper.Map<TouristDTO>(await _unitOfWorkVigo.Tourists.GetById(infoId));
+            var info = await _unitOfWorkVigo.Tourists.GetById(infoId);
+            var account = await _unitOfWorkVigo.Accounts.GetDetailBy(e => e.Id.Equals(info.AccountId));
+            var data = _mapper.Map<TouristDTO>(info);
+            data.Email = account!.Email;
+            return _mapper.Map<TouristDTO>(data);
         }
 
         public async Task Register(TouristRegisterDTO dto)
@@ -167,18 +171,12 @@ namespace vigo.Service.Application.ServiceApp
             int infoId = int.Parse(user.FindFirst("InfoId")!.Value);
             var info = await _unitOfWorkVigo.Tourists.GetById(infoId);
             var account = await _unitOfWorkVigo.Accounts.GetDetailBy(e => e.Id == info.AccountId);
-            var checkUnique = await _unitOfWorkVigo.Accounts.GetDetailBy(e => e.Email == dto.Email);
-            if (dto.Email != account!.Email && checkUnique != null)
-            {
-                throw new CustomException("email đã tồn tại");
-            }
             if (!dto.PhoneNumber.IsNullOrEmpty() && !Regex.IsMatch(dto.PhoneNumber!, $@"{ConstRegex.PHONE_REGEX}"))
             {
                 throw new CustomException("số điện thoại không hợp lệ");
             }
             DateTime dateNow = DateTime.Now;
-            account.Email = dto.Email;
-            account.UpdatedDate = dateNow;
+            account!.UpdatedDate = dateNow;
 
             info.UpdatedDate = dateNow;
             info.DOB = dto.DOB != null ? (DateTime)dto.DOB : info.DOB;
