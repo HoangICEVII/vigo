@@ -62,6 +62,10 @@ namespace vigo.Service.Application.ServiceApp
             {
                 throw new CustomException("email không hợp lệ");
             }
+            if (dto.Password.Length < 8)
+            {
+                throw new CustomException("độ dài mật khẩu không đạt");
+            }
             var salt = PasswordHasher.CreateSalt();
             var hashedPassword = PasswordHasher.HashPassword(dto.Password, salt);
             Guid accountId = Guid.NewGuid();
@@ -137,6 +141,25 @@ namespace vigo.Service.Application.ServiceApp
                 Url = $"http://localhost:2002/api/application/accounts/active-email/{emailAuthen.Token}"
             };
             _emailAuthenProducer.SendEmailAuthen(emailAuthenDTO);
+        }
+
+        public async Task UpdatePassword(string oldPassword, string newPassword, ClaimsPrincipal user)
+        {
+            if (newPassword.Length < 8)
+            {
+                throw new CustomException("độ dài mật khẩu không đạt");
+            }
+            int infoId = int.Parse(user.FindFirst("InfoId")!.Value);
+            var info = await _unitOfWorkVigo.Tourists.GetDetailBy(e => e.Id == infoId);
+            var account = await _unitOfWorkVigo.Accounts.GetDetailBy(e => e.Id.Equals(info!.AccountId));
+            if (!account!.Password.Equals(PasswordHasher.HashPassword(oldPassword, account!.Salt)))
+            {
+                throw new CustomException("mật khẩu cũ không chính xác");
+            }
+            var hashedPassword = PasswordHasher.HashPassword(newPassword, account.Salt);
+            account.Password = hashedPassword;
+
+            await _unitOfWorkVigo.Complete();
         }
 
         public async Task UpdateTouristInfo(TouristUpdateDTO dto, ClaimsPrincipal user)

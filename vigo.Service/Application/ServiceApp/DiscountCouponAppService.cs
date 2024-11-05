@@ -34,6 +34,11 @@ namespace vigo.Service.Application.ServiceApp
         {
             int? infoId = user.FindFirst("InfoId") != null ? int.Parse(user.FindFirst("InfoId")!.Value) : null;
             List<DiscountCouponAppDTO> result = new List<DiscountCouponAppDTO>();
+            List<Expression<Func<DiscountCoupon, bool>>> con = new List<Expression<Func<DiscountCoupon, bool>>>()
+            {
+                e => e.EndDate > DateTime.Now,
+                e => e.DeletedDate == null
+            };
             var data = await _unitOfWorkVigo.DiscountCoupons.GetAll(null);
             foreach (var item in data) {
                 if (item.RoomApply.Split(",").Contains(roomId.ToString()))
@@ -88,6 +93,7 @@ namespace vigo.Service.Application.ServiceApp
             int? infoId = user.FindFirst("InfoId") != null ? int.Parse(user.FindFirst("InfoId")!.Value) : null;
             List<Expression<Func<DiscountCoupon, bool>>> conditions = new List<Expression<Func<DiscountCoupon, bool>>>()
             {
+                e => e.EndDate > DateTime.Now,
                 e => e.DeletedDate == null
             };
             if (searchName != null)

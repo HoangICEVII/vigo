@@ -41,6 +41,26 @@ namespace vigo.Controllers
             }
         }
 
+        [HttpPost("update-password")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> UpdatePassword(string oldPassword, string newPassword)
+        {
+            try
+            {
+                await _accountService.UpdatePassword(oldPassword, newPassword, User);
+                return CreateResponse(null, "register success", 200, null);
+            }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return CreateResponse(null, "register fail", 500, null);
+            }
+        }
+
         [HttpPost("resend-active-email")]
         public async Task<IActionResult> ResendActiveEmail(string email)
         {

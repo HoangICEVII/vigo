@@ -15,6 +15,7 @@ namespace vigo.Service.Application.IServiceApp
         Task<TouristDTO> GetTouristInfo(ClaimsPrincipal user);
         Task UpdateTouristInfo(TouristUpdateDTO dto, ClaimsPrincipal user);
         Task Register(TouristRegisterDTO dto);
+        Task UpdatePassword(string oldPassword, string newPassword, ClaimsPrincipal user);
         Task ActiveEmail(string token);
         Task ResendActiveEmail(string email);
     }
