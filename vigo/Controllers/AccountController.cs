@@ -43,11 +43,11 @@ namespace vigo.Controllers
 
         [HttpPost("update-password")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> UpdatePassword(string oldPassword, string newPassword)
+        public async Task<IActionResult> UpdatePassword(UpdatePasswordAppDTO dto)
         {
             try
             {
-                await _accountService.UpdatePassword(oldPassword, newPassword, User);
+                await _accountService.UpdatePassword(dto, User);
                 return CreateResponse(null, "register success", 200, null);
             }
             catch (CustomException e)

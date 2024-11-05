@@ -147,20 +147,20 @@ namespace vigo.Service.Application.ServiceApp
             _emailAuthenProducer.SendEmailAuthen(emailAuthenDTO);
         }
 
-        public async Task UpdatePassword(string oldPassword, string newPassword, ClaimsPrincipal user)
+        public async Task UpdatePassword(UpdatePasswordAppDTO dto, ClaimsPrincipal user)
         {
-            if (newPassword.Length < 8)
+            if (dto.NewPassword.Length < 8)
             {
                 throw new CustomException("độ dài mật khẩu không đạt");
             }
             int infoId = int.Parse(user.FindFirst("InfoId")!.Value);
             var info = await _unitOfWorkVigo.Tourists.GetDetailBy(e => e.Id == infoId);
             var account = await _unitOfWorkVigo.Accounts.GetDetailBy(e => e.Id.Equals(info!.AccountId));
-            if (!account!.Password.Equals(PasswordHasher.HashPassword(oldPassword, account!.Salt)))
+            if (!account!.Password.Equals(PasswordHasher.HashPassword(dto.OldPassword, account!.Salt)))
             {
                 throw new CustomException("mật khẩu cũ không chính xác");
             }
-            var hashedPassword = PasswordHasher.HashPassword(newPassword, account.Salt);
+            var hashedPassword = PasswordHasher.HashPassword(dto.NewPassword, account.Salt);
             account.Password = hashedPassword;
 
             await _unitOfWorkVigo.Complete();
