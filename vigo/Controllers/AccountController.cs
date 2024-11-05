@@ -86,8 +86,8 @@ namespace vigo.Controllers
         {
             try
             {
-                await _accountService.GetTouristInfo(User);
-                return CreateResponse(null, "get success", 200, null);
+                var data = await _accountService.GetTouristInfo(User);
+                return CreateResponse(data, "get success", 200, null);
             }
             catch (CustomException e)
             {

@@ -505,6 +505,9 @@ namespace vigo.Service.Admin.Service
                 UpdatedDate = info.UpdatedDate,
                 Email = account.Email,
                 Name = info.FullName,
+                Address = info.Address,
+                Gender = info.Gender,
+                PhoneNumber = info.PhoneNumber,
                 DOB = info.DOB,
                 Avatar = info.Avatar
             };
