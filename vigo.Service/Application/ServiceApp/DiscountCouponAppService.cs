@@ -63,6 +63,27 @@ namespace vigo.Service.Application.ServiceApp
             return result;
         }
 
+        public async Task<DiscountCouponAppDTO> GetDetail(int id, ClaimsPrincipal user)
+        {
+            int? infoId = user.FindFirst("InfoId") != null ? int.Parse(user.FindFirst("InfoId")!.Value) : null;
+            var data = await _unitOfWorkVigo.DiscountCoupons.GetById(id);
+            return new DiscountCouponAppDTO()
+            {
+                Description = data.Description,
+                DiscountCode = data.DiscountCode,
+                DiscountCount = data.DiscountCount,
+                DiscountMax = data.DiscountMax,
+                DiscountType = data.DiscountType,
+                DiscountValue = data.DiscountValue,
+                EndDate = data.EndDate,
+                Id = data.Id,
+                Image = data.Image,
+                Name = data.Name,
+                StartDate = data.StartDate,
+                UseAble = !data.UserUsed.Split(',').Contains(infoId.ToString())
+            };
+        }
+
         public async Task<List<RoomDTO>> GetAllUseAbleRoom(int couponId, ClaimsPrincipal user)
         {
             var data = await _unitOfWorkVigo.DiscountCoupons.GetById(couponId);

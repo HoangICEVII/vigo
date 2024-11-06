@@ -83,11 +83,12 @@ namespace vigo.Service.Application.ServiceApp
                             };
                             roomIds.AddRange((await _unitOfWorkVigo.RoomServices.GetAll(serviceCon)).Select(e => e.RoomId));
                         }
-                        foreach (var item in roomFilter)
+                        for (int i = roomFilter.Count - 1; i >= 0; i--)
                         {
+                            var item = roomFilter[i];
                             if (!roomIds.Contains(item.Id))
                             {
-                                roomFilter.Remove(item);
+                                roomFilter.RemoveAt(i);
                             }
                         }
                     }
@@ -185,11 +186,12 @@ namespace vigo.Service.Application.ServiceApp
                             };
                             roomIds.AddRange((await _unitOfWorkVigo.RoomServices.GetAll(serviceCon)).Select(e => e.RoomId));
                         }
-                        foreach (var item in roomFilter)
+                        for (int i = roomFilter.Count - 1; i >= 0; i--)
                         {
+                            var item = roomFilter[i];
                             if (!roomIds.Contains(item.Id))
                             {
-                                roomFilter.Remove(item);
+                                roomFilter.RemoveAt(i);
                             }
                         }
                     }

@@ -18,6 +18,7 @@ namespace vigo.Service.DTO.Application.Room
         public DateTime CheckOut { get; set; }
         public List<int>? Stars { get; set; }
         public List<int>? Services { get; set; }
-        public decimal? Price { get; set; }
+        public decimal MinPrice { get; set; }
+        public decimal MaxPrice { get; set; }
     }
 }

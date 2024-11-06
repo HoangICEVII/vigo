@@ -15,5 +15,6 @@ namespace vigo.Service.Application.IServiceApp
         Task<PagedResultCustom<DiscountCouponAppDTO>> GetPaging(int page, int perPage, string? searchName, ClaimsPrincipal user);
         Task<List<DiscountCouponAppDTO>> GetAllUseAble(int roomId, ClaimsPrincipal user);
         Task<List<RoomDTO>> GetAllUseAbleRoom(int couponId, ClaimsPrincipal user);
+        Task<DiscountCouponAppDTO> GetDetail(int id, ClaimsPrincipal user);
     }
 }

@@ -29,7 +29,7 @@ namespace vigo.Controllers
         {
             try
             {
-                var data = await _roomAppService.GetPaging(dto.Page, dto.PerPage, dto.RoomTypeId, dto.ProvinceId, dto.DistrictId, dto.CheckIn, dto.CheckOut, dto.Stars, dto.Services, dto.Price);
+                var data = await _roomAppService.GetPaging(dto.Page, dto.PerPage, dto.RoomTypeId, dto.ProvinceId, dto.DistrictId, dto.CheckIn, dto.CheckOut, dto.Stars, dto.Services, dto.MaxPrice, dto.MinPrice);
                 Option options = new Option()
                 {
                     Name = "",

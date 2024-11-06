@@ -50,6 +50,26 @@ namespace vigo.Controllers
             }
         }
 
+        [HttpGet("{id}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetDetail(int id)
+        {
+            try
+            {
+                var data = await _discountCouponAppService.GetDetail(id, User);
+                return CreateResponse(data, "get success", 200, null);
+            }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return CreateResponse(null, "get fail", 500, null);
+            }
+        }
+
         [HttpGet("use-able-room")]
         [AllowAnonymous]
         public async Task<IActionResult> GetAllUseAbleRoom(int couponId)
