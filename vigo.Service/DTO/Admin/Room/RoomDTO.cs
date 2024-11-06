@@ -14,6 +14,8 @@ namespace vigo.Service.DTO.Admin.Room
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public string Thumbnail { get; set; } = string.Empty;
+        public string Province { get; set; } = string.Empty;
+        public string District { get; set; } = string.Empty;
         public decimal Price { get; set; }
         public int Avaiable { get; set; }
         public int BusinessPartnerId { get; set; }

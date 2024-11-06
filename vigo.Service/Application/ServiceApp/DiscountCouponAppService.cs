@@ -93,7 +93,8 @@ namespace vigo.Service.Application.ServiceApp
             }
             List<RoomDTO> result = new List<RoomDTO>();
             foreach (var item in roomIds) {
-                var temp = _mapper.Map<RoomDTO>(await _unitOfWorkVigo.Rooms.GetById(item));
+                var roomData = await _unitOfWorkVigo.Rooms.GetById(item);
+                var temp = _mapper.Map<RoomDTO>(roomData);
                 List<Expression<Func<RoomServiceR, bool>>> con = new List<Expression<Func<RoomServiceR, bool>>>()
                 {
                     e => e.RoomId == item,
@@ -104,6 +105,8 @@ namespace vigo.Service.Application.ServiceApp
                     temp.Services.Add(_mapper.Map<ServiceDTO>(await _unitOfWorkVigo.Services.GetById(service.ServiceId)));
                 }
                 temp.BusinessPartner = _mapper.Map<BusinessPartnerShortDTO>(await _unitOfWorkVigo.BusinessPartners.GetById(temp.BusinessPartnerId));
+                temp.Province = (await _unitOfWorkVigo.Provinces.GetDetailBy(e => e.Id.Equals(roomData.ProvinceId)))!.Name;
+                temp.District = (await _unitOfWorkVigo.Districts.GetDetailBy(e => e.Id.Equals(roomData.DistrictId)))!.Name;
                 result.Add(temp);
             }
             return result;
