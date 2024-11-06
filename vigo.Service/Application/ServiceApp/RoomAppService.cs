@@ -70,7 +70,7 @@ namespace vigo.Service.Application.ServiceApp
             return result;
         }
 
-        public async Task<ProvinceV2DTO> GetPaging(int page, int perPage, int? roomTypeId, string provinceId, string? districtId, DateTime checkIn, DateTime checkOut, List<int>? stars, List<int>? services, decimal price)
+        public async Task<ProvinceV2DTO> GetPaging(int page, int perPage, int? roomTypeId, string provinceId, string? districtId, DateTime checkIn, DateTime checkOut, List<int>? stars, List<int>? services, decimal? price)
         {
             List<Expression<Func<Room, bool>>> conditions = new List<Expression<Func<Room, bool>>>()
             {
@@ -87,8 +87,19 @@ namespace vigo.Service.Application.ServiceApp
             var roomResult = new List<Room>();
             if (stars != null)
             {
-                foreach (var item in stars) {
-                    roomResult.AddRange(room.Where(e => Math.Floor(e.Star + 0.5m) == item && e.Price > price - 100m && e.Price < price + 100m));
+                if (price != null)
+                {
+                    foreach (var item in stars)
+                    {
+                        roomResult.AddRange(room.Where(e => Math.Floor(e.Star + 0.5m) == item && e.Price > price - 100m && e.Price < price + 100m));
+                    }
+                }
+                else
+                {
+                    foreach (var item in stars)
+                    {
+                        roomResult.AddRange(room.Where(e => Math.Floor(e.Star + 0.5m) == item));
+                    }
                 }
             }
             else

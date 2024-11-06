@@ -36,15 +36,15 @@ namespace vigo.Service.Application.ServiceApp
             {
                 e => e.Name.ToLower().Contains(dto.SearchInput!.ToLower())
             };
-            var province = await _unitOfWorkVigo.Provinces.GetAll(conditions);
-            if (province.Count() != 0) {
+            var provinces = await _unitOfWorkVigo.Provinces.GetAll(conditions);
+            if (provinces.Count() != 0) {
                 PagedResultCustom<RoomAppDTO> result = new PagedResultCustom<RoomAppDTO>(new List<RoomAppDTO>(),0,dto.Page,dto.PerPage);
                 int totalRecords = 0;
-                foreach (var room in province)
+                foreach (var province in provinces)
                 {
                     List<Expression<Func<Room, bool>>> con2 = new List<Expression<Func<Room, bool>>>()
                     {
-                        e => e.ProvinceId.Equals(room.Id)
+                        e => e.ProvinceId.Equals(province.Id)
                     };
                     var rooms = await _unitOfWorkVigo.Rooms.GetAll(con2);
                     var roomFilter = new List<Room>();
