@@ -7,9 +7,11 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using vigo.Domain.Entity;
+using vigo.Domain.Helper;
 using vigo.Domain.Interface.IUnitOfWork;
 using vigo.Domain.User;
 using vigo.Service.Application.IServiceApp;
+using vigo.Service.DTO.Admin.Bank;
 using vigo.Service.DTO.Application.Account;
 using vigo.Service.DTO.Application.Room;
 using vigo.Service.DTO.Application.Search;
@@ -28,125 +30,210 @@ namespace vigo.Service.Application.ServiceApp
             _mapper = mapper;
         }
 
-        public async Task<SearchResultReturnDTO> ReturnSearchResult(string? searchInput, DateTime checkIn, DateTime checkOut, int? roomTypeId)
+        public async Task<PagedResultCustom<RoomAppDTO>> ReturnSearchResult(GetRoomSearchDTO dto)
         {
-            var conditions = searchInput.IsNullOrEmpty() ? null : new List<Expression<Func<Province, bool>>>()
+            var conditions = dto.SearchInput.IsNullOrEmpty() ? null : new List<Expression<Func<Province, bool>>>()
             {
-                e => e.Name.ToLower().Contains(searchInput!.ToLower())
+                e => e.Name.ToLower().Contains(dto.SearchInput!.ToLower())
             };
             var province = await _unitOfWorkVigo.Provinces.GetAll(conditions);
             if (province.Count() != 0) {
-                SearchResultReturnDTO result = new SearchResultReturnDTO();
-                foreach (var item in province)
+                PagedResultCustom<RoomAppDTO> result = new PagedResultCustom<RoomAppDTO>(new List<RoomAppDTO>(),0,dto.Page,dto.PerPage);
+                int totalRecords = 0;
+                foreach (var room in province)
                 {
-                    List<Expression<Func<BusinessPartner, bool>>> con2 = new List<Expression<Func<BusinessPartner, bool>>>()
+                    List<Expression<Func<Room, bool>>> con2 = new List<Expression<Func<Room, bool>>>()
                     {
-                        e => e.ProvinceId.Equals(item.Id)
+                        e => e.ProvinceId.Equals(room.Id)
                     };
-                    var business = await _unitOfWorkVigo.BusinessPartners.GetAll(con2);
-                    List<BusinessAppDTO> businessAppDTOs = new List<BusinessAppDTO>();
-                    foreach (var businessPartner in business)
+                    var rooms = await _unitOfWorkVigo.Rooms.GetAll(con2);
+                    var roomFilter = new List<Room>();
+                    var roomResult = new List<Room>();
+                    foreach (var item in rooms)
                     {
-                        List<Expression<Func<Room, bool>>> conRoom = new List<Expression<Func<Room, bool>>>()
+                        if (item.Avaiable > 0)
                         {
-                            e => e.BusinessPartnerId == businessPartner.Id
-                        };
-                        if (roomTypeId != null)
-                        {
-                            conRoom.Add(e => e.RoomTypeId == roomTypeId);
+                            roomFilter.Add(item);
                         }
-                        BusinessAppDTO businessAppDTO = new BusinessAppDTO();
-                        businessAppDTO.Address = businessPartner.Address;
-                        businessAppDTO.PhoneNumber = businessPartner.PhoneNumber;
-                        businessAppDTO.CompanyName = businessPartner.CompanyName;
-
-                        var rooms = await _unitOfWorkVigo.Rooms.GetAll(conRoom);
-                        foreach (var room in rooms)
+                        else
                         {
-                            if (room.Avaiable > 0)
-                            {
-                                businessAppDTO.RoomAppDTOs.Add(new RoomAppDTO()
+                            DateTime DateNow = DateTime.Now;
+                            List<Expression<Func<Booking, bool>>> bookCon = new List<Expression<Func<Booking, bool>>>()
                                 {
-                                    Id = room.Id,
-                                    ProvinceId = room.ProvinceId,
-                                    DistrictId = room.DistrictId,
-                                    Name = room.Name,
-                                    Address = room.Address,
-                                    Avaiable = room.Avaiable,
-                                    DefaultDiscount = room.DefaultDiscount,
-                                    Description = room.Description,
-                                    Price = room.Price,
-                                    Star = room.Star,
-                                    Thumbnail = room.Thumbnail
-                                });
-                            }
-                            else
-                            {
-                                DateTime DateNow = DateTime.Now;
-                                List<Expression<Func<Booking, bool>>> bookCon = new List<Expression<Func<Booking, bool>>>()
-                                {
-                                    e => e.RoomId == room.Id,
+                                    e => e.RoomId == item.Id,
                                     e => e.CheckOutDate > DateNow,
-                                    e => e.CheckOutDate < checkIn
+                                    e => e.CheckOutDate < dto.CheckIn
                                 };
-                                var booking = await _unitOfWorkVigo.Bookings.GetAll(bookCon);
-                                if (booking.Count() > 0 - room.Avaiable)
-                                {
-                                    businessAppDTO.RoomAppDTOs.Add(new RoomAppDTO()
-                                    {
-                                        Id = room.Id,
-                                        Name = room.Name,
-                                        Address = room.Address,
-                                        Avaiable = room.Avaiable,
-                                        DefaultDiscount = room.DefaultDiscount,
-                                        Description = room.Description,
-                                        Price = room.Price,
-                                        Star = room.Star,
-                                        Thumbnail = room.Thumbnail
-                                    });
-                                }
+                            var booking = await _unitOfWorkVigo.Bookings.GetAll(bookCon);
+                            if (booking.Count() > 0 - item.Avaiable)
+                            {
+                                roomFilter.Add(item);
                             }
                         }
-                        result.BusinessPartnerDTOs.Add(businessAppDTO);
+                    }
+
+                    if (dto.Services != null)
+                    {
+                        List<int> roomIds = new List<int>();
+                        foreach (var item in dto.Services)
+                        {
+                            List<Expression<Func<RoomServiceR, bool>>> serviceCon = new List<Expression<Func<RoomServiceR, bool>>>()
+                            {
+                                e => e.ServiceId == item
+                            };
+                            roomIds.AddRange((await _unitOfWorkVigo.RoomServices.GetAll(serviceCon)).Select(e => e.RoomId));
+                        }
+                        foreach (var item in roomFilter)
+                        {
+                            if (!roomIds.Contains(item.Id))
+                            {
+                                roomFilter.Remove(item);
+                            }
+                        }
+                    }
+
+                    if (dto.Stars != null)
+                    {
+                        foreach (var star in dto.Stars)
+                        {
+                            roomResult.AddRange(roomFilter.Where(e => Math.Floor(e.Star + 0.5m) == star));
+                        }
+                    }
+                    else
+                    {
+                        roomResult = roomFilter.ToList();
+                    }
+                    totalRecords += roomResult.Count();
+                    roomResult = roomResult.Skip((dto.Page-1)*dto.PerPage).Take(dto.PerPage).ToList();
+                    foreach (var item in roomResult)
+                    {
+                        List<Expression<Func<Image, bool>>> imageCon = new List<Expression<Func<Image, bool>>>()
+                        {
+                            e => e.RoomId == item.Id
+                        };
+                        var imageTemp = await _unitOfWorkVigo.Images.GetPaging(imageCon, null, null, null, 1, 8);
+                        result.Items.Add(new RoomAppDTO()
+                        {
+                            ProvinceId = item.ProvinceId,
+                            DistrictId = item.DistrictId,
+                            Address = item.Address,
+                            Avaiable = item.Avaiable,
+                            DefaultDiscount = item.DefaultDiscount,
+                            Description = item.Description,
+                            District = (await _unitOfWorkVigo.Districts.GetDetailBy(e => e.Id.Equals(item.DistrictId)))!.Name,
+                            Name = item.Name,
+                            Id = item.Id,
+                            Images = imageTemp.Items.Select(e => e.Url).ToList(),
+                            Price = item.Price,
+                            Province = (await _unitOfWorkVigo.Provinces.GetDetailBy(e => e.Id.Equals(item.ProvinceId)))!.Name,
+                            Star = item.Star,
+                            Thumbnail = item.Thumbnail
+                        });
                     }
                 }
+                result.TotalRecords = totalRecords;
                 return result;
             }
             else
             {
-                SearchResultReturnDTO result = new SearchResultReturnDTO();
+                PagedResultCustom<RoomAppDTO> result = new PagedResultCustom<RoomAppDTO>(new List<RoomAppDTO>(), 0, dto.Page, dto.PerPage);
+                int totalRecords = 0;
                 List<Expression<Func<BusinessPartner, bool>>> con2 = new List<Expression<Func<BusinessPartner, bool>>>()
                 {
-                    e => e.Name.ToLower().Contains(searchInput!.ToLower())
+                    e => e.Name.ToLower().Contains(dto.SearchInput!.ToLower())
                 };
                 var business = await _unitOfWorkVigo.BusinessPartners.GetAll(con2);
-                List<BusinessAppDTO> businessAppDTOs = new List<BusinessAppDTO>();
                 foreach (var businessPartner in business) {
                     List<Expression<Func<Room, bool>>> conRoom = new List<Expression<Func<Room, bool>>>()
                     {
                         e => e.BusinessPartnerId == businessPartner.Id
                     };
-                    BusinessAppDTO businessAppDTO = new BusinessAppDTO();
-                    businessAppDTO.Address = businessPartner.Address;
-                    businessAppDTO.PhoneNumber = businessPartner.PhoneNumber;
-                    businessAppDTO.CompanyName = businessPartner.CompanyName;
-                    
                     var rooms = await _unitOfWorkVigo.Rooms.GetAll(conRoom);
-                    foreach (var room in rooms) {
-                        businessAppDTO.RoomAppDTOs.Add(new RoomAppDTO()
+                    var roomFilter = new List<Room>();
+                    var roomResult = new List<Room>();
+                    foreach (var item in rooms)
+                    {
+                        if (item.Avaiable > 0)
                         {
-                            Id = room.Id,
-                            Name = room.Name,
-                            Address = room.Address,
-                            Avaiable = room.Avaiable,
-                            DefaultDiscount = room.DefaultDiscount,
-                            Description = room.Description,
-                            Price = room.Price,
-                            Thumbnail = room.Thumbnail
+                            roomFilter.Add(item);
+                        }
+                        else
+                        {
+                            DateTime DateNow = DateTime.Now;
+                            List<Expression<Func<Booking, bool>>> bookCon = new List<Expression<Func<Booking, bool>>>()
+                                {
+                                    e => e.RoomId == item.Id,
+                                    e => e.CheckOutDate > DateNow,
+                                    e => e.CheckOutDate < dto.CheckIn
+                                };
+                            var booking = await _unitOfWorkVigo.Bookings.GetAll(bookCon);
+                            if (booking.Count() > 0 - item.Avaiable)
+                            {
+                                roomFilter.Add(item);
+                            }
+                        }
+                    }
+
+                    if (dto.Services != null)
+                    {
+                        List<int> roomIds = new List<int>();
+                        foreach (var item in dto.Services)
+                        {
+                            List<Expression<Func<RoomServiceR, bool>>> serviceCon = new List<Expression<Func<RoomServiceR, bool>>>()
+                            {
+                                e => e.ServiceId == item
+                            };
+                            roomIds.AddRange((await _unitOfWorkVigo.RoomServices.GetAll(serviceCon)).Select(e => e.RoomId));
+                        }
+                        foreach (var item in roomFilter)
+                        {
+                            if (!roomIds.Contains(item.Id))
+                            {
+                                roomFilter.Remove(item);
+                            }
+                        }
+                    }
+
+                    if (dto.Stars != null)
+                    {
+                        foreach (var star in dto.Stars)
+                        {
+                            roomResult.AddRange(roomFilter.Where(e => Math.Floor(e.Star + 0.5m) == star));
+                        }
+                    }
+                    else
+                    {
+                        roomResult = roomFilter.ToList();
+                    }
+                    totalRecords += roomResult.Count();
+                    roomResult = roomResult.Skip((dto.Page - 1) * dto.PerPage).Take(dto.PerPage).ToList();
+                    foreach (var item in roomResult)
+                    {
+                        List<Expression<Func<Image, bool>>> imageCon = new List<Expression<Func<Image, bool>>>()
+                        {
+                            e => e.RoomId == item.Id
+                        };
+                        var imageTemp = await _unitOfWorkVigo.Images.GetPaging(imageCon, null, null, null, 1, 8);
+                        result.Items.Add(new RoomAppDTO()
+                        {
+                            ProvinceId = item.ProvinceId,
+                            DistrictId = item.DistrictId,
+                            Address = item.Address,
+                            Avaiable = item.Avaiable,
+                            DefaultDiscount = item.DefaultDiscount,
+                            Description = item.Description,
+                            District = (await _unitOfWorkVigo.Districts.GetDetailBy(e => e.Id.Equals(item.DistrictId)))!.Name,
+                            Name = item.Name,
+                            Id = item.Id,
+                            Images = imageTemp.Items.Select(e => e.Url).ToList(),
+                            Price = item.Price,
+                            Province = (await _unitOfWorkVigo.Provinces.GetDetailBy(e => e.Id.Equals(item.ProvinceId)))!.Name,
+                            Star = item.Star,
+                            Thumbnail = item.Thumbnail
                         });
                     }
-                    result.BusinessPartnerDTOs.Add(businessAppDTO);
                 }
+                result.TotalRecords = totalRecords;
                 return result;
             }
         }

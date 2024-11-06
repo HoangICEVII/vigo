@@ -70,7 +70,7 @@ namespace vigo.Service.Application.ServiceApp
             return result;
         }
 
-        public async Task<ProvinceV2DTO> GetPaging(int page, int perPage, int? roomTypeId, string provinceId, string? districtId, DateTime checkIn, DateTime checkOut, List<int> star)
+        public async Task<ProvinceV2DTO> GetPaging(int page, int perPage, int? roomTypeId, string provinceId, string? districtId, DateTime checkIn, DateTime checkOut, List<int>? stars, List<int>? services, decimal price)
         {
             List<Expression<Func<Room, bool>>> conditions = new List<Expression<Func<Room, bool>>>()
             {
@@ -85,16 +85,37 @@ namespace vigo.Service.Application.ServiceApp
             }
             var room = await _unitOfWorkVigo.Rooms.GetAll(conditions);
             var roomResult = new List<Room>();
-            if (star.Any())
+            if (stars != null)
             {
-                foreach (var item in star) {
-                    roomResult.AddRange(room.Where(e => Math.Floor(e.Star + 0.5m) == item));
+                foreach (var item in stars) {
+                    roomResult.AddRange(room.Where(e => Math.Floor(e.Star + 0.5m) == item && e.Price > price - 100m && e.Price < price + 100m));
                 }
             }
             else
             {
                 roomResult = room.ToList();
             }
+
+            if (services != null)
+            {
+                List<int> roomIds = new List<int>();
+                foreach (var item in services)
+                {
+                    List<Expression<Func<RoomServiceR, bool>>> serviceCon = new List<Expression<Func<RoomServiceR, bool>>>()
+                    {
+                        e => e.ServiceId == item
+                    };
+                    roomIds.AddRange((await _unitOfWorkVigo.RoomServices.GetAll(serviceCon)).Select(e => e.RoomId));
+                }
+                foreach (var item in roomResult)
+                {
+                    if (!roomIds.Contains(item.Id))
+                    {
+                        roomResult.Remove(item);
+                    }
+                }
+            }
+
             foreach (var roomTempResult in roomResult)
             {
                 DateTime DateNow = DateTime.Now;
@@ -150,14 +171,29 @@ namespace vigo.Service.Application.ServiceApp
             };
         }
 
+        public async Task<PriceRangeDTO> GetPriceRange()
+        {
+            List<Expression<Func<Room, bool>>> conditions = new List<Expression<Func<Room, bool>>>()
+            {
+                e => e.DeletedDate == null
+            };
+            var prices = (await _unitOfWorkVigo.Rooms.GetAll(conditions)).Select(e => e.Price);
+            return new PriceRangeDTO()
+            {
+                Max = prices.Max(),
+                Min = prices.Min()
+            };
+        }
+
         public async Task<List<RoomAppDTO>> GetRelatedRoom(int businessPartnerId)
         {
             List<Expression<Func<Room, bool>>> conditions = new List<Expression<Func<Room, bool>>>()
             {
-                e => e.BusinessPartnerId == businessPartnerId
+                e => e.BusinessPartnerId == businessPartnerId,
+                e => e.DeletedDate == null
             };
             var rooms = await _unitOfWorkVigo.Rooms.GetPaging(conditions, null, e => e.BookNumber, null, 1, 8, true);
-            List<RoomAppDTO> temp = new List<RoomAppDTO>();
+            List <RoomAppDTO> temp = new List<RoomAppDTO>();
             foreach (var room in rooms.Items)
             {
                 List<Expression<Func<Image, bool>>> imageCon = new List<Expression<Func<Image, bool>>>()

@@ -29,7 +29,7 @@ namespace vigo.Controllers
         {
             try
             {
-                var data = await _roomAppService.GetPaging(dto.Page, dto.PerPage, dto.RoomTypeId, dto.ProvinceId, dto.DistrictId, dto.CheckIn, dto.CheckOut, dto.Stars);
+                var data = await _roomAppService.GetPaging(dto.Page, dto.PerPage, dto.RoomTypeId, dto.ProvinceId, dto.DistrictId, dto.CheckIn, dto.CheckOut, dto.Stars, dto.Services, dto.Price);
                 Option options = new Option()
                 {
                     Name = "",
@@ -56,6 +56,25 @@ namespace vigo.Controllers
             try
             {
                 var data = await _roomAppService.GetDetail(id);
+                return CreateResponse(data, "get success", 200, null);
+            }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return CreateResponse(null, "get fail", 500, null);
+            }
+        }
+
+        [HttpGet("price-range")]
+        public async Task<IActionResult> GetPriceRange()
+        {
+            try
+            {
+                var data = await _roomAppService.GetPriceRange();
                 return CreateResponse(data, "get success", 200, null);
             }
             catch (CustomException e)

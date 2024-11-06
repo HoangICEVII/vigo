@@ -4,6 +4,8 @@ using vigo.Domain.Helper;
 using vigo.Service.Application.IServiceApp;
 using vigo.Service.Application.ServiceApp;
 using vigo.Service.DTO;
+using vigo.Service.DTO.Application.Room;
+using vigo.Service.DTO.Shared;
 
 namespace vigo.Controllers
 {
@@ -38,13 +40,20 @@ namespace vigo.Controllers
             }
         }
 
-        [HttpGet("get-result")]
-        public async Task<IActionResult> ReturnSearchResult(string? searchInput, DateTime checkIn, DateTime checkOut, int? roomTypeId)
+        [HttpPost("get-result")]
+        public async Task<IActionResult> ReturnSearchResult(GetRoomSearchDTO dto)
         {
             try
             {
-                var data = await _searchAppService.ReturnSearchResult(searchInput, checkIn, checkOut, roomTypeId);
-                return CreateResponse(data.BusinessPartnerDTOs, "get success", 200, null);
+                var data = await _searchAppService.ReturnSearchResult(dto);
+                Option options = new Option()
+                {
+                    Name = "",
+                    PageSize = data.PageSize,
+                    Page = data.PageIndex,
+                    TotalRecords = data.TotalRecords
+                };
+                return CreateResponse(data.Items, "get success", 200, options);
             }
             catch (CustomException e)
             {
