@@ -70,24 +70,22 @@ namespace vigo.Service.Application.ServiceApp
             return result;
         }
 
-        public async Task<ProvinceV2DTO> GetPaging(int page, int perPage, int? roomTypeId, string provinceId, string? districtId, DateTime checkIn, DateTime checkOut, List<int>? stars, List<int>? services, decimal maxPrice, decimal minPrice)
+        public async Task<ProvinceV2DTO> GetPaging(GetRoomDTO dto)
         {
             List<Expression<Func<Room, bool>>> conditions = new List<Expression<Func<Room, bool>>>()
             {
-                e => e.ProvinceId.Equals(provinceId)
+                e => e.ProvinceId.Equals(dto.ProvinceId)
             };
-            if (roomTypeId != null)
+            if (dto.RoomTypeId != null)
             {
-                conditions.Add(e => e.RoomTypeId == roomTypeId);
-            }
-            if (districtId != null) {
-                conditions.Add(e => e.DistrictId == districtId);
+                conditions.Add(e => e.RoomTypeId == dto.RoomTypeId);
             }
             var room = await _unitOfWorkVigo.Rooms.GetAll(conditions);
             var roomResult = new List<Room>();
-            if (stars != null)
+
+            if (dto.Stars != null)
             {
-                foreach (var item in stars)
+                foreach (var item in dto.Stars)
                 {
                     roomResult.AddRange(room.Where(e => Math.Floor(e.Star + 0.5m) == item));
                 }
@@ -97,19 +95,31 @@ namespace vigo.Service.Application.ServiceApp
                 roomResult = room.ToList();
             }
 
-            for(int i = roomResult.Count - 1; i >= 0; i--)
+            if (dto.DistrictIds != null)
+            {
+                for (int i = roomResult.Count - 1; i >= 0; i--)
+                {
+                    var item = roomResult[i];
+                    if (!dto.DistrictIds.Contains(item.DistrictId))
+                    {
+                        roomResult.RemoveAt(i);
+                    }
+                }
+            }
+
+            for (int i = roomResult.Count - 1; i >= 0; i--)
             {
                 var item = roomResult[i];
-                if (item.Price < minPrice || item.Price > maxPrice)
+                if (item.Price < dto.MinPrice || item.Price > dto.MaxPrice)
                 {
                     roomResult.RemoveAt(i);
                 }
             }
 
-            if (services != null)
+            if (dto.Services != null)
             {
                 List<int> roomIds = new List<int>();
-                foreach (var item in services)
+                foreach (var item in dto.Services)
                 {
                     List<Expression<Func<RoomServiceR, bool>>> serviceCon = new List<Expression<Func<RoomServiceR, bool>>>()
                     {
@@ -135,7 +145,7 @@ namespace vigo.Service.Application.ServiceApp
                                 {
                                     e => e.RoomId == roomTempResult.Id,
                                     e => e.CheckOutDate > DateNow,
-                                    e => e.CheckOutDate < checkIn
+                                    e => e.CheckOutDate < dto.CheckIn
                                 };
                 var booking = await _unitOfWorkVigo.Bookings.GetAll(bookCon);
                 if (!(booking.Count() > 0 - roomTempResult.Avaiable))
@@ -145,8 +155,8 @@ namespace vigo.Service.Application.ServiceApp
             }
             
             var tempRoomCount = roomResult.Count();
-            roomResult = roomResult.Skip((page - 1)*perPage).Take(perPage).ToList();
-            var province = await _unitOfWorkVigo.Provinces.GetDetailBy(e => e.Id.Equals(provinceId));
+            roomResult = roomResult.Skip((dto.Page - 1)* dto.PerPage).Take(dto.PerPage).ToList();
+            var province = await _unitOfWorkVigo.Provinces.GetDetailBy(e => e.Id.Equals(dto.ProvinceId));
             List<RoomAppDTO> temp = new List<RoomAppDTO>();
             foreach (var item in roomResult)
             {

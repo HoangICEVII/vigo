@@ -13,7 +13,7 @@ namespace vigo.Service.DTO.Application.Room
         public int PerPage { get; set; }
         public int? RoomTypeId { get; set; }
         public string ProvinceId { get; set; } = string.Empty;
-        public string? DistrictId { get; set; }
+        public List<string>? DistrictIds { get; set; }
         public DateTime CheckIn { get; set; }
         public DateTime CheckOut { get; set; }
         public List<int>? Stars { get; set; }

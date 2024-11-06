@@ -16,5 +16,7 @@ namespace vigo.Service.DTO.Application.Room
         public int? RoomTypeId { get; set; }
         public List<int>? Stars { get; set; }
         public List<int>? Services { get; set; }
+        public decimal MaxPrice { get; set; }
+        public decimal MinPrice { get; set; }
     }
 }

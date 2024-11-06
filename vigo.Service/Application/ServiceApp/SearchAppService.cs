@@ -72,6 +72,15 @@ namespace vigo.Service.Application.ServiceApp
                         }
                     }
 
+                    for (int i = roomFilter.Count - 1; i >= 0; i--)
+                    {
+                        var item = roomFilter[i];
+                        if (item.Price < dto.MinPrice || item.Price > dto.MaxPrice)
+                        {
+                            roomFilter.RemoveAt(i);
+                        }
+                    }
+
                     if (dto.Services != null)
                     {
                         List<int> roomIds = new List<int>();
