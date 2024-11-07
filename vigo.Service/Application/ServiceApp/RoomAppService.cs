@@ -67,6 +67,8 @@ namespace vigo.Service.Application.ServiceApp
                 }
             }
             result.BusinessPartnerName = (await _unitOfWorkVigo.BusinessPartners.GetById(result.BusinessPartnerId)).Name;
+            result.Province = (await _unitOfWorkVigo.Provinces.GetDetailBy(e => e.Id.Equals(result.ProvinceId)))!.Name;
+            result.District = (await _unitOfWorkVigo.Districts.GetDetailBy(e => e.Id.Equals(result.DistrictId)))!.Name;
             return result;
         }
 
