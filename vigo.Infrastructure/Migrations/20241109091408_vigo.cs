@@ -430,6 +430,10 @@ namespace vigo.Infrastructure.Migrations
                     CreatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
                     CheckInDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
                     CheckOutDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
+                    Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PhoneNumber = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     RoomId = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
                     DiscountCode = table.Column<string>(type: "longtext", nullable: false)

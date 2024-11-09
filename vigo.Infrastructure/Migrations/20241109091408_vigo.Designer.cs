@@ -12,7 +12,7 @@ using vigo.Infrastructure.DBContext;
 namespace vigo.Infrastructure.Migrations
 {
     [DbContext(typeof(VigoDatabaseContext))]
-    [Migration("20241103182537_vigo")]
+    [Migration("20241109091408_vigo")]
     partial class vigo
     {
         /// <inheritdoc />
@@ -246,6 +246,14 @@ namespace vigo.Infrastructure.Migrations
 
                     b.Property<decimal>("DiscountPrice")
                         .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(65,30)");

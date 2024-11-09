@@ -52,6 +52,8 @@ namespace vigo.Service.Application.ServiceApp
                 DiscountCode = coupon.DiscountCode,
                 DiscountPrice = discountPrice,
                 RoomId = room.Id,
+                Name = dto.Name,
+                PhoneNumber = dto.PhoneNumber,
                 Price = price,
                 TotalPrice = price - discountPrice,
                 TouristId = infoId

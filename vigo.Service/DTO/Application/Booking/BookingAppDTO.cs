@@ -15,6 +15,8 @@ namespace vigo.Service.DTO.Application.Booking
         public int RoomId { get; set; }
         public decimal Price { get; set; }
         public string DiscountCode { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+        public string PhoneNumber { get; set; } = string.Empty;
         public decimal DiscountPrice { get; set; }
         public decimal TotalPrice { get; set; }
         public bool Approved { get; set; }
