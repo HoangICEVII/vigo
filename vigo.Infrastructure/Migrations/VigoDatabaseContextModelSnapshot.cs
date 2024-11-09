@@ -228,6 +228,10 @@ namespace vigo.Infrastructure.Migrations
                     b.Property<bool>("Approved")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<string>("CCCD")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("CheckInDate")
                         .HasColumnType("TIMESTAMP");
 

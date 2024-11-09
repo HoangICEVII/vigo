@@ -12,7 +12,7 @@ using vigo.Infrastructure.DBContext;
 namespace vigo.Infrastructure.Migrations
 {
     [DbContext(typeof(VigoDatabaseContext))]
-    [Migration("20241109091408_vigo")]
+    [Migration("20241109092021_vigo")]
     partial class vigo
     {
         /// <inheritdoc />
@@ -230,6 +230,10 @@ namespace vigo.Infrastructure.Migrations
 
                     b.Property<bool>("Approved")
                         .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("CCCD")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("CheckInDate")
                         .HasColumnType("TIMESTAMP");

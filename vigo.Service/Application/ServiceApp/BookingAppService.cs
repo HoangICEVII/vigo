@@ -54,6 +54,7 @@ namespace vigo.Service.Application.ServiceApp
                 RoomId = room.Id,
                 Name = dto.Name,
                 PhoneNumber = dto.PhoneNumber,
+                CCCD = dto.CCCD,
                 Price = price,
                 TotalPrice = price - discountPrice,
                 TouristId = infoId

@@ -430,6 +430,8 @@ namespace vigo.Infrastructure.Migrations
                     CreatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
                     CheckInDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
                     CheckOutDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
+                    CCCD = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     PhoneNumber = table.Column<string>(type: "longtext", nullable: false)

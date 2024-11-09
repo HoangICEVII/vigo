@@ -13,6 +13,7 @@ namespace vigo.Domain.Entity
         public DateTime CreatedDate { get; set; }
         public DateTime CheckInDate { get; set; }
         public DateTime CheckOutDate { get; set; }
+        public string CCCD {  get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;
         public int RoomId { get; set; }

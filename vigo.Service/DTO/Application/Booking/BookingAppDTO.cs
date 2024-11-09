@@ -12,6 +12,7 @@ namespace vigo.Service.DTO.Application.Booking
         public DateTime CreatedDate { get; set; }
         public DateTime CheckInDate { get; set; }
         public DateTime CheckOutDate { get; set; }
+        public string CCCD { get; set; } = string.Empty;
         public int RoomId { get; set; }
         public decimal Price { get; set; }
         public string DiscountCode { get; set; } = string.Empty;
