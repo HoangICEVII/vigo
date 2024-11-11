@@ -100,7 +100,7 @@ namespace vigo.Controllers
             }
         }
 
-        [HttpPost("active-email/{token}")]
+        [HttpPost("active-email")]
         public async Task<IActionResult> ActiveEmail(string token)
         {
             try

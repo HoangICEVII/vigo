@@ -118,7 +118,7 @@ namespace vigo.Service.Application.ServiceApp
             EmailAuthenDTO emailAuthenDTO = new EmailAuthenDTO()
             {
                 Email = dto.Email,
-                Url = $"http://localhost:2002/api/application/accounts/active-email/{emailAuthen.Token}"
+                Url = $"http://localhost:2002/api/application/accounts/active-email?token={emailAuthen.Token}"
             };
             _emailAuthenProducer.SendEmailAuthen(emailAuthenDTO);
         }
