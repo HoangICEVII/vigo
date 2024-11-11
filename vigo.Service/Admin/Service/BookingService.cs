@@ -123,10 +123,13 @@ namespace vigo.Service.Admin.Service
             foreach (Booking item in data) {
                 var room = await _unitOfWorkVigo.Rooms.GetById(item.RoomId);
                 var coupon = await _unitOfWorkVigo.DiscountCoupons.GetDetailBy(e => e.DiscountCode.Equals(item.DiscountCode));
-                coupon!.UserUsed = coupon.UserUsed.IsNullOrEmpty() ? item.TouristId.ToString() : coupon.UserUsed + $",{item.TouristId}";
                 room.BookNumber += 1;
                 room.Avaiable -=1;
                 item.Approved = true;
+                if (coupon != null)
+                {
+                    coupon!.UserUsed = coupon.UserUsed.IsNullOrEmpty() ? item.TouristId.ToString() : coupon.UserUsed + $",{item.TouristId}";
+                }
             }
             await _unitOfWorkVigo.Complete();
         }
