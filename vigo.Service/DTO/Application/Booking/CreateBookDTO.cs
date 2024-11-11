@@ -14,6 +14,6 @@ namespace vigo.Service.DTO.Application.Booking
         public string PhoneNumber { get; set; } = string.Empty;
         public string CCCD { get; set; } = string.Empty;
         public int RoomId { get; set; }
-        public int CouponId { get; set; }
+        public int? CouponId { get; set; }
     }
 }

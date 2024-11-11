@@ -15,7 +15,6 @@ using vigo.Service.Admin.IService;
 using vigo.Service.DTO.Admin.Account;
 using vigo.Service.DTO.Admin.Booking;
 using vigo.Service.DTO.Admin.Room;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace vigo.Service.Admin.Service
 {
@@ -28,6 +27,27 @@ namespace vigo.Service.Admin.Service
         {
             _unitOfWorkVigo = unitOfWorkVigo;
             _mapper = mapper;
+        }
+
+        public async Task Delete(List<int> ids, ClaimsPrincipal user)
+        {
+            int roleId = int.Parse(user.FindFirst("RoleId")!.Value);
+            var role = await _unitOfWorkVigo.Roles.GetById(roleId);
+            if (!role.Permission.Split(",").Contains("booking_manage"))
+            {
+                throw new CustomException("không có quyền");
+            }
+            List<Booking> data = new List<Booking>();
+            DateTime DateNow = DateTime.Now;
+            foreach (int id in ids)
+            {
+                data.Add(await _unitOfWorkVigo.Bookings.GetById(id));
+            }
+            foreach (Booking item in data)
+            {
+                item.DeletedDate = DateNow;
+            }
+            await _unitOfWorkVigo.Complete();
         }
 
         public async Task<BookingDetailDTO> GetDetail(int id, ClaimsPrincipal user)
@@ -60,9 +80,15 @@ namespace vigo.Service.Admin.Service
             {
                 throw new CustomException("không có quyền");
             }
+            string userType = user.FindFirst("UserType")!.Value;
             List<Expression<Func<Booking, bool>>> conditions = new List<Expression<Func<Booking, bool>>>()
             {
+                e => e.DeletedDate == null
             };
+            if (userType.Equals("BusinessPartner"))
+            {
+                conditions.Add(e => e.BusinessPartnerId == int.Parse(user.FindFirst("InfoId")!.Value));
+            }
             if (isReceived != null)
             {
                 conditions.Add(e => e.Approved == isReceived);

@@ -10,9 +10,11 @@ namespace vigo.Domain.Entity
     {
         public int Id { get; set; }
         public int TouristId { get; set; }
+        public int BusinessPartnerId { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime CheckInDate { get; set; }
         public DateTime CheckOutDate { get; set; }
+        public DateTime? DeletedDate { get; set; }
         public string CCCD {  get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;
@@ -22,5 +24,6 @@ namespace vigo.Domain.Entity
         public decimal DiscountPrice { get; set; }
         public decimal TotalPrice { get; set; }
         public bool Approved { get; set; }
+        public bool IsCheckOut { get; set; }
     }
 }

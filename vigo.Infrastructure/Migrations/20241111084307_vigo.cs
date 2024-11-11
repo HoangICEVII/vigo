@@ -427,9 +427,11 @@ namespace vigo.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     TouristId = table.Column<int>(type: "int", nullable: false),
+                    BusinessPartnerId = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
                     CheckInDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
                     CheckOutDate = table.Column<DateTime>(type: "TIMESTAMP", nullable: false),
+                    DeletedDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     CCCD = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Name = table.Column<string>(type: "longtext", nullable: false)
@@ -442,7 +444,8 @@ namespace vigo.Infrastructure.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     DiscountPrice = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
                     TotalPrice = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    Approved = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                    Approved = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsCheckOut = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {

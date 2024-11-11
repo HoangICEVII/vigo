@@ -10,6 +10,7 @@ using vigo.Admin;
 using vigo.Domain.Interface.IUnitOfWork;
 using vigo.Infrastructure.DBContext;
 using vigo.Infrastructure.UnitOfWork;
+using vigo.Service.Admin;
 using vigo.Service.Admin.IService;
 using vigo.Service.Admin.Service;
 using vigo.Service.Helper;
@@ -81,6 +82,7 @@ builder.Services.AddScoped<IRoomService, RoomService>();
 builder.Services.AddScoped<IServiceService, ServiceService>();
 builder.Services.AddScoped<IRoomTypeService, RoomTypeService>();
 builder.Services.AddScoped<IBankService, BankService>();
+builder.Services.AddScoped<ICheckOutService, CheckOutService>();
 //builder.Services.AddScoped<ISystemEmployeeService, SystemEmployeeService>();
 //builder.Services.AddScoped<ITouristService, TouristService>();
 #endregion
@@ -91,6 +93,7 @@ builder.Services.AddScoped<IUnitOfWorkVigo, UnitOfWorkVigo>();
 //DbContext Denpendency Injection
 builder.Services.AddScoped<VigoDatabaseContext, VigoDatabaseContext>();
 
+builder.Services.AddHostedService<VigoBackGroundService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

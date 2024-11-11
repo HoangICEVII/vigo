@@ -31,25 +31,34 @@ namespace vigo.Service.Application.ServiceApp
         public async Task<List<BookingBankDataDTO>> Book(CreateBookDTO dto, ClaimsPrincipal user)
         {
             int infoId = int.Parse(user.FindFirst("InfoId")!.Value);
-            DiscountCoupon coupon = await _unitOfWorkVigo.DiscountCoupons.GetById(dto.CouponId);
+            DiscountCoupon? coupon = null;
+            if (dto.CouponId != null)
+            {
+                coupon = await _unitOfWorkVigo.DiscountCoupons.GetById((int)dto.CouponId);
+            }
             var room = await _unitOfWorkVigo.Rooms.GetById(dto.RoomId);
             decimal price = room.Price * (dto.CheckOutDate - dto.CheckInDate).Days;
             decimal discountPrice = 0;
-            if (coupon.DiscountType.ToString().Equals("fixed_amount"))
+            if (coupon != null)
             {
-                discountPrice = coupon.DiscountValue;
-            }
-            if (coupon.DiscountType.ToString().Equals("percentage"))
-            {
-                discountPrice = coupon.DiscountValue * price / 100;
+                if (coupon.DiscountType.ToString().Equals("fixed_amount"))
+                {
+                    discountPrice = coupon.DiscountValue;
+                }
+                if (coupon.DiscountType.ToString().Equals("percentage"))
+                {
+                    discountPrice = coupon.DiscountValue * price / 100;
+                }
             }
             Booking data = new Booking()
             {
                 Approved = false,
+                BusinessPartnerId = room.BusinessPartnerId,
+                DeletedDate = null,
                 CheckInDate = dto.CheckInDate,
                 CheckOutDate = dto.CheckOutDate,
                 CreatedDate = DateTime.Now,
-                DiscountCode = coupon.DiscountCode,
+                DiscountCode = coupon != null ? coupon.DiscountCode : string.Empty,
                 DiscountPrice = discountPrice,
                 RoomId = room.Id,
                 Name = dto.Name,
@@ -57,7 +66,8 @@ namespace vigo.Service.Application.ServiceApp
                 CCCD = dto.CCCD,
                 Price = price,
                 TotalPrice = price - discountPrice,
-                TouristId = infoId
+                TouristId = infoId,
+                IsCheckOut = false
             };
             _unitOfWorkVigo.Bookings.Create(data);
             await _unitOfWorkVigo.Complete();
@@ -65,7 +75,8 @@ namespace vigo.Service.Application.ServiceApp
             List<BookingBankDataDTO> result = new List<BookingBankDataDTO>();
             List<Expression<Func<BusinessPartnerBank, bool>>> conditions = new List<Expression<Func<BusinessPartnerBank, bool>>>()
             {
-                e => e.BusinessPartnerId == room.BusinessPartnerId
+                e => e.BusinessPartnerId == room.BusinessPartnerId,
+                e => e.DeletedDate == null
             };
             var businessBank = await _unitOfWorkVigo.BusinessPartnerBanks.GetAll(conditions);
 
@@ -89,7 +100,8 @@ namespace vigo.Service.Application.ServiceApp
             int infoId = int.Parse(user.FindFirst("InfoId")!.Value);
             List<Expression<Func<Booking, bool>>> conditions = new List<Expression<Func<Booking, bool>>>()
             {
-                e => e.TouristId == infoId
+                e => e.TouristId == infoId,
+                e => e.DeletedDate == null
             };
             var data = await _unitOfWorkVigo.Bookings.GetPaging(conditions,
                                                                 null,

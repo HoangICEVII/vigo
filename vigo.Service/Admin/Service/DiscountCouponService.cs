@@ -13,6 +13,7 @@ using vigo.Domain.Interface.IUnitOfWork;
 using vigo.Service.Admin.IService;
 using vigo.Service.DTO.Admin.Account;
 using vigo.Service.DTO.Admin.Discount;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace vigo.Service.Admin.Service
 {
@@ -76,6 +77,15 @@ namespace vigo.Service.Admin.Service
             var data = await _unitOfWorkVigo.DiscountCoupons.GetById(id);
             data.DeletedDate = DateNow;
             await _unitOfWorkVigo.Complete();
+        }
+
+        public async Task<List<DiscountCouponDTO>> GetAll(ClaimsPrincipal user)
+        {
+            List<Expression<Func<DiscountCoupon, bool>>> conditions = new List<Expression<Func<DiscountCoupon, bool>>>()
+            {
+                e => e.DeletedDate == null,
+            };
+            return _mapper.Map<List<DiscountCouponDTO>>(await _unitOfWorkVigo.DiscountCoupons.GetAll(conditions));
         }
 
         public async Task<DiscountCouponDetailDTO> GetDetail(int id, ClaimsPrincipal user)

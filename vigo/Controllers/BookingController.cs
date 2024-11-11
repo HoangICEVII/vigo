@@ -86,7 +86,7 @@ namespace vigo.Controllers
                     Page = 1,
                     TotalRecords = data.Count()
                 };
-                return CreateResponse(data, "get success", 200, options);
+                return CreateResponse(data, "book success", 200, options);
             }
             catch (CustomException e)
             {
@@ -95,7 +95,7 @@ namespace vigo.Controllers
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                return CreateResponse(null, "get fail", 500, null);
+                return CreateResponse(null, "book fail", 500, null);
             }
         }
     }

@@ -13,6 +13,7 @@ namespace vigo.Service.Admin.IService
     public interface IDiscountCouponService
     {
         Task<PagedResultCustom<DiscountCouponDTO>> GetPaging(int page, int perPage, string? sortType, string? sortField, ClaimsPrincipal user);
+        Task<List<DiscountCouponDTO>> GetAll(ClaimsPrincipal user);
         Task<List<RoomShortDTO>> GetRoomApplyDiscount(ClaimsPrincipal user);
         Task Create(CreateDiscountCouponDTO dto, ClaimsPrincipal user);
         Task<DiscountCouponDetailDTO> GetDetail(int id, ClaimsPrincipal user);

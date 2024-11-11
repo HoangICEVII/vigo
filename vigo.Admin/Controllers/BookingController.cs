@@ -85,5 +85,24 @@ namespace vigo.Admin.Controllers
                 return CreateResponse(null, "receive fail", 500, null);
             }
         }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete(List<int> ids)
+        {
+            try
+            {
+                await _bookingService.Delete(ids, User);
+                return CreateResponse(null, "delete success", 200, null);
+            }
+            catch (CustomException e)
+            {
+                return CreateResponse(null, e.Message, 500, null);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return CreateResponse(null, "delete fail", 500, null);
+            }
+        }
     }
 }

@@ -15,5 +15,6 @@ namespace vigo.Service.Admin.IService
         Task<PagedResultCustom<BookingDTO>> GetPaging(int page, int perPage, bool? isReceived, string? sortType, string? sortField, ClaimsPrincipal user);
         Task<BookingDetailDTO> GetDetail(int id, ClaimsPrincipal user);
         Task ReceiveBooking(List<int> ids, ClaimsPrincipal user);
+        Task Delete(List<int> ids, ClaimsPrincipal user);
     }
 }
