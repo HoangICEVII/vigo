@@ -121,7 +121,13 @@ namespace vigo.Service.Admin.Service
             List<Rating> data = new List<Rating>();
             foreach (int id in ids)
             {
-                data.Add(await _unitOfWorkVigo.Ratings.GetById(id));
+                var rate = await _unitOfWorkVigo.Ratings.GetById(id);
+                if (!rate.UpdateComment.IsNullOrEmpty())
+                {
+                    rate.UpdateComment = string.Empty;
+                    continue;
+                }
+                data.Add(rate);
             }
             _unitOfWorkVigo.Ratings.DeleteRange(data);
             await _unitOfWorkVigo.Complete();

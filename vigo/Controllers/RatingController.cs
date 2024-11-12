@@ -56,7 +56,7 @@ namespace vigo.Controllers
             try
             {
                 await _ratingAppService.RateRoom(dto, User);
-                return CreateResponse(null, "get success", 200, null);
+                return CreateResponse(null, "đánh giá đã được gửi để kiểm duyệt", 200, null);
             }
             catch (CustomException e)
             {
@@ -65,7 +65,7 @@ namespace vigo.Controllers
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                return CreateResponse(null, "get fail", 500, null);
+                return CreateResponse(null, "rate fail", 500, null);
             }
         }
 
@@ -75,7 +75,7 @@ namespace vigo.Controllers
             try
             {
                 await _ratingAppService.UpdateRateRoom(dto, User);
-                return CreateResponse(null, "get success", 200, null);
+                return CreateResponse(null, "chỉnh sửa đang được kiểm duyệt", 200, null);
             }
             catch (CustomException e)
             {
@@ -84,7 +84,7 @@ namespace vigo.Controllers
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                return CreateResponse(null, "get fail", 500, null);
+                return CreateResponse(null, "update fail", 500, null);
             }
         }
     }

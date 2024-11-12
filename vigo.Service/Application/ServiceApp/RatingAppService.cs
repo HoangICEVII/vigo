@@ -73,6 +73,7 @@ namespace vigo.Service.Application.ServiceApp
         {
             var data = await _unitOfWorkVigo.Ratings.GetById(dto.Id);
             data.UpdateComment = dto.UpdateComment;
+            data.Star = dto.Rate;
             await _unitOfWorkVigo.Complete();
         }
     }
