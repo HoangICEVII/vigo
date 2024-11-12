@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using vigo.Service.DTO.Admin.Room;
 
 namespace vigo.Service.DTO.Application.Booking
 {
@@ -14,6 +15,7 @@ namespace vigo.Service.DTO.Application.Booking
         public DateTime CheckOutDate { get; set; }
         public string CCCD { get; set; } = string.Empty;
         public int RoomId { get; set; }
+        public RoomDetailDTO RoomDetail { get; set; } = null!;
         public decimal Price { get; set; }
         public string DiscountCode { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;

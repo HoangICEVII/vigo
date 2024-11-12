@@ -12,6 +12,8 @@ using vigo.Domain.Interface.IUnitOfWork;
 using vigo.Domain.User;
 using vigo.Service.Application.IServiceApp;
 using vigo.Service.DTO.Admin.Account;
+using vigo.Service.DTO.Admin.Room;
+using vigo.Service.DTO.Admin.Service;
 using vigo.Service.DTO.Application;
 using vigo.Service.DTO.Application.Booking;
 
@@ -110,7 +112,47 @@ namespace vigo.Service.Application.ServiceApp
                                                                 page,
                                                                 perPage,
                                                                 true);
-            return new PagedResultCustom<BookingAppDTO>(_mapper.Map<List<BookingAppDTO>>(data.Items), data.TotalRecords, data.PageIndex, data.PageSize);
+            var books = _mapper.Map<List<BookingAppDTO>>(data.Items);
+            foreach (var item in books) {
+                var book = _mapper.Map<RoomDetailDTO>(await _unitOfWorkVigo.Rooms.GetById(item.RoomId));
+                List<Expression<Func<RoomServiceR, bool>>> con = new List<Expression<Func<RoomServiceR, bool>>>()
+                {
+                    e => e.RoomId == book.Id
+                };
+                var roomServices = await _unitOfWorkVigo.RoomServices.GetAll(con);
+                foreach (var service in roomServices)
+                {
+                    book.Services.Add(_mapper.Map<ServiceDTO>(await _unitOfWorkVigo.Services.GetById(service.ServiceId)));
+                }
+                List<Expression<Func<Image, bool>>> con2 = new List<Expression<Func<Image, bool>>>()
+                {
+                    e => e.RoomId == book.Id
+                };
+                var images = await _unitOfWorkVigo.Images.GetAll(con2);
+                List<string> type = new List<string>();
+                foreach (var image in images)
+                {
+                    if (type.Contains(image.Type))
+                    {
+                        book.Images.Where(e => e.Type == image.Type).FirstOrDefault()!.Urls.Add(image.Url);
+                    }
+                    else
+                    {
+                        type.Add(image.Type);
+                        var temp = new RoomImageDTO()
+                        {
+                            Type = image.Type
+                        };
+                        temp.Urls.Add(image.Url);
+                        book.Images.Add(temp);
+                    }
+                }
+                book.BusinessPartnerName = (await _unitOfWorkVigo.BusinessPartners.GetById(book.BusinessPartnerId)).Name;
+                book.Province = (await _unitOfWorkVigo.Provinces.GetDetailBy(e => e.Id.Equals(book.ProvinceId)))!.Name;
+                book.District = (await _unitOfWorkVigo.Districts.GetDetailBy(e => e.Id.Equals(book.DistrictId)))!.Name;
+                item.RoomDetail = book;
+            }
+            return new PagedResultCustom<BookingAppDTO>(books, data.TotalRecords, data.PageIndex, data.PageSize);
         }
 
         public async Task<decimal> GetPrice(int roomId, int couponId, DateTime checkInDate, DateTime checkOutDate, ClaimsPrincipal user)
