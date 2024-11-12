@@ -53,7 +53,7 @@ namespace vigo.Service.Application.ServiceApp
 
         public async Task RateRoom(RateRoomDTO dto, ClaimsPrincipal user)
         {
-            int info = int.Parse(user.FindFirst("Info")!.Value);
+            int infoId = int.Parse(user.FindFirst("InfoId")!.Value);
             DateTime DateNow = DateTime.Now;
             var data = new Rating()
             {
@@ -63,7 +63,7 @@ namespace vigo.Service.Application.ServiceApp
                 LastUpdatedDate = DateNow,
                 Star = dto.Rate,
                 Status = false,
-                TouristId = info,
+                TouristId = infoId,
             };
             _unitOfWorkVigo.Ratings.Create(data);
             await _unitOfWorkVigo.Complete();
