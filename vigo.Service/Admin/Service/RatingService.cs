@@ -97,7 +97,7 @@ namespace vigo.Service.Admin.Service
             {
                 e => e.DeletedDate == null
             };
-            if (type.ToString().Equals("unapprove"))
+            if ((int)type == 1)
             {
                 conditions.Add(e => e.Status == false || !e.UpdateComment.IsNullOrEmpty());
             }
