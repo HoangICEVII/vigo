@@ -44,7 +44,8 @@ namespace vigo.Service.Helper
             CreateMap<Booking, BookingDTO>();
             CreateMap<DiscountCoupon, DiscountCouponDetailDTO>();
             CreateMap<DiscountCoupon, DiscountCouponDTO>();
-            CreateMap<Rating, RatingDTO>();
+            CreateMap<Rating, RatingDTO>().ForMember(dest => dest.Rate, opt => opt.MapFrom(e => e.Star));
+            CreateMap<Rating, RoomRatingDTO>().ForMember(dest => dest.Rate, opt => opt.MapFrom(e => e.Star));
             CreateMap<RoomType, RoomTypeDTO>();
             CreateMap<Room, RoomDetailDTO > ();
             CreateMap<Room, RoomDTO> ();
@@ -55,7 +56,6 @@ namespace vigo.Service.Helper
             CreateMap<Tourist, TouristDTO>().ForMember(dest => dest.Name, opt => opt.MapFrom(e => e.FullName));
             CreateMap<Booking, BookingAppDTO>();
             CreateMap<DiscountCoupon, DiscountCouponAppDTO>();
-            CreateMap<Rating, RoomRatingDTO>();
             CreateMap<Province, VisitProvinceDTO>();
             CreateMap<Bank, BankDTO>();
             CreateMap<Room, RoomShortDTO>();

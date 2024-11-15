@@ -11,6 +11,6 @@ namespace vigo.Service.DTO.Admin.Rating
         public int Id { get; set; }
         public int Rate { get; set; }
         public string Comment { get; set; } = string.Empty;
-        public DateTime CreatedDate { get; set; }
+        public DateTime LastUpdatedDate { get; set; }
     }
 }
