@@ -8,7 +8,7 @@ namespace vigo.Domain.Helper
 {
     public enum RatingType
     {
-        all,
+        approve,
         unapprove
     }
 }

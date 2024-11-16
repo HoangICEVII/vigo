@@ -98,28 +98,51 @@ namespace vigo.Service.Admin.Service
             {
                 e => e.DeletedDate == null
             };
+            if ((int)type == 0)
+            {
+                conditions.Add(e => e.Status == true);
+                var data = await _unitOfWorkVigo.Ratings.GetPaging(conditions,
+                                                                   null,
+                                                                   null,
+                                                                   null,
+                                                                   page,
+                                                                   perPage);
+                List<RatingDTO> result = new List<RatingDTO>();
+                foreach (var rating in data.Items)
+                {
+                    result.Add(new RatingDTO()
+                    {
+                        Id = rating.Id,
+                        Comment = rating.Comment,
+                        LastUpdatedDate = rating.LastUpdatedDate,
+                        Rate = rating.Star
+                    });
+                }
+                return new PagedResultCustom<RatingDTO>(result, data.TotalRecords, data.PageIndex, data.PageSize);
+            }
             if ((int)type == 1)
             {
                 conditions.Add(e => e.Status == false || !e.UpdateComment.Equals(string.Empty));
-            }
-
-            var data = await _unitOfWorkVigo.Ratings.GetPaging(conditions,
-                                                               null,
-                                                               null,
-                                                               null,
-                                                               page,
-                                                               perPage);
-            List<RatingDTO> result = new List<RatingDTO>();
-            foreach (var rating in data.Items) {
-                result.Add(new RatingDTO()
+                var data = await _unitOfWorkVigo.Ratings.GetPaging(conditions,
+                                                                   null,
+                                                                   null,
+                                                                   null,
+                                                                   page,
+                                                                   perPage);
+                List<RatingDTO> result = new List<RatingDTO>();
+                foreach (var rating in data.Items)
                 {
-                    Id = rating.Id,
-                    Comment = rating.UpdateComment.IsNullOrEmpty() ? rating.Comment : rating.UpdateComment,
-                    LastUpdatedDate = rating.LastUpdatedDate,
-                    Rate = rating.Star
-                });
+                    result.Add(new RatingDTO()
+                    {
+                        Id = rating.Id,
+                        Comment = rating.UpdateComment.IsNullOrEmpty() ? rating.Comment : rating.UpdateComment,
+                        LastUpdatedDate = rating.LastUpdatedDate,
+                        Rate = rating.Star
+                    });
+                }
+                return new PagedResultCustom<RatingDTO>(result, data.TotalRecords, data.PageIndex, data.PageSize);
             }
-            return new PagedResultCustom<RatingDTO>(result, data.TotalRecords, data.PageIndex, data.PageSize);
+            return new PagedResultCustom<RatingDTO>(new List<RatingDTO>(), 0, 0, 0);
         }
 
         public async Task UnApprove(List<int> ids, ClaimsPrincipal user)
