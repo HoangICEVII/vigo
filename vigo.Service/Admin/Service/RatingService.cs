@@ -46,6 +46,7 @@ namespace vigo.Service.Admin.Service
                 }
                 if (!rating.UpdateComment.IsNullOrEmpty()) {
                     rating.Comment = rating.UpdateComment;
+                    rating.UpdateComment = string.Empty;
                 }
 
                 List<Expression<Func<Rating, bool>>> conditions = new List<Expression<Func<Rating, bool>>>()
@@ -101,13 +102,24 @@ namespace vigo.Service.Admin.Service
             {
                 conditions.Add(e => e.Status == false || !e.UpdateComment.Equals(string.Empty));
             }
+
             var data = await _unitOfWorkVigo.Ratings.GetPaging(conditions,
                                                                null,
                                                                null,
                                                                null,
                                                                page,
                                                                perPage);
-            return new PagedResultCustom<RatingDTO>(_mapper.Map<List<RatingDTO>>(data.Items), data.TotalRecords, data.PageIndex, data.PageSize);
+            List<RatingDTO> result = new List<RatingDTO>();
+            foreach (var rating in data.Items) {
+                result.Add(new RatingDTO()
+                {
+                    Id = rating.Id,
+                    Comment = rating.UpdateComment.IsNullOrEmpty() ? rating.Comment : rating.UpdateComment,
+                    LastUpdatedDate = rating.LastUpdatedDate,
+                    Rate = rating.Star
+                });
+            }
+            return new PagedResultCustom<RatingDTO>(result, data.TotalRecords, data.PageIndex, data.PageSize);
         }
 
         public async Task UnApprove(List<int> ids, ClaimsPrincipal user)
