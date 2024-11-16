@@ -99,7 +99,7 @@ namespace vigo.Service.Admin.Service
             };
             if ((int)type == 1)
             {
-                conditions.Add(e => e.Status == false || !e.UpdateComment.IsNullOrEmpty());
+                conditions.Add(e => e.Status == false || !e.UpdateComment.Equals(string.Empty));
             }
             var data = await _unitOfWorkVigo.Ratings.GetPaging(conditions,
                                                                null,
